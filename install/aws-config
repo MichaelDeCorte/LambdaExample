@@ -1,0 +1,8 @@
+#!/bin/sh
+
+AWSHOME=/Users/mdecorte/Library/Python/2.7/bin
+
+PATH=$PATH:$AWSHOME
+
+
+
