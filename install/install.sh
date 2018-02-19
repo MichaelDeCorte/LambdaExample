@@ -1,8 +1,16 @@
 #!/bin/sh
 
-sudo easy_install pip
+echo ========== install pip
+if ! which pip
+then
+    sudo easy_install pip
+fi
 
-sudo pip install awscli --upgrade --user
+echo ========== install aws
+if ! which aws
+then
+    sudo pip install awscli --upgrade --user
+fi
 
 sudo chmod 755 $(sudo find ~/Library/Python/ -type d -print)
 
@@ -15,11 +23,28 @@ then
 fi
 
 
-echo ============================================================
-cat ~/.aws/mdecorte.csv
-echo Default region name: us-east-1
-echo Default output format: text
-aws configure
-aws configure --profile Adminstrator
+echo ========== configure aws
+if ! aws iam get-user
+then
+    cat ~/.aws/mdecorte.csv
+    echo Default region name: us-east-1
+    echo Default output format: text
+    aws configure
+# aws configure --profile Adminstrator
+    aws iam get-user
+fi
 
-aws ec2 list-functions 
+echo ========== install brew
+if ! which brew
+then
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+echo ========== install node
+if ! which node
+then
+    brew install node
+fi
+
+
+

@@ -23,6 +23,7 @@ test: $(TESTOUTPUT)
 init:
 	terraform init
 	terraform get
+	terraform refresh
 
 clean:
 	rm -f $(PACKAGE) $(TESTOUTPUT)

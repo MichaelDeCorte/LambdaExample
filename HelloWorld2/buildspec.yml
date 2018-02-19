@@ -5,7 +5,7 @@ version: 0.1
 phases:
   install:
     commands:
-      - npm install HelloWorld
+      - npm install HelloWorld2
       - aws cloudformation package --template-file samTemplate.yaml --s3-bucket CodeBucket
                                    --output-template-file NewSamTemplate.yaml
 artifacts:

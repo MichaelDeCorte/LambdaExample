@@ -77,9 +77,13 @@ resource "aws_codebuild_project" "HelloWorld" {
   source {
     type     = "GITHUB"
     location = "https://github.com/MichaelDeCorte/LambdaExample.git"
+    buildspec = "HelloWorld2/buildspec.yml"
   }
 
   tags {
     "Environment" = "Test"
   }
+
+  depends_on = ["aws_s3_bucket.mrd_codebucket"]
 }
+
