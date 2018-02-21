@@ -1,7 +1,7 @@
 # https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-syntax
 # AWS CodeBuild configuration file
     
-version: 0.1
+version: 0.2
 phases:
   install:
     commands:
