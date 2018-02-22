@@ -1,5 +1,5 @@
-resource "aws_s3_bucket" "mrd-codebucket" {
-  bucket = "mrd-codebucket"
+resource "aws_s3_bucket" "mdecorte-codebucket" {
+  bucket = "mdecorte-codebucket"
   acl    = "private"
 
   tags {
