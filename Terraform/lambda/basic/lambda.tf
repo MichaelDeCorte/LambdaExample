@@ -71,7 +71,7 @@ EOF
 
 # https://www.terraform.io/docs/providers/aws/r/lambda_function.html
 resource "aws_lambda_function" "aws_lambda" {
-    filename          = "${var.filename}"
+    # filename          = "${var.filename}"
     function_name     = "${var.function_name}"
 
     publish	        = "${var.publish}"
