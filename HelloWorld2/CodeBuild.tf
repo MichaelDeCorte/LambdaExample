@@ -1,20 +1,7 @@
 resource "aws_iam_role" "CodeBuildRole" {
   name = "CodeBuildRole"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "codebuild.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
+  assume_role_policy = "${file("CodeBuildRole.json")}"
 }
 
 resource "aws_iam_policy" "CodeBuildPolicy" {
@@ -22,42 +9,8 @@ resource "aws_iam_policy" "CodeBuildPolicy" {
   path        = "/service-role/"
   description = "Policy used in trust relationship with CodeBuild"
 
-  policy = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Resource": "*",
-            "Action": [
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-                "codebuild:BatchGet*",
-                "codebuild:Get*",
-                "codebuild:List*",
-                "s3:GetBucketLocation",
-                "s3:ListAllMyBuckets",
-                "s3:GetObject",
-                "s3:PutObject"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Resource": "arn:aws:logs:*:*:log-group:/aws/codebuild/*:log-stream:*",
-            "Action": [
-                "logs:CreateLogStream"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Resource": "arn:aws:ssm:*:*:parameter/CodeBuild/*",
-            "Action": [
-                "ssm:PutParameter"
-            ]
-        }
-    ]
-}
-POLICY
+  policy = "${file("CodeBuildPolicy.json")}"
+
 }
 
 resource "aws_iam_policy_attachment" "codebuild_policy_attachment" {
