@@ -84,6 +84,6 @@ resource "aws_codebuild_project" "HelloWorld" {
     "Environment" = "Test"
   }
 
-  depends_on = ["aws_s3_bucket.mrd_codebucket"]
+  depends_on = ["aws_s3_bucket.mrd-codebucket"]
 }
 
