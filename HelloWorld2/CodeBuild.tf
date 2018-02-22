@@ -1,5 +1,5 @@
 resource "aws_iam_role" "codebuild_role" {
-  name = "codebuild-role-"
+  name = "CodeBuildRole"
 
   assume_role_policy = <<EOF
 {
@@ -17,27 +17,45 @@ resource "aws_iam_role" "codebuild_role" {
 EOF
 }
 
-resource "aws_iam_policy" "codebuild_policy" {
+resource "aws_iam_policy" "CodeBuildPolicy" {
   name        = "codebuild-policy"
   path        = "/service-role/"
   description = "Policy used in trust relationship with CodeBuild"
 
   policy = <<POLICY
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Resource": [
-        "*"
-      ],
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ]
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Resource": "*",
+            "Action": [
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+                "codebuild:BatchGet*",
+                "codebuild:Get*",
+                "codebuild:List*",
+                "s3:GetBucketLocation",
+                "s3:ListAllMyBuckets",
+                "s3:GetObject",
+                "s3:PutObject"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/codebuild/*:log-stream:*",
+            "Action": [
+                "logs:CreateLogStream"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Resource": "arn:aws:ssm:*:*:parameter/CodeBuild/*",
+            "Action": [
+                "ssm:PutParameter"
+            ]
+        }
+    ]
 }
 POLICY
 }
