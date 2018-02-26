@@ -8,7 +8,8 @@ provider "aws" {
 }
 
 module "HelloWorld" {
-    source = "../Terraform/codebuild"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/codebuild"
+    # source = "../Terraform/codebuild"
 
     name = "HelloWorld"
     description = "HelloWorld Lambda project"
@@ -19,7 +20,8 @@ module "HelloWorld" {
 }
 
 module "mdecorte-codebucket" {
-    source = "../Terraform/s3"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/s3"
+    # source = "../Terraform/s3"
 
     bucket = "mdecorte-codebucket"
     acl    = "private"
@@ -28,13 +30,4 @@ module "mdecorte-codebucket" {
 
 
 
-#module "LambdaExample" {
-#    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
-#    source = "../Terraform/lambda/basic"
-#
-#
-#	# filename		    = "HelloWorld.zip"
-#	function_name		= "HelloWorld"
-#	handler			    = "main.handler"
-#}
 
