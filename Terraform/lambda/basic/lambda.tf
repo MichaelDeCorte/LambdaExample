@@ -25,9 +25,9 @@ variable "function_name" {
 	 type = "string"
 }
 
-#variable "filename" {
-#	 type = "string"
-#}
+variable "filename" {
+    type = "string"
+}
 
 variable "handler" {
 	 type = "string"
@@ -64,29 +64,25 @@ resource "aws_iam_role" "lambda_role" {
 EOF
 }
 
-#resource "aws_iam_role_policy_attachment" "test-attach" {
-#     role        = "${aws_iam_role.lambda_role.name}"
-#     policy_arn  = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-#}
+variable "tags" {
+	 type = "map"
+	 default = { }
+}
+
 
 # https://www.terraform.io/docs/providers/aws/r/lambda_function.html
 resource "aws_lambda_function" "aws_lambda" {
-    # filename          = "${var.filename}"
+    filename          = "${var.filename}"
+    source_code_hash  = "${base64sha256(file("${var.filename}"))}"
     function_name     = "${var.function_name}"
 
     publish	        = "${var.publish}"
     handler	        = "${var.handler}"
-  
-    
 
     tags		        = "${merge(var.tags, module.variables.tags)}"
     role              = "${aws_iam_role.lambda_role.arn}"
-    source_code_hash  = "${base64sha256(file("${var.filename}"))}"
     runtime           = "${var.runtime}"
 
-    environment {
-        variables = {
-            foo = "bar"
-        }
-    }
+
+    tags 					= "${merge(var.tags, module.variables.tags)}"
 }
