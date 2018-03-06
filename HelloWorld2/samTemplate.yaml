@@ -17,7 +17,7 @@ Resources:
     Properties:
       Handler: main.handler
       # CodeUri: s3://mdecorte-codebucket/code.zip
-       CodeUri: ./
+      CodeUri: ./
 
-    DeploymentPreference:
-      Type: All-at-once
+    # DeploymentPreference:
+    #  Type: All-at-once
