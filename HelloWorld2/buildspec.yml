@@ -12,6 +12,6 @@ phases:
       - ls -FR
 artifacts:
   type: zip
-  files:
-    - samTemplate.yaml
+#  files:
+#    - samTemplate.yaml
     
