@@ -8,8 +8,8 @@ provider "aws" {
 }
 
 module "HelloWorld" {
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/codebuild"
-    # source = "../Terraform/codebuild"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/codebuild"
+    source = "../Terraform/codebuild"
 
     name = "HelloWorld"
     description = "HelloWorld Lambda project"
