@@ -15,8 +15,6 @@ module "HelloWorld" {
     description = "HelloWorld Lambda project"
     location = "https://github.com/MichaelDeCorte/LambdaExample.git"
     buildspec = "HelloWorld2/buildspec.yml"
-
-#    depends_on = ["aws_s3_bucket.mdecorte-codebucket"]
 }
 
 module "mdecorte-codebucket" {

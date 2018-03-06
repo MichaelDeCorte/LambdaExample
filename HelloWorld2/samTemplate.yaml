@@ -4,10 +4,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Hello World2
+
+Globals:
+  Function:
+    Runtime: nodejs6.10
+    Timeout: 16
+    MemorySize: 128
+
 Resources:
   helloworld2:
     Type: AWS::Serverless::Function
     Properties:
       Handler: main.handler
-      Runtime: nodejs6.10
-      CodeUri: ./
+      CodeUri: s3://mdecorte-codebucket/code.zip
+      # CodeUri: ./
+
+    DeploymentPreference:
+      Type: All-at-once
