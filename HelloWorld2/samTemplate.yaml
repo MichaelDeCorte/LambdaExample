@@ -16,8 +16,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: main.handler
-      CodeUri: 's3://mdecorte-codebucket/code.zip'
-      # CodeUri: ./
+      # CodeUri: 's3://mdecorte-codebucket/code.zip'
+      CodeUri: ./
 
     # DeploymentPreference:
     #  Type: All-at-once
