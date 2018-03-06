@@ -15,9 +15,10 @@ Resources:
   helloworld2:
     Type: AWS::Serverless::Function
     Properties:
+      # AutoPublishAlias: production
+      # DeploymentPreference:
+      #   Enabled: true
+      #   Type: AllAtOnce
       Handler: main.handler
-      # CodeUri: 's3://mdecorte-codebucket/code.zip'
       CodeUri: ./
 
-    # DeploymentPreference:
-    #  Type: All-at-once
