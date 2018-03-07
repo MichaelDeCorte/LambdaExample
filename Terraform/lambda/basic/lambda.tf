@@ -41,10 +41,12 @@ variable "runtime" {
 variable "publish" {
 	 default = "false"
 }
+
+
 ############################################################
 resource "aws_iam_role" "lambda_role" {
   name = "lambda_role"
-
+  force_detach_policies = true
   assume_role_policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -63,7 +65,6 @@ resource "aws_iam_role" "lambda_role" {
 }
 EOF
 }
-
 variable "tags" {
 	 type = "map"
 	 default = { }
@@ -72,17 +73,16 @@ variable "tags" {
 
 # https://www.terraform.io/docs/providers/aws/r/lambda_function.html
 resource "aws_lambda_function" "aws_lambda" {
-    filename          = "${var.filename}"
-    source_code_hash  = "${base64sha256(file("${var.filename}"))}"
-    function_name     = "${var.function_name}"
+    filename            = "${var.filename}"
+    source_code_hash    = "${base64sha256(file("${var.filename}"))}"
+    function_name       = "${var.function_name}"
 
-    publish	        = "${var.publish}"
-    handler	        = "${var.handler}"
+    publish	            = "${var.publish}"
+    handler	            = "${var.handler}"
 
     tags		        = "${merge(var.tags, module.variables.tags)}"
-    role              = "${aws_iam_role.lambda_role.arn}"
-    runtime           = "${var.runtime}"
+    role                = "${aws_iam_role.lambda_role.arn}"
+    runtime             = "${var.runtime}"
 
-
-    tags 					= "${merge(var.tags, module.variables.tags)}"
+    tags                = "${merge(var.tags, module.variables.tags)}"
 }

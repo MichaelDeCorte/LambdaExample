@@ -1,5 +1,5 @@
 # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md
-# AWS application deployment configuration file
+# CloudForomation serverless application deployment configuration file
 
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
@@ -15,10 +15,10 @@ Resources:
   helloworld2:
     Type: AWS::Serverless::Function
     Properties:
-      # AutoPublishAlias: production
-      # DeploymentPreference:
-      #   Enabled: true
-      #   Type: AllAtOnce
+      AutoPublishAlias: test
+      DeploymentPreference:
+        Enabled: true
+        Type: AllAtOnce
       Handler: main.handler
-      CodeUri: ./
+      CodeUri: .
 

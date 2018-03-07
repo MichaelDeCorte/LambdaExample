@@ -1,4 +1,5 @@
-# CodeBuild.tf
+# Serverless Application Model configuration
+# https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md
 
 # include "global" variables
 module "variables" {
@@ -37,6 +38,8 @@ variable "tags" {
 resource "aws_iam_role" "CodeBuildRole" {
   name = "CodeBuildRole"
 
+  force_detach_policies = true
+    
   assume_role_policy = "${file("${path.module}/CodeBuildRole.json")}"
 }
 
@@ -64,6 +67,8 @@ resource "aws_codebuild_project" "lambda_nodejs" {
 
   artifacts {
     type = "NO_ARTIFACTS"
+#    type = "S3"
+#    location = "mdecorte-codebucket"
   }
 
   environment {
