@@ -40,3 +40,5 @@ veryclean:
 	terraform destroy
 	rm -f $(PACKAGE) $(TESTOUTPUT)
 
+$(PACKAGE): $(SRC)
+	zip -r $@ $<
