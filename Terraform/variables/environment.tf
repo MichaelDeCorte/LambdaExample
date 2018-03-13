@@ -20,6 +20,11 @@ output "region" {
        description = "AWS region to launch servers."
 }
 
+output "id" {
+    # value = "AKIAJ7H5ZLIQEZS7C4EQ"
+    value = "mdecorte"
+}
+
 output "keypair" {
        value    = "KPVirginia" #Virginia (us-east-1)
        description = "Desired name of AWS key pair"
