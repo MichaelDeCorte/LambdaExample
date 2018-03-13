@@ -9,7 +9,7 @@ fi
 echo ========== install aws
 if ! which aws
 then
-    sudo pip install awscli --upgrade --user
+    sudo -H pip install awscli --upgrade --user
 fi
 
 sudo chmod 755 $(sudo find ~/Library/Python/ -type d -print)
@@ -22,6 +22,7 @@ then
     echo 'source aws-config' >> ~/.bashrc
 fi
 
+source ~/bin/aws-config
 
 echo ========== configure aws
 if ! aws iam get-user
