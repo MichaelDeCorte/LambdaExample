@@ -71,7 +71,7 @@ resource "aws_iam_policy" "CodeDeployPolicy" {
 
 resource "aws_iam_policy_attachment" "CodeDeployPolicyAttachment" {
   name       = "CodeBuildPolicyAttachment"
-  policy_arn = "${aws_iam_policy.CodeBuildPolicy.arn}"
+  policy_arn = "${aws_iam_policy.CodeDeployPolicy.arn}"
   roles      = ["${aws_iam_role.CodeBuildRole.id}"]
 }
 

@@ -1,9 +1,9 @@
 # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md
-# CloudForomation serverless application deployment configuration file
+# CloudFormation serverless application deployment configuration file
 
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Hello World2
+Description: Hello World
 
 Globals:
   Function:
@@ -12,13 +12,15 @@ Globals:
     MemorySize: 128
 
 Resources:
-  helloworld2:
+  HelloWorld:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: HelloWorld
       AutoPublishAlias: test
       DeploymentPreference:
         Enabled: true
         Type: AllAtOnce
+      Role: arn:aws:iam::345879289395:role/lambda_role
       Handler: main.handler
       CodeUri: .
 

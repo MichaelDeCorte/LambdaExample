@@ -16,11 +16,6 @@ variable "description" {
 	default=""
 }
 
-variable "tags" {
-	 type = "map"
-	 default = { }
-}
-
 variable "function_name" {
 	 type = "string"
 }
@@ -41,6 +36,12 @@ variable "runtime" {
 variable "publish" {
 	 default = "false"
 }
+
+variable "tags" {
+	 type = "map"
+	 default = { }
+}
+
 
 
 ############################################################
@@ -65,16 +66,13 @@ resource "aws_iam_role" "lambda_role" {
 }
 EOF
 }
-variable "tags" {
-	 type = "map"
-	 default = { }
-}
-
 
 # https://www.terraform.io/docs/providers/aws/r/lambda_function.html
 resource "aws_lambda_function" "aws_lambda" {
-    filename            = "${var.filename}"
     source_code_hash    = "${base64sha256(file("${var.filename}"))}"
+    filename              = "${var.filename}"
+    # s3_bucket             = "mdecorte-codebucket"
+    # s3_key                = "9e7ddb249e5ae71e28a77cce43bf9791"
     function_name       = "${var.function_name}"
 
     publish	            = "${var.publish}"

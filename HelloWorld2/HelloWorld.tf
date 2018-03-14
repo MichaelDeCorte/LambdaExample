@@ -26,11 +26,15 @@ module "mdecorte-codebucket" {
     force_destroy = true
 }    
 
-module "LambdaExample" {
-    # source = "../Terraform/lambda/basic"
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic-zip"
-
-	filename		    = "HelloWorld.zip"
-	function_name		= "HelloWorld"
-	handler			    = "main.handler"
+module "LambdaRole" {
+     source = "../Terraform/lambda/role"
 }
+
+# module "LambdaExample" {
+#     source = "../Terraform/lambda/basic"
+#     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic-zip"
+
+# 	filename		    = "HelloWorld.zip"
+# 	function_name		= "HelloWorld"
+# 	handler			    = "main.handler"
+# }
