@@ -43,29 +43,11 @@ variable "tags" {
 }
 
 
-
 ############################################################
-resource "aws_iam_role" "lambda_role" {
-  name = "lambda_role"
-  force_detach_policies = true
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "",
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "lambda.amazonaws.com"
-            },
-            "Action": [
-                "sts:AssumeRole"
-            ]
-        }
-    ]
+module "LambdaRole" {
+     source = "../Terraform/lambda/role"
 }
-EOF
-}
+
 
 # https://www.terraform.io/docs/providers/aws/r/lambda_function.html
 resource "aws_lambda_function" "aws_lambda" {
@@ -79,6 +61,7 @@ resource "aws_lambda_function" "aws_lambda" {
     handler	            = "${var.handler}"
 
     tags		        = "${merge(var.tags, module.variables.tags)}"
+    role                = "${mmodule.LambdaRole.arn}"
     role                = "${aws_iam_role.lambda_role.arn}"
     runtime             = "${var.runtime}"
 

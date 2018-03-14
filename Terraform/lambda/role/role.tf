@@ -16,23 +16,7 @@ variable "tags" {
 resource "aws_iam_role" "lambda_role" {
   name = "lambda_role"
   force_detach_policies = true
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "",
-            "Effect": "Allow",
-            "Principal": {
-                "Service": "lambda.amazonaws.com"
-            },
-            "Action": [
-                "sts:AssumeRole"
-            ]
-        }
-    ]
-}
-EOF
+  assume_role_policy = "${file("${path.module}/LambdaRole.json")}"
 }
 
 output "roleID" {
