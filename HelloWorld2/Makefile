@@ -52,7 +52,7 @@ package.CloudFormation: newSamTemplate.yaml
 newSamTemplate.yaml: samTemplate.yaml
 newSamTemplate.yaml: $(SRC)
 newSamTemplate.yaml:
-	aws cloudformation package --template-file samTemplate.yaml --s3-bucket $S3BUCKET --output-template-file newSamTemplate.yaml && \
+	aws cloudformation package --template-file samTemplate.yaml --s3-bucket $(S3BUCKET) --output-template-file newSamTemplate.yaml && \
 	touch .package.CloudFormation
 
 .package.CloudFormation: newSamTemplate.yaml
@@ -66,12 +66,12 @@ install.CloudFormation: .install.CloudFormation
 	touch .install.CloudFormation
 
 
-test.local: tests/$(TARGET).test.out environment package install
+test.local: tests/$(TARGET).test.out
 
-
-tests/$(TARGET).test.out: 
+tests/$(TARGET).test.out:  terraform.tfstate .package.CloudFormation .install.CloudFormation
 tests/$(TARGET).test.out: 
 	cd tests; sh $(TARGET).test.sh
+	cat $@
 
 clean.CloudFormation:
 	rm -f newSameTemplate.yaml
