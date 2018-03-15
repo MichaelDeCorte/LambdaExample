@@ -7,18 +7,23 @@ module "variables" {
 
 ############################################################
 # input variables
+
+# input template file
 variable "input" {
     type = "string"
 }
 
+# output file that will be created from template and variable substituion
 variable "output" {
     type = "string"
 }
 
+# a map of variables that will be substituted in the template file
 variable "variables" {
     type = "map"
 }
 
+# the permissions of the output file.  By default, read-only
 variable "chmod" {
     default = "aog-w" 
 }

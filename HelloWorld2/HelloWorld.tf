@@ -8,8 +8,8 @@ provider "aws" {
 }
 
 module "mdecorte-codebucket" {
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/s3"
-    # source = "../Terraform/s3"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/s3"
+    source = "../Terraform/s3"
 
     bucket = "mdecorte-codebucket"
     acl    = "private"
@@ -33,4 +33,20 @@ module "samTemplate" {
         role = "${module.LambdaRole.arn}"
     }
 }    
-    
+
+
+############################################################
+# samTemplate.yaml, update with role
+
+module "buildspec" {
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/files"
+    source = "../Terraform/files"
+
+    input = "templates/buildspec.yml"
+    output = "buildspec.yml"
+    variables = {
+        s3bucket = "${module.mdecorte-codebucket.id}"
+        role = "${module.LambdaRole.arn}"
+    }
+}    
+        
