@@ -20,7 +20,11 @@ Resources:
       DeploymentPreference:
         Enabled: true
         Type: AllAtOnce
-      Role: arn:aws:iam::345879289395:role/lambda_role
+      Role: ${role}
       Handler: main.handler
       CodeUri: .
+
+    
+
+
 

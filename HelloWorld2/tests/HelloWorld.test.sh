@@ -1,7 +1,9 @@
 #!/bin/sh
 
 BASENAME=$(basename $0 .sh)
-OUTPUTFILE=$BASENAME.out
+OUTPUT=$BASENAME.out
+ERROR=$BASENAME.error
+EXPECTED=$BASENAME.expected
 
 aws lambda invoke \
 --profile mdecorte \
@@ -10,12 +12,12 @@ aws lambda invoke \
 --region us-east-1 \
 --log-type Tail \
 --payload '{"key1":"value1", "key2":"value2", "key3":"value3"}' \
-    $OUTPUTFILE |
+    $OUTPUT |
 sed 's@^[^[[:space:]]*[[:space:]]*@@'  | base64 --decode 
 
-diff $OUTPUTFILE $BASENAME.base
+diff $OUTPUT $EXPECTED
 if  [ "$?" -ne "0" ]
 then
-    mv $OUTPUTFILE $BASENAME.error
+    mv $OUTPUT $ERROR
 fi
 

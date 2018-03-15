@@ -40,6 +40,8 @@ all: package install
 
 ############################################################
 # CloudFormation
+S3BUCKET=mdecorte-codebucket
+
 environment.Terraform: terraform.tfstate
 
 terraform.tfstate: $(TFSOURCE)
@@ -50,7 +52,7 @@ package.CloudFormation: newSamTemplate.yaml
 newSamTemplate.yaml: samTemplate.yaml
 newSamTemplate.yaml: $(SRC)
 newSamTemplate.yaml:
-	aws cloudformation package --template-file samTemplate.yaml --s3-bucket mdecorte-codebucket --output-template-file newSamTemplate.yaml && \
+	aws cloudformation package --template-file samTemplate.yaml --s3-bucket $S3BUCKET --output-template-file newSamTemplate.yaml && \
 	touch .package.CloudFormation
 
 .package.CloudFormation: newSamTemplate.yaml
@@ -64,19 +66,19 @@ install.CloudFormation: .install.CloudFormation
 	touch .install.CloudFormation
 
 
-test.local: $(TARGET).test.out environment package install
+test.local: tests/$(TARGET).test.out environment package install
 
 
-$(TARGET).test.out: 
-$(TARGET).test.out: 
-	sh $(TARGET).test.sh 
+tests/$(TARGET).test.out: 
+tests/$(TARGET).test.out: 
+	cd tests; sh $(TARGET).test.sh
 
 clean.CloudFormation:
 	rm -f newSameTemplate.yaml
 	rm -f .package.CloudFormation .install.CloudFormation
 
 clean.local:
-	rm -f *.test.out
+	rm -f tests/*.test.out tests/*.test.error
 
 ############################################################
 environment: environment.Terraform

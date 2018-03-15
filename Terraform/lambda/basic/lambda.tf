@@ -61,8 +61,8 @@ resource "aws_lambda_function" "aws_lambda" {
     handler	            = "${var.handler}"
 
     tags		        = "${merge(var.tags, module.variables.tags)}"
-    role                = "${mmodule.LambdaRole.arn}"
-    role                = "${aws_iam_role.lambda_role.arn}"
+    role                = "${module.LambdaRole.arn}"
+    # role                = "${aws_iam_role.lambda_role.arn}"
     runtime             = "${var.runtime}"
 
     tags                = "${merge(var.tags, module.variables.tags)}"

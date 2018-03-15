@@ -19,7 +19,7 @@ resource "aws_iam_role" "lambda_role" {
   assume_role_policy = "${file("${path.module}/LambdaRole.json")}"
 }
 
-output "roleID" {
+output "arn" {
        value = "${aws_iam_role.lambda_role.arn}"
 }
 

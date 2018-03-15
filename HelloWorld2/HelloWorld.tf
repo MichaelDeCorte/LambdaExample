@@ -38,3 +38,18 @@ module "LambdaRole" {
 # 	function_name		= "HelloWorld"
 # 	handler			    = "main.handler"
 # }
+
+############################################################
+# samTemplate.yaml, update with role
+
+module "samTemplate" {
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/files"
+    source = "../Terraform/files"
+
+    input = "templates/samTemplate.yaml"
+    output = "samTemplate.yaml"
+    variables = {
+        role = "${module.LambdaRole.arn}"
+    }
+}    
+    

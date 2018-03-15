@@ -7,7 +7,7 @@ phases:
     commands:
       - cd HelloWorld2
       - npm install
-      - aws cloudformation package --template-file samTemplate.yaml --s3-bucket mdecorte-codebucket --output-template-file NewSamTemplate.yaml
+      - aws cloudformation package --template-file samTemplate.yaml --s3-bucket mdecorte-codebucket --output-template-file newSamTemplate.yaml
       - ls -FR
 artifacts:
   type: zip
