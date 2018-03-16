@@ -1,11 +1,13 @@
-const hello = require('./main');
+const hello = require('./main').handler;
 
-// function callback(error, result) {
-//    return result;
-// }
+function testFunc(done) {
+    function callback(error, result) {
+        expect(result).toBe('Hello from Lambda!!!');
+        done();
+    }
 
-// test('Hello',
-//      () => {
-//          expect(hello(null, null, callback)).toBe('Hello from Lambda!!!');
-//      }
-// );
+    hello(null, null, callback);
+}
+
+test('Hello World Test', testFunc);
+

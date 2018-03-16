@@ -36,12 +36,15 @@ install.CloudFormation: .install.CloudFormation
 	touch .install.CloudFormation
 
 
-test.local: tests/$(TARGET).test.out
+test.local: .test.local
 
-tests/$(TARGET).test.out:  terraform.tfstate .package.CloudFormation .install.CloudFormation
-tests/$(TARGET).test.out: 
-	cd tests; sh $(TARGET).test.sh
-	cat $@
+.test.local:  terraform.tfstate .package.CloudFormation .install.CloudFormation
+.test.local:
+	( npm run lint && 										\
+	npm run test && 										\
+	npm run coverage &&										\
+	touch .test.local 										\
+	) 2>&1 | tee -a src/test.output 
 
 clean.CloudFormation:
 	rm -f newSameTemplate.yaml

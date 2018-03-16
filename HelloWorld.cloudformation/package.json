@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/MichaelDeCorte/LambdaExample#readme",
   "scripts": {
-    "lint": "eslint src/**",
+    "lint": "eslint src/*.js",
     "test": "jest src",
     "coverage": "jest --collectCoverageFrom=src/**.js --coverage src",
     "testxxx": "echo \"Error: no test specified\" && exit 1"
