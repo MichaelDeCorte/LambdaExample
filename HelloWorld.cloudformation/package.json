@@ -1,0 +1,29 @@
+{
+  "name": "helloworld2",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "author": "Michael DeCorte",
+  "description": "For test ",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
+  },
+  "main": "main.js",
+  "bugs": {
+    "url": "https://github.com/MichaelDeCorte/LambdaExample/issues"
+  },
+  "homepage": "https://github.com/MichaelDeCorte/LambdaExample#readme",
+  "scripts": {
+    "lint": "eslint src/**",
+    "test": "jest src",
+    "coverage": "jest --collectCoverageFrom=src/**.js --coverage src",
+    "testxxx": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jest": "^21.15.0",
+    "jest": "^23.0.0-alpha.0"
+  }
+}

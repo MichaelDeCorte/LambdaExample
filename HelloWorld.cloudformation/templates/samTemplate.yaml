@@ -22,6 +22,6 @@ Resources:
         Type: AllAtOnce
       Role: ${role}
       Handler: main.handler
-      CodeUri: .
+      CodeUri: src
 
     

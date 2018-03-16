@@ -1,5 +1,5 @@
  
-SRC=main.js 
+SRC=src/main.js 
 TARGET=HelloWorld
 TFSOURCE=HelloWorld.tf
 
@@ -60,6 +60,10 @@ install: install.CloudFormation
 test: test.local
 
 init:
+	npm install
+	npm install --save-dev jest
+	npm install --save-dev eslint-plugin-jest
+	npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
 	terraform init
 	terraform get
 	terraform refresh

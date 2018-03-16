@@ -7,10 +7,10 @@ then
 fi
 
 echo ========== install aws
-if ! which aws
-then
+# if ! which aws
+# then
     sudo -H pip install awscli --upgrade --user
-fi
+# fi
 
 sudo chmod 755 $(sudo find ~/Library/Python/ -type d -print)
 
@@ -47,5 +47,8 @@ then
     brew install node
 fi
 
+echo ========== upgrade node
+brew upgrade node
 
-
+echo ========== upgrade npm
+npm i npm
