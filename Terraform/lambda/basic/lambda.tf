@@ -45,7 +45,7 @@ variable "tags" {
 
 ############################################################
 module "LambdaRole" {
-     source = "../Terraform/lambda/role"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/role"
 }
 
 
