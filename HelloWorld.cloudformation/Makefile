@@ -4,15 +4,21 @@ TFSOURCE=HelloWorld.tf
 
 all: package install
 
-############################################################
-# CloudFormation
 S3BUCKET=mdecorte-codebucket
 
-environment.terraform: terraform.tfstate
+############################################################
+# Environment
+.environment.terraform: $(PACKAGE)
+.environment.terraform: $(TFSOURCE)
+.environment.terraform: 
+	terraform apply &&  \
+	touch .environment.terraform
 
-terraform.tfstate: $(TFSOURCE)
-terraform.tfstate:
-	terraform apply
+.environment.terraform: $(package)
+
+############################################################
+# Package
+.package.cloudformation: newSamTemplate.yaml
 
 samTemplate.yaml: templates/samTemplate.yaml
 	terraform apply
@@ -23,8 +29,9 @@ newSamTemplate.yaml:
 	aws cloudformation package --template-file samTemplate.yaml --s3-bucket $(S3BUCKET) --output-template-file newSamTemplate.yaml && \
 	touch .package.cloudformation
 
-.package.cloudformation: newSamTemplate.yaml
 
+############################################################
+# Install
 .install.cloudformation: .package.cloudformation
 
 .install.cloudformation:
@@ -32,6 +39,8 @@ newSamTemplate.yaml:
 	touch .install.cloudformation
 
 
+############################################################
+# Test
 .test.local:  terraform.tfstate .package.cloudformation .install.cloudformation
 .test.local:
 	( npm run lint && 										\
@@ -40,6 +49,8 @@ newSamTemplate.yaml:
 	touch .test.local 										\
 	) 2>&1 | tee -a src/test.output 
 
+############################################################
+# Clean
 clean.cloudformation:
 	rm -f newSameTemplate.yaml
 	rm -f .package.cloudformation .install.cloudformation
@@ -48,14 +59,7 @@ clean.local:
 	rm -f src/test.output
 
 ############################################################
-environment: environment.terraform
-
-package: .package.cloudformation
-
-install: .install.cloudformation
-
-test: .test.local
-
+# Init
 init:
 	npm install --save-dev jest
 	npm install --save-dev eslint-plugin-jest
@@ -65,6 +69,15 @@ init:
 	terraform init
 	terraform get
 	terraform refresh
+
+############################################################
+environment: .environment.terraform
+
+package: .package.cloudformation
+
+install: .install.cloudformation
+
+test: .test.local
 
 clean: clean.cloudformation clean.local
 

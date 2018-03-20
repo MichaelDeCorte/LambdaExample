@@ -40,6 +40,14 @@ $(PACKAGE): $(SRC)
 
 
 ############################################################
+# Clean
+clean.terraform:
+	rm -f .package.terraform .install.terraform $(package)
+
+clean.local:
+	rm -f src/test.output 
+
+############################################################
 # Init
 init:
 	npm install --save-dev jest
@@ -50,16 +58,6 @@ init:
 	terraform init
 	terraform get
 	terraform refresh
-
-
-############################################################
-# Clean
-clean.terraform:
-	rm -f .package.terraform .install.terraform $(package)
-
-clean.local:
-	rm -f src/test.output 
-
 
 ############################################################
 environment: .environment.terraform
