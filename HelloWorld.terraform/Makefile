@@ -1,33 +1,77 @@
-
-SRC=main.js
+#############################################################
+SRC=src/main.js
+TFSOURCE=HelloWorld.tf
 PACKAGE=HelloWorld.zip
-TESTOUTPUT=testOutput.txt
 
-all: install package
+all: package install
+
+############################################################
+# Environment
+.environment.terraform: $(PACKAGE)
+.environment.terraform: $(TFSOURCE)
+.environment.terraform: 
+	terraform apply &&  \
+	touch .environment.terraform
+
+############################################################
+# Package
+.package.terraform: $(PACKAGE)
 
 $(PACKAGE): $(SRC)
 	zip -r $@ $<
 
-package: $(PACKAGE)
+#############################################################
+# Install
+.install.terraform: terraform.tfstate 
+.install.terraform: $(PACKAGE)
+.install.terraform:
+	terraform apply && \
+	touch .install.terraform
 
-terraform.tfstate: $(PACKAGE)
-	terraform apply
+############################################################
+# Test
+.test.local:  terraform.tfstate .package.terraform .install.terraform
+.test.local:
+	( npm run lint && 										\
+	npm run test && 										\
+	npm run coverage &&										\
+	touch .test.local 										\
+	) 2>&1 | tee -a src/test.output 
 
-install: terraform.tfstate $(PACKAGE)
 
-$(TESTOUTPUT): terraform.tfstate $(PACKAGE) 
-	sh ./test.sh
-
-test: $(TESTOUTPUT)
-
+############################################################
+# Init
 init:
+	npm install --save-dev jest
+	npm install --save-dev eslint-plugin-jest
+	npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
+	npm install --save-dev webpack
+	npm install
 	terraform init
 	terraform get
+	terraform refresh
 
-clean:
-	rm -f $(PACKAGE) $(TESTOUTPUT)
 
-veryclean: 
+############################################################
+# Clean
+clean.terraform:
+	rm -f .package.terraform .install.terraform $(package)
+
+clean.local:
+	rm -f src/test.output 
+
+
+############################################################
+environment: .environment.terraform
+
+package: .package.terraform
+
+install: .install.terraform
+
+test: .test.local
+
+clean: clean.terraform clean.local
+
+veryclean:  clean
 	terraform destroy
-	rm -f $(PACKAGE) $(TESTOUTPUT)
 

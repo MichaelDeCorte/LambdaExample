@@ -1,6 +1,5 @@
  
 SRC=src/main.js 
-TARGET=HelloWorld
 TFSOURCE=HelloWorld.tf
 
 all: package install
@@ -9,7 +8,7 @@ all: package install
 # CloudFormation
 S3BUCKET=mdecorte-codebucket
 
-environment.Terraform: terraform.tfstate
+environment.terraform: terraform.tfstate
 
 terraform.tfstate: $(TFSOURCE)
 terraform.tfstate:
@@ -18,27 +17,22 @@ terraform.tfstate:
 samTemplate.yaml: templates/samTemplate.yaml
 	terraform apply
 
-package.CloudFormation: newSamTemplate.yaml
 newSamTemplate.yaml: samTemplate.yaml
 newSamTemplate.yaml: $(SRC)
 newSamTemplate.yaml:
 	aws cloudformation package --template-file samTemplate.yaml --s3-bucket $(S3BUCKET) --output-template-file newSamTemplate.yaml && \
-	touch .package.CloudFormation
+	touch .package.cloudformation
 
-.package.CloudFormation: newSamTemplate.yaml
+.package.cloudformation: newSamTemplate.yaml
 
-install.CloudFormation: .install.CloudFormation 
+.install.cloudformation: .package.cloudformation
 
-.install.CloudFormation: .package.CloudFormation
-
-.install.CloudFormation:
+.install.cloudformation:
 	aws cloudformation deploy --template-file newSamTemplate.yaml --stack-name test --capabilities CAPABILITY_IAM && \
-	touch .install.CloudFormation
+	touch .install.cloudformation
 
 
-test.local: .test.local
-
-.test.local:  terraform.tfstate .package.CloudFormation .install.CloudFormation
+.test.local:  terraform.tfstate .package.cloudformation .install.cloudformation
 .test.local:
 	( npm run lint && 										\
 	npm run test && 										\
@@ -46,32 +40,33 @@ test.local: .test.local
 	touch .test.local 										\
 	) 2>&1 | tee -a src/test.output 
 
-clean.CloudFormation:
+clean.cloudformation:
 	rm -f newSameTemplate.yaml
-	rm -f .package.CloudFormation .install.CloudFormation
+	rm -f .package.cloudformation .install.cloudformation
 
 clean.local:
-	rm -f tests/*.test.out tests/*.test.error
+	rm -f src/test.output
 
 ############################################################
-environment: environment.Terraform
+environment: environment.terraform
 
-package: package.CloudFormation
+package: .package.cloudformation
 
-install: install.CloudFormation
+install: .install.cloudformation
 
-test: test.local
+test: .test.local
 
 init:
-	npm install
 	npm install --save-dev jest
 	npm install --save-dev eslint-plugin-jest
 	npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
+	npm install --save-dev webpack
+	npm install
 	terraform init
 	terraform get
 	terraform refresh
 
-clean: clean.CloudFormation clean.local
+clean: clean.cloudformation clean.local
 
 veryclean: clean
 	terraform destroy

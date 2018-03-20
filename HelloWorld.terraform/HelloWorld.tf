@@ -9,9 +9,18 @@ provider "aws" {
 }
 
 
+module "mdecorte-codebucket" {
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/s3"
+    # source = "../Terraform/s3"
+
+    bucket = "mdecorte-codebucket"
+    acl    = "private"
+    force_destroy = true
+}    
+
 module "LambdaExample" {
-    # source = "../Terraform/lambda/basic"
     source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
+    # source = "../Terraform/lambda/basic"
 
 	filename		    = "HelloWorld.zip"
 	function_name		= "HelloWorld"

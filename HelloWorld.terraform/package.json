@@ -19,11 +19,11 @@
     "coverage": "jest --collectCoverageFrom=src/**.js --coverage src"
   },
   "devDependencies": {
-    "eslint": "^4.18.2",
+    "eslint": "^4.19.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jest": "^21.15.0",
-    "jest": "^23.0.0-alpha.0",
+    "jest": "^22.4.2",
     "webpack": "^4.1.1"
   }
 }

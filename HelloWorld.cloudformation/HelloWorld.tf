@@ -18,7 +18,8 @@ module "mdecorte-codebucket" {
 }    
 
 module "LambdaRole" {
-     source = "../Terraform/lambda/role"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/role"
+    # source = "../Terraform/lambda/role"
 }
 
 ############################################################
