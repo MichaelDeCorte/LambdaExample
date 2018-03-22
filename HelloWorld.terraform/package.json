@@ -19,6 +19,7 @@
     "coverage": "jest --coverage "
   },
   "devDependencies": {
+    "aws-sdk-mock": "^1.7.0",
     "eslint": "^4.19.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
@@ -32,7 +33,28 @@
   "jest": {
     "coverageDirectory": "./coverage/",
     "collectCoverage": true,
-    "modulePaths": [ "./src", "./test", "./node_modules" ],
+    "modulePaths": [
+      "./src",
+      "./test",
+      "./node_modules"
+    ],
     "testEnvironment": "node"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-base",
+      "plugin:jest/recommended"
+    ],
+    "plugins": [
+      "import",
+      "jest"
+    ],
+    "rules": {
+      "indent": ["error", 4],
+      "no-console": "off"
+    },
+    "env": {
+      "node": true
+    }
   }
 }

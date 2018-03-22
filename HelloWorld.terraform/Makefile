@@ -55,7 +55,7 @@ init:
 	npm install --save-dev eslint-plugin-jest
 	npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
 	npm install --save-dev webpack
-	npm install --save-dev nsp
+	npm install --save-dev aws-sdk-mock
 	npm install
 	terraform init
 	terraform get
