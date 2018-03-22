@@ -1,13 +1,21 @@
 const hello = require('main').handler;
+const each = require('jest-each');
 
-function testFunc(done) {
-    function callback(error, result) {
-        expect(result).toBe('Hello from Lambda!!!');
+function testFunc(input, output, done) {
+    function callbackFunc(error, result) {
+        expect(result).toBe(output);
         done();
     }
 
-    hello(null, null, callback);
+    var event = {
+        message: input
+    };
+    hello(event, null, callbackFunc);
 }
 
-test('Hello World Test', testFunc);
+each([
+    ['Hello World 1', 'Lambda, Hello World 1'],
+    ['Hello World 2', 'Lambda, Hello World 2'],
+    ['Good Bye', 'Lambda, Good Bye']
+]).test('Hello World Test', testFunc);
 
