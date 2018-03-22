@@ -1,22 +1,22 @@
 {
-  "name": "helloworld2",
+  "name": "helloworld",
   "license": "Apache-2.0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Michael DeCorte",
   "description": "For test ",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
   },
-  "main": "main.js",
+  "main": "index.js",
   "bugs": {
     "url": "https://github.com/MichaelDeCorte/LambdaExample/issues"
   },
   "homepage": "https://github.com/MichaelDeCorte/LambdaExample#readme",
   "scripts": {
     "lint": "eslint src/*.js",
-    "test": "jest src",
-    "coverage": "jest --collectCoverageFrom=src/**.js --coverage src"
+    "test": "jest",
+    "coverage": "jest --coverage "
   },
   "devDependencies": {
     "eslint": "^4.19.0",
@@ -25,5 +25,14 @@
     "eslint-plugin-jest": "^21.15.0",
     "jest": "^22.4.2",
     "webpack": "^4.1.1"
+  },
+  "dependencies": {
+    "npm": "^5.7.1"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
+    "modulePaths": [ "./src", "./test", "./node_modules" ],
+    "testEnvironment": "node"
   }
 }

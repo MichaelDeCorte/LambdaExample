@@ -10,7 +10,7 @@ all: package install
 .environment.terraform: $(PACKAGE)
 .environment.terraform: $(TFSOURCE)
 .environment.terraform: 
-	terraform apply &&  \
+	terraform apply -auto-approve &&  \
 	touch .environment.terraform
 
 ############################################################
@@ -25,7 +25,7 @@ $(PACKAGE): $(SRC)
 .install.terraform: terraform.tfstate 
 .install.terraform: $(PACKAGE)
 .install.terraform:
-	terraform apply && \
+	terraform apply -auto-approve && \
 	touch .install.terraform
 
 ############################################################
@@ -50,10 +50,12 @@ clean.local:
 ############################################################
 # Init
 init:
+	npm install npm # update npm
 	npm install --save-dev jest
 	npm install --save-dev eslint-plugin-jest
 	npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
 	npm install --save-dev webpack
+	npm install --save-dev nsp
 	npm install
 	terraform init
 	terraform get

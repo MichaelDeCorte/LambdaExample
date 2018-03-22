@@ -1,4 +1,4 @@
-const hello = require('./main').handler;
+const hello = require('main').handler;
 
 function testFunc(done) {
     function callback(error, result) {
