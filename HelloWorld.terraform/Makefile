@@ -9,12 +9,13 @@ TESTSRC= \
 TFSOURCE=HelloWorld.tf
 PACKAGE=HelloWorld.zip
 
-all: package install
+all: unit package environment install integration
 
 ############################################################
 # Environment
 .environment.terraform: $(PACKAGE)
 .environment.terraform: $(TFSOURCE)
+.environment.terraform: .unit.local
 .environment.terraform: 
 	terraform apply -auto-approve &&  \
 	touch .environment.terraform
@@ -22,6 +23,7 @@ all: package install
 ############################################################
 # Package
 .package.terraform: $(PACKAGE)
+.package.terraform: .unit.local
 
 $(PACKAGE): $(SRC)
 	zip -r $@ $<
@@ -35,25 +37,33 @@ $(PACKAGE): $(SRC)
 	touch .install.terraform
 
 ############################################################
-# Test
-.test.local:  terraform.tfstate .package.terraform .install.terraform
-.test.local: $(TESTSRC)
-.test.local:
+# Unit Tests
+.unit.local: $(TESTSRC)
+.unit.local:
 	( npm run lint  									&&	\
-	npm run test 	 									&&	\
+	npm run unit 	 									&&	\
 	npm run coverage 									&&	\
-	touch .test.local 									&&	\
+	touch .unit.local 									&&	\
 	sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) \
+	) 2>&1 | tee -a test/test.output
+
+############################################################
+# Integration Tests
+.integration.local:  terraform.tfstate .install.terraform .unit.local
+.integration.local: $(TESTSRC)
+.integration.local:
+	( npm run aws 	 									&&	\
+	touch .integration.local 								\
 	) 2>&1 | tee -a test/test.output 
 
 
 ############################################################
 # Clean
 clean.terraform:
-	rm -f .package.terraform .install.terraform $(package)
+	rm -f .install.terraform $(package)
 
 clean.local:
-	rm -f test/test.output 
+	rm -f test/test.output .unit.local .integration.local
 
 ############################################################
 # Init
@@ -78,7 +88,11 @@ package: .package.terraform
 
 install: .install.terraform
 
-test: .test.local
+test: unit integration
+
+unit: .unit.local
+
+integration: .integration.local
 
 clean: clean.terraform clean.local
 

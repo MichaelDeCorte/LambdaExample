@@ -15,7 +15,8 @@
   "homepage": "https://github.com/MichaelDeCorte/LambdaExample#readme",
   "scripts": {
     "lint": "eslint src/*.js",
-    "test": "jest",
+    "unit": "jest unit",
+    "aws": "jest aws",
     "coverage": "jest --coverage "
   },
   "devDependencies": {
