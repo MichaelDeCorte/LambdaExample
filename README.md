@@ -1,7 +1,6 @@
 # LambdaExample
 
 Todo
-- integration testing
 - dynamo     
 - AWS stubbing
 - selenium?
@@ -17,4 +16,5 @@ Done
 - data driven testing / jest-each
 - integration with sonarqube
 - jest-each, externalize test data
+- integration testing
     
