@@ -2,7 +2,6 @@
 
 Todo
 - AWS service api
-- jest-each, externalize test data
 - integration testing, selenium?
 - cucumber?    
 - jenkins    
@@ -16,4 +15,5 @@ Done
 - jest
 - data driven testing / jest-each
 - integration with sonarqube
+- jest-each, externalize test data
     

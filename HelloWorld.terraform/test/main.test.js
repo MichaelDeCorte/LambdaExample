@@ -15,11 +15,7 @@ function testFunc(input, output, done) {
     hello(event, null, callbackFunc);
 }
 
-const testData=[
-    ['Hello World 1', 'Lambda, Hello World 1'],
-    ['Hello World 2', 'Lambda, Hello World 2'],
-    ['Good Bye', 'Lambda, Good Bye']
-];
+const testData = require(__filename.replace(/\.[^\.]+$/, '.json'));
 
 each(testData).test('Hello World Test', testFunc);
 
