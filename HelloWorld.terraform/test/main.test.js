@@ -1,3 +1,5 @@
+// https://github.com/mattphillips/jest-each
+
 const hello = require('main').handler;
 const each = require('jest-each');
 
@@ -13,9 +15,11 @@ function testFunc(input, output, done) {
     hello(event, null, callbackFunc);
 }
 
-each([
+const testData=[
     ['Hello World 1', 'Lambda, Hello World 1'],
     ['Hello World 2', 'Lambda, Hello World 2'],
     ['Good Bye', 'Lambda, Good Bye']
-]).test('Hello World Test', testFunc);
+];
+
+each(testData).test('Hello World Test', testFunc);
 

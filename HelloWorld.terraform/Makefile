@@ -32,10 +32,11 @@ $(PACKAGE): $(SRC)
 # Test
 .test.local:  terraform.tfstate .package.terraform .install.terraform
 .test.local:
-	( npm run lint && 										\
-	npm run test && 										\
-	npm run coverage &&										\
-	touch .test.local 										\
+	( npm run lint  									&&	\
+	npm run test 	 									&&	\
+	npm run coverage 									&&	\
+	touch .test.local 									&&	\
+	sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) \
 	) 2>&1 | tee -a src/test.output 
 
 
