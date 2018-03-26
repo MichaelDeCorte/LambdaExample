@@ -24,6 +24,6 @@ module "LambdaExample" {
 
 	filename		    = "HelloWorld.zip"
 	function_name		= "HelloWorld"
-	handler			    = "main.handler"
+	handler			    = "src/main.handler"
 }
 

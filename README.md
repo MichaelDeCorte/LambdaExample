@@ -1,13 +1,14 @@
 # LambdaExample
 
 Todo
-- AWS service api
-- integration testing, selenium?
+- integration testing
+- dynamo     
+- AWS stubbing
+- selenium?
 - cucumber?    
 - jenkins    
 - replace make 
-- AWS stubbing
-- dynamo     
+- AWS api gateway??
 - source code security scanning (unclear if there are good open source packages to do this)
 
 Done

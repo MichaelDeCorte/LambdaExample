@@ -19,17 +19,18 @@
     "coverage": "jest --coverage "
   },
   "devDependencies": {
+    "aws-sdk": "^2.213.1",
     "aws-sdk-mock": "^1.7.0",
-    "eslint": "^4.19.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jest": "^21.15.0",
-    "jest": "^22.4.2",
+    "jest": "^22.4.3",
     "jest-each": "^0.3.1",
-    "webpack": "^4.1.1"
+    "webpack": "^4.2.0"
   },
   "dependencies": {
-    "npm": "^5.7.1"
+    "npm": "^5.8.0"
   },
   "jest": {
     "coverageDirectory": "./coverage/",

@@ -1,5 +1,11 @@
 #############################################################
 SRC=src/main.js
+TESTSRC= \
+		test/main-aws.test.js 		\
+		test/main-aws.test.json 	\
+		test/main-unit.test.js		\
+		test/main-unit.test.json
+
 TFSOURCE=HelloWorld.tf
 PACKAGE=HelloWorld.zip
 
@@ -31,13 +37,14 @@ $(PACKAGE): $(SRC)
 ############################################################
 # Test
 .test.local:  terraform.tfstate .package.terraform .install.terraform
+.test.local: $(TESTSRC)
 .test.local:
 	( npm run lint  									&&	\
 	npm run test 	 									&&	\
 	npm run coverage 									&&	\
 	touch .test.local 									&&	\
 	sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) \
-	) 2>&1 | tee -a src/test.output 
+	) 2>&1 | tee -a test/test.output 
 
 
 ############################################################
@@ -46,7 +53,7 @@ clean.terraform:
 	rm -f .package.terraform .install.terraform $(package)
 
 clean.local:
-	rm -f src/test.output 
+	rm -f test/test.output 
 
 ############################################################
 # Init
@@ -57,6 +64,7 @@ init:
 	npm install --save-dev eslint-plugin-jest
 	npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
 	npm install --save-dev webpack
+	npm install --save-dev aws-sdk
 	npm install --save-dev aws-sdk-mock
 	npm install
 	terraform init
