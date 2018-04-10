@@ -1,13 +1,22 @@
 #############################################################
-SRC=src/main.js
-TESTSRC= \
-		test/main-aws.test.js 		\
-		test/main-aws.test.json 	\
-		test/main-unit.test.js		\
-		test/main-unit.test.json
+SRC= \
+	src/putParty.js						\
+	src/guid.js
 
-TFSOURCE=HelloWorld.tf
-PACKAGE=HelloWorld.zip
+UNITTESTSRC= \
+		test/putParty-unit.test.js		\
+		test/putParty-unit.test.json
+
+INTTESTSRC= \
+		test/putParty-aws.test.js 		\
+		test/putParty-aws.test.json
+
+TFSOURCE=putParty.tf
+# PACKAGE=.serverless/aws-nodejs.zip
+PACKAGE=.serverless/putParty.zip
+.EXPORT_ALL_VARIABLES:
+
+AWS_SDK_LOAD_CONFIG=1
 
 all: unit package environment install integration
 
@@ -26,7 +35,7 @@ all: unit package environment install integration
 .package.terraform: .unit.local
 
 $(PACKAGE): $(SRC)
-	zip -r $@ $<
+	npm run package
 
 #############################################################
 # Install
@@ -38,21 +47,24 @@ $(PACKAGE): $(SRC)
 
 ############################################################
 # Unit Tests
-.unit.local: $(TESTSRC)
-.unit.local:
-	( npm run lint  									&&	\
-	npm run unit 	 									&&	\
-	npm run coverage 									&&	\
-	touch .unit.local 									&&	\
-	sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) \
+.unit.local: $(UNITTESTSRC) $(SRC)
+.unit.local: 
+	( echo ==== lint && npm run lint &&					 		\
+	echo ==== unit test && npm run unit	&&				 		\
+	touch .unit.local 											\
+	) 2>&1 | tee -a test/test.output
+
+sonar:
+	@( echo ==== sonarqube && sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) \
 	) 2>&1 | tee -a test/test.output
 
 ############################################################
 # Integration Tests
-.integration.local:  terraform.tfstate .install.terraform .unit.local
-.integration.local: $(TESTSRC)
+.integration.local: .unit.local
+.integration.local: .install.terraform 
+.integration.local: $(INTTESTSRC) $(SRC)
 .integration.local:
-	( npm run aws 	 									&&	\
+	@( npm run aws 	 									&&	\
 	touch .integration.local 								\
 	) 2>&1 | tee -a test/test.output 
 
@@ -68,18 +80,19 @@ clean.local:
 ############################################################
 # Init
 init:
-	npm install npm # update npm
+	npm install --save-dev npm # update npm
 	npm install --save-dev jest
 	npm install --save-dev jest-each
 	npm install --save-dev eslint-plugin-jest
+	npm install --save-dev serverless
 	npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
-	npm install --save-dev webpack
 	npm install --save-dev aws-sdk
 	npm install --save-dev aws-sdk-mock
+	npm install string-hash
+	npm install promise
 	npm install
 	terraform init
 	terraform get
-	terraform refresh
 
 ############################################################
 environment: .environment.terraform
@@ -93,6 +106,7 @@ test: unit integration
 unit: .unit.local
 
 integration: .integration.local
+integration: .unit.local
 
 clean: clean.terraform clean.local
 

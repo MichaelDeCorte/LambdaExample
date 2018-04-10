@@ -42,8 +42,8 @@ variable "publish" {
 	 default = "false"
 }
 ############################################################
-resource "aws_iam_role" "lambda_role" {
-  name = "lambda_role"
+resource "aws_iam_role" "LambdaRole" {
+  name = "LambdaRole"
 
   assume_role_policy = <<EOF
 {
@@ -65,7 +65,7 @@ EOF
 }
 
 #resource "aws_iam_role_policy_attachment" "test-attach" {
-#     role        = "${aws_iam_role.lambda_role.name}"
+#     role        = "${aws_iam_role.LambdaRole.name}"
 #     policy_arn  = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 #}
 
@@ -80,7 +80,7 @@ resource "aws_lambda_function" "aws_lambda" {
     
 
     tags		        = "${merge(var.tags, module.variables.tags)}"
-    role              = "${aws_iam_role.lambda_role.arn}"
+    role              = "${aws_iam_role.LambdaRole.arn}"
     source_code_hash  = "${base64sha256(file("${var.filename}"))}"
     runtime           = "${var.runtime}"
 

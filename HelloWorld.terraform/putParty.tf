@@ -19,11 +19,11 @@ module "mdecorte-codebucket" {
 }    
 
 module "LambdaExample" {
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
-    # source = "../Terraform/lambda/basic"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
+    source = "../Terraform/lambda/basic"
 
-	filename		    = "HelloWorld.zip"
-	function_name		= "HelloWorld"
-	handler			    = "src/main.handler"
+	filename		    = ".serverless/putParty.zip"
+	function_name		= "putParty"
+	handler			    = "src/putParty.handler"
 }
 

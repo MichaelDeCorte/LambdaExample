@@ -1,5 +1,32 @@
 [
-    ["Hello World 1", "Lambda, Hello World 1"],
-    ["Hello World 2", "Lambda, Hello World 2"],
-    ["Good Bye", "Lambda, Good Bye"]
+  [
+    {
+      "firstName": "George",
+      "lastName": "Washington"
+    },
+    {
+      "firstName": "George",
+      "lastName": "Washington"
+    }
+  ],
+  [
+    {
+      "firstName": "John",
+      "lastName": "Adams"
+    },
+    {
+      "firstName": "John",
+      "lastName": "Adams"
+    }
+  ],
+  [
+    {
+      "firstName": "Thomas",
+      "lastName": "Jefferson"
+    },
+    {
+      "firstName": "Thomas",
+      "lastName": "Jefferson"
+    }
+  ]
 ]

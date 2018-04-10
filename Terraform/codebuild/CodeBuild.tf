@@ -47,7 +47,7 @@ resource "aws_iam_role" "CodeBuildRole" {
 resource "aws_iam_policy" "CodeBuildPolicy" {
   name        = "CodeBuildPolicy"
   path        = "/service-role/"
-  description = "Policy used in trust relationship with CodeBuild"
+  description = "Policy used with CodeBuild"
 
   policy = "${file("${path.module}/CodeBuildPolicy.json")}"
 

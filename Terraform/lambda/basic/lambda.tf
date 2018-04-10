@@ -45,7 +45,8 @@ variable "tags" {
 
 ############################################################
 module "LambdaRole" {
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/role"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/role"
+    source = "../role"
 }
 
 
@@ -62,7 +63,6 @@ resource "aws_lambda_function" "aws_lambda" {
 
     tags		        = "${merge(var.tags, module.variables.tags)}"
     role                = "${module.LambdaRole.arn}"
-    # role                = "${aws_iam_role.lambda_role.arn}"
     runtime             = "${var.runtime}"
 
     tags                = "${merge(var.tags, module.variables.tags)}"

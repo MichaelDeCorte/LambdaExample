@@ -1,5 +1,23 @@
 [
-    [ { "message": "Hello World 1" }, "Lambda, Hello World 1"],
-    [ { "message": "Hello World 2" }, "Lambda, Hello World 2"],
-    [ { "message": "Good Bye" }, "Lambda, Good Bye"]
+  [
+    {
+      "firstName": "George",
+      "lastName": "Washington"
+    },
+    "George Washington"
+  ],
+  [
+    {
+      "firstName": "John",
+      "lastName": "Adams"
+    },
+    "John Adams"
+  ],
+  [
+    {
+      "firstName": "Thomas",
+      "lastName": "Jefferson"
+    },
+    "Thomas Jefferson"
+  ]
 ]
