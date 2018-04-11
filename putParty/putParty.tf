@@ -10,19 +10,20 @@ provider "aws" {
 
 
 module "mdecorte-codebucket" {
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/s3"
     # source = "../Terraform/s3"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/s3"
 
     bucket = "mdecorte-codebucket"
     acl    = "private"
     force_destroy = true
 }    
 
-module "LambdaExample" {
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
+module "putParty" {
     source = "../Terraform/lambda/basic"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
 
 	filename		    = ".serverless/putParty.zip"
+    s3_bucket           = "${module.mdecorte-codebucket.id}"
 	function_name		= "putParty"
 	handler			    = "src/putParty.handler"
 }

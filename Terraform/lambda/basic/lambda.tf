@@ -24,6 +24,10 @@ variable "filename" {
     type = "string"
 }
 
+variable "s3_bucket" {
+    type = "string"
+}
+
 variable "handler" {
 	 type = "string"
 }
@@ -45,18 +49,28 @@ variable "tags" {
 
 ############################################################
 module "LambdaRole" {
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/role"
-    source = "../role"
+    # source = "../role"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/role"
+}
+
+resource "aws_s3_bucket_object" "lambdaFile" {
+    bucket = "${var.s3_bucket}"
+    source = "${var.filename}"
+    key = "${replace(var.filename, "/^.*/([^/]*)/", "$1")}"
 }
 
 
-# https://www.terraform.io/docs/providers/aws/r/lambda_function.html
+############################################################
 resource "aws_lambda_function" "aws_lambda" {
-    source_code_hash    = "${base64sha256(file("${var.filename}"))}"
-    filename              = "${var.filename}"
-    # s3_bucket             = "mdecorte-codebucket"
-    # s3_key                = "9e7ddb249e5ae71e28a77cce43bf9791"
-    function_name       = "${var.function_name}"
+    # waiting on https://github.com/hashicorp/terraform/issues/14037
+    # to allow conditional empty blocks to switch between passing
+    # s3 or file into module
+
+    source_code_hash        = "${base64sha256(file("${var.filename}"))}"
+    s3_bucket               = "${var.s3_bucket}"
+    s3_key                  = "${aws_s3_bucket_object.lambdaFile.id}"
+
+    function_name           = "${var.function_name}"
 
     publish	            = "${var.publish}"
     handler	            = "${var.handler}"

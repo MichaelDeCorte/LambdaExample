@@ -6,7 +6,6 @@ const guid = require('./guid').generateGUID;
 exports.handler = (event, context, lambdaCallback) => {
     // create AWS service functions in handler to allow mocking
     const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });  
-    // console.log('exports.hander: ' + JSON.stringify(event));
     const eventObj = event;
 
     const partyID = guid(hash(eventObj.lastName)).toString();
@@ -29,6 +28,10 @@ exports.handler = (event, context, lambdaCallback) => {
 
     function dynamoCallback(error, dynamoResponse) {
         if (error) {
+            console.log('putParty.js Error: '
+                        + ' error:' + error
+                        + ' event:' + JSON.stringify(event, null, 4)
+                        + ' context:' + JSON.stringify(context, null, 4));
             lambdaCallback(
                 error,
                 {

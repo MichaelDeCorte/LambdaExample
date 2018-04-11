@@ -12,7 +12,6 @@ INTTESTSRC= \
 		test/putParty-aws.test.json
 
 TFSOURCE=putParty.tf
-# PACKAGE=.serverless/aws-nodejs.zip
 PACKAGE=.serverless/putParty.zip
 .EXPORT_ALL_VARIABLES:
 
@@ -42,7 +41,7 @@ $(PACKAGE): $(SRC)
 .install.terraform: terraform.tfstate 
 .install.terraform: $(PACKAGE)
 .install.terraform:
-	terraform apply -auto-approve && \
+	terraform apply -auto-approve && 	\
 	touch .install.terraform
 
 ############################################################

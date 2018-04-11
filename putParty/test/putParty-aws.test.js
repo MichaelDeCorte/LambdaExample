@@ -35,7 +35,9 @@ function dynamoPartyGet(partyDataGet) {
             dynamodb.getItem(partyDataGet,
                              (error, result) => {
                                  if (error) {
-                                     console.log('Error: dynamodb.getItem:' + error);
+                                     console.log('Error: dynamodb.getItem:'
+                                                 + error +
+                                                 JSON.stringify(partyDataGet, null, 4));
                                      reject(error);
                                  } else {
                                      resolve(result);
