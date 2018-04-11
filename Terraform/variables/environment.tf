@@ -6,13 +6,13 @@ output "keys" {
 }
 
 output "tags" {
-       value  	 =    {
-      		AdminContact = "Michael DeCorte"
-	        Description = "LambdaHelloWorld"
+    value  	 =    {
+        AdminContact = "Michael DeCorte"
+        Description = "LambdaHelloWorld"
 		Owner	 = "Michael DeCorte"
 		Project	 = "RedRocks"
 		Terraform = "true"
-        LOG_LEVEL = "trace"
+        LOG_LEVEL = "debug"
 	}
 }
 

@@ -2,6 +2,7 @@
 
 # include "global" variables
 module "variables" {
+    # source = "../../../Terraform/variables"
     source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/variables"
 }
 
