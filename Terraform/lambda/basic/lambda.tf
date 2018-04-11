@@ -49,6 +49,11 @@ variable "tags" {
 	 default = { }
 }
 
+variable "variables" {
+	 type = "map"
+	 default = { }
+}
+    
 
 ############################################################
 module "LambdaRole" {
@@ -80,6 +85,9 @@ resource "aws_lambda_function" "aws_lambda" {
     handler	            = "${var.handler}"
 
     tags		        = "${merge(var.tags, module.variables.tags)}"
+    environment {
+        variables	    = "${merge(var.variables, module.variables.variables)}"
+    }
     role                = "${module.LambdaRole.arn}"
     runtime             = "${var.runtime}"
 

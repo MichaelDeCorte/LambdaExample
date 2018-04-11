@@ -12,6 +12,11 @@ output "tags" {
 		Owner	 = "Michael DeCorte"
 		Project	 = "RedRocks"
 		Terraform = "true"
+	}
+}
+
+output "variables" {
+    value  	 =    {
         LOG_LEVEL = "debug"
 	}
 }
@@ -44,21 +49,3 @@ output "env" {
        description = "The name for the environment."
 }
 
-# output "sslcert" {
-#        #value    = "arn:aws:acm:us-east-1:yyy:certificate/xxx" #Virginia (us-east-1)
-#        description = "The name for the environment."
-# }
-
-# output "subnets" {
-#        #value    = ["subnet-yyy", "subnet-xxxx"] # Virginia (us-east-1)
-#        description = "The name for the environment."
-# }
-
-# output "subnetid" {
-#        #value    = "subnet-xxx" # Virginia (us-east-1)
-#        description = "The name for the environment."
-# }
-
-# output "vpcid" {
-#        #value = "vpc-xxx" #Virginia (us-east-1)
-# }

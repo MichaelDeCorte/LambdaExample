@@ -1,6 +1,7 @@
 #############################################################
 SRC= \
 	src/putParty.js						\
+	src/logger.js						\
 	src/guid.js
 
 UNITTESTSRC= \
@@ -18,8 +19,8 @@ PACKAGE=.serverless/putParty.zip
 AWS_SDK_LOAD_CONFIG=1
 
 # error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 
-LOG_LEVEL=silly
-# LOG_LEVEL=debug
+# LOG_LEVEL=silly
+LOG_LEVEL=debug
 # LOG_LEVEL=error
 
 all: unit package environment install integration

@@ -6,23 +6,18 @@ const winston = require('winston');
 
 const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
+function tsFormat(){
+    const d = new Date();
+    return months[d.getMonth()] + ' ' + d.getDate() + ' ' +
+        d.getHours() + ':' + d.getMinutes() + ':' +
+        d.getSeconds() + ':' + d.getMilliseconds();
+}
+
 const logger = new (winston.Logger)(
     {
         transports: [
             new (winston.transports.Console)({
-                timestamp: function() {
-                    const d = new Date();
-                    return months[d.getMonth()] + ' ' + d.getDate() + ' ' +
-                        d.getHours() + ':' + d.getMinutes() + ':' +
-                        d.getSeconds() + ':' + d.getMilliseconds();
-                },
-                formatter: function(options) {
-                    // - Return string will be passed to logger.
-                    //   colorize output based on the log level.
-                    return options.timestamp() + ' ' +
-                        (options.message ? options.message : '') +
-                        (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
-                }
+                timestamp: tsFormat,
             })
         ]
     }
