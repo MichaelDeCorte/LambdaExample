@@ -21,7 +21,7 @@
     "package": "serverless package"
   },
   "devDependencies": {
-    "aws-sdk": "^2.217.1",
+    "aws-sdk": "^2.224.1",
     "aws-sdk-mock": "^1.7.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
@@ -34,7 +34,8 @@
   },
   "dependencies": {
     "promise": "^8.0.1",
-    "string-hash": "^1.1.3"
+    "string-hash": "^1.1.3",
+    "winston": "^2.4.1"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -71,17 +72,27 @@
         "error",
         4,
         {
-          "FunctionDeclaration": { "parameters": "first" },
-          "FunctionExpression": { "parameters": "first" },
-          "CallExpression": { "arguments": "first" },
+          "FunctionDeclaration": {
+            "parameters": "first"
+          },
+          "FunctionExpression": {
+            "parameters": "first"
+          },
+          "CallExpression": {
+            "arguments": "first"
+          },
           "ArrayExpression": "first",
           "ObjectExpression": "first",
           "ImportDeclaration": "first",
           "ignoreComments": true
         }
       ],
-      "max-len": [ "warn" ],
-      "prefer-const": [ "off" ],
+      "max-len": [
+        "warn"
+      ],
+      "prefer-const": [
+        "off"
+      ],
       "no-console": "off",
       "no-multi-spaces": "off",
       "no-trailing-spaces": "off",

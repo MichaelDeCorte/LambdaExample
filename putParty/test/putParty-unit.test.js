@@ -1,12 +1,17 @@
 // https://github.com/mattphillips/jest-each
 
 const AWS = require('aws-sdk-mock'); // eslint-disable-line import/no-extraneous-dependencies
-const Promise = require('promise');
-const putParty = require('../src/putParty').handler;
 const each = require('jest-each');
+const Promise = require('promise');
+const logger = require('../src/logger.js').logger;
+const putParty = require('../src/putParty').handler;
+
 
 function testFunc(testData, testResult, done) {
     const lambdaParam = testData;
+
+    logger.silly('putParty-unit.test.js: testData: ' + JSON.stringify(testData, null, 4));
+    logger.silly('putParty-unit.test.js: testResult: ' + JSON.stringify(testResult, null, 4));
 
     // https://facebook.github.io/jest/docs/en/expect.html
     expect.assertions(1);
@@ -20,6 +25,7 @@ function testFunc(testData, testResult, done) {
 
     return new Promise(
         (resolve, reject) => {
+            logger.silly('putParty-unit.test.js: lambdaParam: ' + JSON.stringify(lambdaParam, null, 4));
             putParty(lambdaParam,
                      null, // context
                      (error, result) => {
@@ -32,6 +38,7 @@ function testFunc(testData, testResult, done) {
         }
     ).then(
         (lambdaResponse) => { 
+            logger.silly('putParty-unit.test.js: lambdaResponse: ' + JSON.stringify(lambdaResponse, null, 4));
             try {
                 expect(lambdaResponse.message).toEqual(testResult);
                 done();
@@ -40,6 +47,7 @@ function testFunc(testData, testResult, done) {
             }
         },
         (lambdaError) => {
+            logger.error('putParty-unit.test.js: lambdaError: ' + lambdaError);
             done.fail(lambdaError);
         }
     );

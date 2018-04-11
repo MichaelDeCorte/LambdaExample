@@ -12,6 +12,7 @@ output "tags" {
 		Owner	 = "Michael DeCorte"
 		Project	 = "RedRocks"
 		Terraform = "true"
+        LOG_LEVEL = "trace"
 	}
 }
 

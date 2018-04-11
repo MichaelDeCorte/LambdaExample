@@ -56,9 +56,10 @@ module "LambdaRole" {
 }
 
 resource "aws_s3_bucket_object" "lambdaFile" {
-    bucket = "${var.s3_bucket}"
-    source = "${var.filename}"
-    key = "${replace(var.filename, "/^.*/([^/]*)/", "$1")}"
+    bucket  = "${var.s3_bucket}"
+    source  = "${var.filename}"
+    key     = "${replace(var.filename, "/^.*/([^/]*)/", "$1")}"
+    etag    = "${md5(file("${var.filename}"))}"
 }
 
 

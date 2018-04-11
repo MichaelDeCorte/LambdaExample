@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
+const logger = require('../src/logger.js').logger;
 const hash = require('string-hash');
 const guid = require('./guid').generateGUID;
 
@@ -10,6 +11,9 @@ exports.handler = (event, context, lambdaCallback) => {
 
     const partyID = guid(hash(eventObj.lastName)).toString();
 
+    console.log('LOG_LEVEL=' + process.env.LOG_LEVEL);
+
+    logger.debug('putParty.js: partyID: ' + partyID);
     const param = {
         TableName: 'party',
         ReturnConsumedCapacity: 'TOTAL',
@@ -27,8 +31,9 @@ exports.handler = (event, context, lambdaCallback) => {
     };
 
     function dynamoCallback(error, dynamoResponse) {
+        logger.debug('putParty.js: dynamoResponse: ' + JSON.stringify(dynamoResponse, null, 4));
         if (error) {
-            console.log('putParty.js Error: '
+            logger.error('putParty.js: '
                         + ' error:' + error
                         + ' event:' + JSON.stringify(event, null, 4)
                         + ' context:' + JSON.stringify(context, null, 4));

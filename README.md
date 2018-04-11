@@ -1,12 +1,12 @@
 # LambdaExample
 
 Todo
-- log4js    
 - data at rest
 - data in transit    
 - multiple services with one lambda?
 - AWS api gateway??
 - route 53    
+- version node libraries
 - selenium?
 - cucumber?    
 - jenkins    
@@ -25,4 +25,5 @@ Done
 - integration testing
 - dynamo     
 - push code to S3
+- log4js    
     

@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const each = require('jest-each');
 const Promise = require('promise');
+const logger = require('../src/logger.js').logger;
 
 // Initialize AWS credentials
 const credentials = new AWS.SharedIniFileCredentials(); 
@@ -13,12 +14,13 @@ const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
 // put PartyData via lambda
 function partyPut(partyDataPut) {
+    logger.silly('putParty-aws.test.js: partyDataPut: ' + JSON.stringify(partyDataPut, null, 4));
     return new Promise(
         (resolve, reject) => {
             lambda.invoke(partyDataPut,
                           (error, result) => {
                               if (error) {
-                                  console.log('Error: Lambda.invoke:' + error);
+                                  logger.error('putParty-aws.test.js: Lambda.invoke:' + error);
                                   reject(error);
                               } else {
                                   resolve(result);
@@ -30,12 +32,14 @@ function partyPut(partyDataPut) {
 
 // get PartyData via Dynamo directly
 function dynamoPartyGet(partyDataGet) {
+    logger.silly('putParty-aws.test.js: partyDataGet: ' + JSON.stringify(partyDataGet, null, 4));
+
     return new Promise(
         (resolve, reject) => {
             dynamodb.getItem(partyDataGet,
                              (error, result) => {
                                  if (error) {
-                                     console.log('Error: dynamodb.getItem:'
+                                     logger.error('putParty-aws.test.js: dynamodb.getItem:'
                                                  + error +
                                                  JSON.stringify(partyDataGet, null, 4));
                                      reject(error);
@@ -72,6 +76,7 @@ function testFunc(testData, expectedResult, done) {
 
     // take results of partyGet and merge with partyDataPut structure
     function prepPartyData(partyPutResult) {
+        logger.silly('putParty-aws.test.js: partyPutResult: ' + JSON.stringify(partyPutResult, null, 4));
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
                 partyDataGet.Key.partyID =
@@ -89,6 +94,7 @@ function testFunc(testData, expectedResult, done) {
 
     // compare partyDataGet results with expected test results
     function validatePartyData(actualResult) {
+        logger.silly('putParty-aws.test.js: actualResult: ' + JSON.stringify(actualResult, null, 4));
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
                 let t = actualResult.Item.firstName.S +
