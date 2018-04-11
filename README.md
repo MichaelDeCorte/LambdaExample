@@ -1,7 +1,6 @@
 # LambdaExample
 
 Todo
-- upgrade to node 8.10
 - log4js    
 - data at rest
 - data in transit    
@@ -14,6 +13,7 @@ Todo
 - replace make
 - version service
 - source code security scanning (unclear if there are good open source packages to do this)
+- upgrade to node 8.10 # waiting on terraform support
 
 Done
 - AWS stubbing
