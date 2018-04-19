@@ -71,6 +71,8 @@ sonar:
 	npm run aws
 	touch .integration.local
 
+# npm run service
+
 ############################################################
 # Clean
 clean.terraform:

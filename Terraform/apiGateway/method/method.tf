@@ -43,7 +43,7 @@ variable "logging_level" {
 
 variable "integration_type" {
     # AWS, AWS_PROXY, HTTP or HTTP_PROXY
-    default     = "AWS_PROXY" 
+    default     = "AWS_PROXY"
 }
 
 variable "integration_http_method" {
@@ -84,6 +84,7 @@ resource "aws_api_gateway_method_settings" "methodSettings" {
     settings {
         metrics_enabled = true
         logging_level   = "${var.logging_level}"
+        data_trace_enabled = true
     }
 }
 
@@ -111,17 +112,6 @@ resource "aws_api_gateway_method_response" "200MethodResponse" {
     }
 }
         
-# resource "aws_api_gateway_integration_response" "200integrationResponse" {
-#     rest_api_id     = "${var.api_id}"
-#     resource_id     = "${var.api_resource_id}"
-#     http_method     = "${aws_api_gateway_method.apiMethod.http_method}"
-#     status_code     = "${aws_api_gateway_method_response.200MethodResponse.status_code}"
-
-#     # Transforms the backend JSON response to XML
-#     response_templates {
-#         "application/json" = ""
-#     }
-# }
 ##############################
 resource "aws_api_gateway_method_response" "500MethodResponse" {
     depends_on = [
@@ -136,20 +126,6 @@ resource "aws_api_gateway_method_response" "500MethodResponse" {
     }
 }
         
-# resource "aws_api_gateway_integration_response" "500integrationResponse" {
-#     rest_api_id     = "${var.api_id}"
-#     resource_id     = "${var.api_resource_id}"
-#     http_method     = "${aws_api_gateway_method.apiMethod.http_method}"
-#     status_code     = "${aws_api_gateway_method_response.500MethodResponse.status_code}"
-#     selection_pattern = ".*Error.*"
-
-
-#     # Transforms the backend JSON response to XML
-#     response_templates {
-#         "application/json" = ""
-#     }
-# }
-
 # ##########
 resource "aws_api_gateway_deployment" "methodDeployment" {
     depends_on = [
