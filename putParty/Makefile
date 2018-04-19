@@ -69,9 +69,9 @@ sonar:
 .integration.local: $(INTTESTSRC) $(SRC)
 .integration.local:
 	npm run aws
+	npm run service
 	touch .integration.local
 
-# npm run service
 
 ############################################################
 # Clean
