@@ -50,5 +50,5 @@ output "env" {
 }
 
 output "retention_in_days" {
-    value   = 3
+    value = "3"
 }
