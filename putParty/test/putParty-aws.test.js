@@ -10,10 +10,12 @@ AWS.config.credentials = credentials;
 // AWS Lambda API with default calling parameters
 const lambda = new AWS.Lambda();
 
-const dynamodb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });  
+const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
 
 // put PartyData via lambda
 function partyPut(partyDataPut) {
+    jest.setTimeout(10000); // 10 second timeout.  lambda can be slow at times
+
     logger.silly('putParty-aws.test.js: partyDataPut: ' + JSON.stringify(partyDataPut, null, 4));
     return new Promise(
         (resolve, reject) => {
@@ -54,13 +56,13 @@ function dynamoPartyGet(partyDataGet) {
 // test service
 function testFunc(testData, expectedResult, done) {
     let partyDataGet = {
-        TableName: 'party',
-        Key: {
-            partyID: { N: '0' },
-            lastName: { S: 'no data' },
+        'TableName': 'party',
+        'Key': {
+            'partyID': { 'N': '0' },
+            'lastName': { 'S': 'no data' },
         },
-        ProjectionExpression: 'partyID, firstName, lastName',
-        ReturnConsumedCapacity: 'TOTAL',
+        'ProjectionExpression': 'partyID, firstName, lastName',
+        'ReturnConsumedCapacity': 'TOTAL',
     };
 
     /* eslint-disable */
@@ -77,15 +79,16 @@ function testFunc(testData, expectedResult, done) {
     // take results of partyGet and merge with partyDataPut structure
     function prepPartyData(partyPutResult) {
         logger.silly('putParty-aws.test.js: partyPutResult: ' + JSON.stringify(partyPutResult, null, 4));
+
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
                 partyDataGet.Key.partyID =
                     {
-                        N: JSON.parse(partyPutResult.Payload).partyID
+                        'N': JSON.parse(partyPutResult.Payload).body.partyID
                     };
                 partyDataGet.Key.lastName =
                     {
-                        S: testData.lastName
+                        'S': testData.lastName
                     };
                 resolve(partyDataGet);
             }

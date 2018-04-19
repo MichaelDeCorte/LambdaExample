@@ -13,6 +13,8 @@ function tsFormat(){
         d.getSeconds() + ':' + d.getMilliseconds();
 }
 
+// const logger = winston;
+
 const logger = new (winston.Logger)(
     {
         transports: [

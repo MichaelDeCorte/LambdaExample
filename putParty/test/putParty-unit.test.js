@@ -19,7 +19,7 @@ function testFunc(testData, testResult, done) {
     AWS.mock('DynamoDB',
              'putItem',
              (params, dynamoCallback) => {
-                 dynamoCallback(null, /* errorCode */  testData);
+                 dynamoCallback(null, /* errorCode */ testData);
                  AWS.restore('DynamoDB');
              });
 
@@ -37,10 +37,10 @@ function testFunc(testData, testResult, done) {
                      });
         }
     ).then(
-        (lambdaResponse) => { 
-            logger.silly('putParty-unit.test.js: lambdaResponse: ' + JSON.stringify(lambdaResponse, null, 4));
+        (partyPutResult) => { 
+            logger.silly('putParty-unit.test.js: partyPutResult: ' + JSON.stringify(partyPutResult, null, 4));
             try {
-                expect(lambdaResponse.message).toEqual(testResult);
+                expect(partyPutResult.body.message).toEqual(testResult);
                 done();
             } catch (e) {
                 done.fail(e);

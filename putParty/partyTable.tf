@@ -18,5 +18,9 @@ resource "aws_dynamodb_table" "partyTable" {
   }
 
   tags    = "${module.variables.tags}"
+
+  server_side_encryption {
+    enabled = "true"
+  }
 }
 

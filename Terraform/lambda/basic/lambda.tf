@@ -75,6 +75,9 @@ resource "aws_lambda_function" "aws_lambda" {
     # to allow conditional empty blocks to switch between passing
     # s3 or file into module
 
+    depends_on = [
+        "module.lambdaLogGroup"
+    ]
     source_code_hash        = "${base64sha256(file("${var.filename}"))}"
     s3_bucket               = "${var.s3_bucket}"
     s3_key                  = "${aws_s3_bucket_object.lambdaFile.id}"
@@ -84,12 +87,31 @@ resource "aws_lambda_function" "aws_lambda" {
     publish	            = "${var.publish}"
     handler	            = "${var.handler}"
 
-    tags		        = "${merge(var.tags, module.variables.tags)}"
+    tags		        = "${merge(module.variables.tags, var.tags)}"
     environment {
-        variables	    = "${merge(var.variables, module.variables.variables)}"
+        variables	    = "${merge(module.variables.variables, var.variables)}"
     }
     role                = "${module.LambdaRole.arn}"
     runtime             = "${var.runtime}"
 
-    tags                = "${merge(var.tags, module.variables.tags)}"
+}
+
+# create CloudWatch LogGroup
+#
+# must be created before AWS creates LogGroup via aws_api_gateway_method_settings
+#
+module "lambdaLogGroup" {
+    source = "../../cloudwatch/logGroup"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/cloudwatch/logGroup"
+
+    name = "/aws/lambda/${var.function_name}"
+}    
+
+
+output "invoke_arn" {
+       value = "${aws_lambda_function.aws_lambda.invoke_arn}"
+}
+
+output "function_name" {
+       value = "${aws_lambda_function.aws_lambda.function_name}"
 }

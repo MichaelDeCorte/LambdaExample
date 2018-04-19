@@ -26,5 +26,33 @@ module "putParty" {
     s3_bucket           = "${module.mdecorte-codebucket.id}"
 	function_name		= "putParty"
 	handler			    = "src/putParty.handler"
+    variables           =
+                        {
+                            LOG_LEVEL = "silly"
+                        }
 }
 
+
+module "apiGateway" {
+    source = "../Terraform/apiGateway/api"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/api"
+
+    api_name = "party"
+
+}
+
+module "partyMethod" {
+    source = "../Terraform/apiGateway/method"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/method"
+
+    stage_name 		= "uat"
+    api_id 			= "${module.apiGateway.api_id}"
+    api_resource_id = "${module.apiGateway.root_resource_id}"
+    function_uri	= "${module.putParty.invoke_arn}"    
+    function_name	= "${module.putParty.function_name}"    
+}
+
+output "invoke_url" {
+    value = "${module.partyMethod.invoke_url}"
+}
+        

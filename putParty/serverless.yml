@@ -59,6 +59,7 @@ package:
         - .terraform/**
         - '.??*'
         - '.??*/**'
+        - '.??*/#*#'
         - coverage/**
         - 'package*.json'
         - '**/*.output'
@@ -66,6 +67,10 @@ package:
         - '**/*terraform*'
         - '**/*.tf'
         - '**/Makefile'
+        - node_modules/colors/screenshots/colors.png
+        - node_modules/**/README.md
+        - node_modules/**/Readme.md
+        - node_modules/**/CHANGELOG.md
 
 functions:
   putParty:

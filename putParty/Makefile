@@ -31,14 +31,12 @@ all: unit package environment install integration
 .environment.terraform: $(TFSOURCE)
 .environment.terraform: .unit.local
 .environment.terraform: 
-	terraform apply -auto-approve &&  \
+	terraform apply -auto-approve
 	touch .environment.terraform
 
 ############################################################
 # Package
-.package.terraform: $(PACKAGE)
-.package.terraform: .unit.local
-
+$(PACKAGE): .unit.local
 $(PACKAGE): $(SRC)
 	npm run package
 
@@ -46,22 +44,23 @@ $(PACKAGE): $(SRC)
 # Install
 .install.terraform: terraform.tfstate 
 .install.terraform: $(PACKAGE)
+.install.terraform: .unit.local
 .install.terraform:
-	terraform apply -auto-approve && 	\
+	terraform apply -auto-approve
 	touch .install.terraform
 
 ############################################################
 # Unit Tests
 .unit.local: $(UNITTESTSRC) $(SRC)
 .unit.local: 
-	( echo ==== lint && npm run lint &&					 		\
-	echo ==== unit test && npm run unit	&&				 		\
-	touch .unit.local 											\
-	) 2>&1 | tee -a test/test.output
+	echo ==== lint
+	npm run lint 
+	echo ==== unit test
+	npm run unit	
+	touch .unit.local
 
 sonar:
-	@( echo ==== sonarqube && sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) \
-	) 2>&1 | tee -a test/test.output
+	echo ==== sonarqube && sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) 
 
 ############################################################
 # Integration Tests
@@ -69,10 +68,8 @@ sonar:
 .integration.local: .install.terraform 
 .integration.local: $(INTTESTSRC) $(SRC)
 .integration.local:
-	@( npm run aws 	 									&&	\
-	touch .integration.local 								\
-	) 2>&1 | tee -a test/test.output 
-
+	npm run aws
+	touch .integration.local
 
 ############################################################
 # Clean
@@ -103,7 +100,7 @@ init:
 ############################################################
 environment: .environment.terraform
 
-package: .package.terraform
+package: $(PACKAGE)
 
 install: .install.terraform
 

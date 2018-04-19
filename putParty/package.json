@@ -93,6 +93,10 @@
       "prefer-const": [
         "off"
       ],
+      "quote-props": [
+        "error",
+        "always"
+      ],
       "no-console": "off",
       "no-multi-spaces": "off",
       "no-trailing-spaces": "off",
