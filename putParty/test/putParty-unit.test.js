@@ -10,8 +10,8 @@ const putParty = require('../src/putParty').handler;
 function testFunc(testData, testResult, done) {
     const lambdaParam = testData;
 
-    logger.silly('putParty-unit.test.js: testData: ' + JSON.stringify(testData, null, 4));
-    logger.silly('putParty-unit.test.js: testResult: ' + JSON.stringify(testResult, null, 4));
+    logger.debug('putParty-unit.test.js: testData: ' + JSON.stringify(testData, null, 4));
+    logger.debug('putParty-unit.test.js: testResult: ' + JSON.stringify(testResult, null, 4));
 
     // https://facebook.github.io/jest/docs/en/expect.html
     expect.assertions(1);
@@ -25,7 +25,7 @@ function testFunc(testData, testResult, done) {
 
     return new Promise(
         (resolve, reject) => {
-            logger.silly('putParty-unit.test.js: lambdaParam: ' + JSON.stringify(lambdaParam, null, 4));
+            logger.debug('putParty-unit.test.js: lambdaParam: ' + JSON.stringify(lambdaParam, null, 4));
             putParty(lambdaParam,
                      null, // context
                      (error, result) => {
@@ -37,10 +37,10 @@ function testFunc(testData, testResult, done) {
                      });
         }
     ).then(
-        (partyPutResult) => { 
-            logger.silly('putParty-unit.test.js: partyPutResult: ' + JSON.stringify(partyPutResult, null, 4));
+        (putPartyResult) => { 
+            logger.debug('putParty-unit.test.js: putPartyResult: ' + JSON.stringify(putPartyResult, null, 4));
             try {
-                expect(partyPutResult.body.message).toEqual(testResult);
+                expect(putPartyResult.body.message).toEqual(testResult);
                 done();
             } catch (e) {
                 done.fail(e);
@@ -56,4 +56,4 @@ function testFunc(testData, testResult, done) {
 // eslint-disable-next-line 
 const testData = require(__filename.replace(/.[^.]+$/, '.json'));
 
-each(testData).test('PutParty unit tests / stubbed AWS calls', testFunc);
+each(testData).test('putParty unit tests / stubbed AWS calls', testFunc);

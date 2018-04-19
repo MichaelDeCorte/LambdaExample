@@ -12,50 +12,9 @@ const lambda = new AWS.Lambda();
 
 const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
 
-// put PartyData via lambda
-function partyPut(partyDataPut) {
-    jest.setTimeout(10000); // 10 second timeout.  lambda can be slow at times
-
-    logger.silly('putParty-aws.test.js: partyDataPut: ' + JSON.stringify(partyDataPut, null, 4));
-    return new Promise(
-        (resolve, reject) => {
-            lambda.invoke(partyDataPut,
-                          (error, result) => {
-                              if (error) {
-                                  logger.error('putParty-aws.test.js: Lambda.invoke:' + error);
-                                  reject(error);
-                              } else {
-                                  resolve(result);
-                              }
-                          });
-        }
-    );
-}
-
-// get PartyData via Dynamo directly
-function dynamoPartyGet(partyDataGet) {
-    logger.silly('putParty-aws.test.js: partyDataGet: ' + JSON.stringify(partyDataGet, null, 4));
-
-    return new Promise(
-        (resolve, reject) => {
-            dynamodb.getItem(partyDataGet,
-                             (error, result) => {
-                                 if (error) {
-                                     logger.error('putParty-aws.test.js: dynamodb.getItem:'
-                                                 + error +
-                                                 JSON.stringify(partyDataGet, null, 4));
-                                     reject(error);
-                                 } else {
-                                     resolve(result);
-                                 }
-                             });
-        }
-    );
-}
-
 // test service
 function testFunc(testData, expectedResult, done) {
-    let partyDataGet = {
+    let getPartyData = {
         'TableName': 'party',
         'Key': {
             'partyID': { 'N': '0' },
@@ -66,38 +25,79 @@ function testFunc(testData, expectedResult, done) {
     };
 
     /* eslint-disable */
-    let partyDataPut = {
+    let putPartyData = {
         FunctionName: 'putParty',
         Payload: JSON.stringify( {
             'firstName': 'testFirstName',
             'lastName': 'testLastName'
         } )
     };
-    partyDataPut.Payload = JSON.stringify(testData);
+    putPartyData.Payload = JSON.stringify(testData);
     /* eslint-enable */
 
-    // take results of partyGet and merge with partyDataPut structure
-    function prepPartyData(partyPutResult) {
-        logger.silly('putParty-aws.test.js: partyPutResult: ' + JSON.stringify(partyPutResult, null, 4));
+    // putParty Data via lambda
+    function putParty(data) {
+        jest.setTimeout(10000); // 10 second timeout.  lambda can be slow at times
 
+        logger.debug('putParty-aws.test.js: data: ' + JSON.stringify(data, null, 4));
         return new Promise(
-            (resolve, reject) => { // eslint-disable-line no-unused-vars
-                partyDataGet.Key.partyID =
-                    {
-                        'N': JSON.parse(partyPutResult.Payload).body.partyID
-                    };
-                partyDataGet.Key.lastName =
-                    {
-                        'S': testData.lastName
-                    };
-                resolve(partyDataGet);
+            (resolve, reject) => {
+                lambda.invoke(data,
+                              (error, result) => {
+                                  if (error) {
+                                      logger.error('putParty-aws.test.js: Lambda.invoke:' + error);
+                                      reject(error);
+                                  } else {
+                                      resolve(result);
+                                  }
+                              });
             }
         );
     }
 
-    // compare partyDataGet results with expected test results
+    // take results of getParty and merge with putPartyData structure
+    function prepPartyData(putPartyResult) {
+        logger.debug('putParty-aws.test.js: putPartyResult: ' + JSON.stringify(putPartyResult, null, 4));
+
+        return new Promise(
+            (resolve, reject) => { // eslint-disable-line no-unused-vars
+                getPartyData.Key.partyID =
+                    {
+                        'N': JSON.parse(putPartyResult.Payload).body.partyID
+                    };
+                getPartyData.Key.lastName =
+                    {
+                        'S': testData.lastName
+                    };
+                resolve(getPartyData);
+            }
+        );
+    }
+
+    // get PartyData via Dynamo directly
+    function getParty(data) {
+        logger.debug('putParty-aws.test.js: data: ' + JSON.stringify(data, null, 4));
+
+        return new Promise(
+            (resolve, reject) => {
+                dynamodb.getItem(data,
+                                 (error, result) => {
+                                     if (error) {
+                                         logger.error('putParty-aws.test.js: dynamodb.getItem:'
+                                                      + error +
+                                                      JSON.stringify(data, null, 4));
+                                         reject(error);
+                                     } else {
+                                         resolve(result);
+                                     }
+                                 });
+            }
+        );
+    }
+
+    // compare actual results with expected test results
     function validatePartyData(actualResult) {
-        logger.silly('putParty-aws.test.js: actualResult: ' + JSON.stringify(actualResult, null, 4));
+        logger.debug('putParty-aws.test.js: actualResult: ' + JSON.stringify(actualResult, null, 4));
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
                 let t = actualResult.Item.firstName.S +
@@ -108,9 +108,9 @@ function testFunc(testData, expectedResult, done) {
         );
     }
 
-    partyPut(partyDataPut)
+    putParty(putPartyData)
         .then(prepPartyData)
-        .then(dynamoPartyGet)
+        .then(getParty)
         .then(validatePartyData)
         .catch(
             (error) => {
