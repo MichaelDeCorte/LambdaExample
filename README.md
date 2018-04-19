@@ -1,22 +1,26 @@
 # LambdaExample
 
 Todo
-- lambdaProxyIntegration vs not
+- terraform source interperlation
+- better test coverage
+- selenium?
+- cucumber?    
+- multiple services with one lambda? / issues with 
+    https://stackoverflow.com/questions/41425511/aws-api-gateway-lambda-multiple-endpoint-functions-vs-single-endpoint
+    https://github.com/balmbees/corgi
 - blog notes    
 - vpc
 - route 53    
 - version node libraries
-- selenium?
-- cucumber?    
 - static resources
 - jenkins    
 - replace make
 - version service
 - load testing
-- memory testing    
+- memory testing
+- authentication    
 - source code security scanning (unclear if there are good open source packages to do this)
 - upgrade to node 8.10 # waiting on terraform support
-- multiple services with one lambda? / issues with 
 
 Done
 - AWS stubbing

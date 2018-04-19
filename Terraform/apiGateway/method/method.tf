@@ -22,7 +22,7 @@ variable "api_id" {
 	type = "string"
 }
 
-variable "api_resource_id" {
+variable "resource_id" {
 	type = "string"
 }
 
@@ -64,7 +64,7 @@ module "apiLogGroup" {
 
 resource "aws_api_gateway_method" "apiMethod" {
     rest_api_id   = "${var.api_id}"
-    resource_id   = "${var.api_resource_id}"
+    resource_id   = "${var.resource_id}"
     http_method   = "ANY"
     http_method   = "PUT"
     authorization = "NONE"
@@ -104,7 +104,7 @@ resource "aws_api_gateway_method_response" "200MethodResponse" {
         "aws_api_gateway_integration.methodIntegration"
     ]
     rest_api_id = "${var.api_id}"
-    resource_id   = "${var.api_resource_id}"
+    resource_id   = "${var.resource_id}"
     http_method = "${aws_api_gateway_method.apiMethod.http_method}"
     status_code = "200"
     response_models = {
@@ -118,7 +118,7 @@ resource "aws_api_gateway_method_response" "500MethodResponse" {
         "aws_api_gateway_integration.methodIntegration"
     ]
     rest_api_id = "${var.api_id}"
-    resource_id   = "${var.api_resource_id}"
+    resource_id   = "${var.resource_id}"
     http_method = "${aws_api_gateway_method.apiMethod.http_method}"
     status_code = "500"
     response_models = {
