@@ -21,7 +21,9 @@ Todo
 - authentication    
 - source code security scanning (unclear if there are good open source packages to do this)
 - upgrade to node 8.10 # waiting on terraform support
-
+- local lambda?
+    https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
+    
 Done
 - AWS stubbing
 - terraform deploy

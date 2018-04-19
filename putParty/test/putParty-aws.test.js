@@ -14,16 +14,7 @@ const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });
 
 // test service
 function testFunc(testData, expectedResult, done) {
-    let getPartyData = {
-        'TableName': 'party',
-        'Key': {
-            'partyID': { 'N': '0' },
-            'lastName': { 'S': 'no data' },
-        },
-        'ProjectionExpression': 'partyID, firstName, lastName',
-        'ReturnConsumedCapacity': 'TOTAL',
-    };
-
+    // putParty Data via lambda
     /* eslint-disable */
     let putPartyData = {
         FunctionName: 'putParty',
@@ -35,7 +26,6 @@ function testFunc(testData, expectedResult, done) {
     putPartyData.Payload = JSON.stringify(testData);
     /* eslint-enable */
 
-    // putParty Data via lambda
     function putParty(data) {
         jest.setTimeout(10000); // 10 second timeout.  lambda can be slow at times
 
@@ -56,6 +46,16 @@ function testFunc(testData, expectedResult, done) {
     }
 
     // take results of getParty and merge with putPartyData structure
+    let getPartyData = {
+        'TableName': 'party',
+        'Key': {
+            'partyID': { 'N': '0' },
+            'lastName': { 'S': 'no data' },
+        },
+        'ProjectionExpression': 'partyID, firstName, lastName',
+        'ReturnConsumedCapacity': 'TOTAL',
+    };
+
     function prepPartyData(putPartyResult) {
         logger.debug('putParty-aws.test.js: putPartyResult: ' + JSON.stringify(putPartyResult, null, 4));
 

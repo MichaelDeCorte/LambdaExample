@@ -65,8 +65,22 @@ module "partyMethod" {
     function_name	= "${module.putParty.function_name}"    
 }
 
+##############################
+module "uriTemplate" {
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/files"
+    # source = "../Terraform/files"
+
+    input = "templates/putParty-service.uri.js"
+    output = "test/putParty-service.uri.js"
+    variables = {
+        uri = "${module.partyMethod.invoke_url}"
+    }
+}    
+
+
 ############################################################
 # printout the api gateway url
 output "invoke_url" {
     value = "${module.partyMethod.invoke_url}"
 }
+

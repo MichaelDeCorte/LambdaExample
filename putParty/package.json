@@ -26,12 +26,13 @@
     "aws-sdk-mock": "^1.7.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-jest": "^21.15.0",
     "jest": "^22.4.3",
     "jest-each": "^0.3.1",
     "npm": "^5.8.0",
-    "serverless": "^1.26.1"
+    "serverless": "^1.26.1",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
     "promise": "^8.0.1",
