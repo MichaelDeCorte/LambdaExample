@@ -1,15 +1,17 @@
 ############################################################
+# Inialization
 module "variables" {
     # source = "../Terraform/variables"
     source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/variables"
 }
 
-##########
 provider "aws" {
-        region     = "${module.variables.region}"
+    region     = "${module.variables.region}"
+    
 }
 
 ##########
+# s3 to store code
 module "mdecorte-codebucket" {
     # source = "../Terraform/s3"
     source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/s3"
@@ -20,21 +22,23 @@ module "mdecorte-codebucket" {
 }    
 
 ##########
+# install lambda function
 module "putParty" {
     source = "../Terraform/lambda/basic"
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
 
-	filename		    = ".serverless/putParty.zip"
+    filename		    = ".serverless/putParty.zip"
     s3_bucket           = "${module.mdecorte-codebucket.id}"
-	function_name		= "putParty"
-	handler			    = "src/putParty.handler"
+    function_name		= "putParty"
+    handler			    = "src/putParty.handler"
     variables           =
-                        {
-                            LOG_LEVEL = "silly"
-                        }
+    {
+        LOG_LEVEL = "silly"
+    }
 }
 
 ##########
+# install api gateway
 module "apiGateway" {
     source = "../Terraform/apiGateway/api"
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/api"
@@ -42,7 +46,6 @@ module "apiGateway" {
     api_name = "party"
 }
 
-##########
 module "partyResource" {
     source = "../Terraform/apiGateway/resource"
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/resource"
@@ -51,7 +54,6 @@ module "partyResource" {
     resource_id     = "${module.apiGateway.root_resource_id}"
 }
 
-##########
 module "partyMethod" {
     source = "../Terraform/apiGateway/method"
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/method"
@@ -64,7 +66,7 @@ module "partyMethod" {
 }
 
 ############################################################
+# printout the api gateway url
 output "invoke_url" {
     value = "${module.partyMethod.invoke_url}"
 }
-        

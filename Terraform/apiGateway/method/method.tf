@@ -15,27 +15,26 @@ module "variables" {
 }
 
 variable "stage_name" {
-	type = "string"
+    type = "string"
 }
 
 variable "api_id" {
-	type = "string"
+    type = "string"
 }
 
 variable "resource_id" {
-	type = "string"
+    type = "string"
 }
 
 variable "function_uri" {
-	type = "string"
+    type = "string"
 }    
 
 variable "function_name" {
-	type = "string"
+    type = "string"
 }    
-    
-##############################
 
+##############################
 variable "logging_level" {
     # OFF ERROR INFO
     default   = "INFO" 
@@ -48,8 +47,9 @@ variable "integration_type" {
 
 variable "integration_http_method" {
     # GET, POST, PUT, DELETE, HEAD, OPTION, ANY
-    default     = "POST" 
+    default     = "ANY" 
 }
+
 
 # create CloudWatch LogGroup
 #
@@ -79,7 +79,7 @@ resource "aws_api_gateway_method_settings" "methodSettings" {
 
     rest_api_id = "${var.api_id}"
     stage_name  = "${var.stage_name}"
-    method_path = "*/*"
+    method_path = "*/*" # log all methods
     
     settings {
         metrics_enabled = true
@@ -111,7 +111,7 @@ resource "aws_api_gateway_method_response" "200MethodResponse" {
         "application/json" = "Empty"
     }
 }
-        
+
 ##############################
 resource "aws_api_gateway_method_response" "500MethodResponse" {
     depends_on = [
@@ -125,7 +125,7 @@ resource "aws_api_gateway_method_response" "500MethodResponse" {
         "application/json" = "Error"
     }
 }
-        
+
 # ##########
 resource "aws_api_gateway_deployment" "methodDeployment" {
     depends_on = [
@@ -137,14 +137,12 @@ resource "aws_api_gateway_deployment" "methodDeployment" {
 }
 
 resource "aws_lambda_permission" "allowApiGateway" {
-  statement_id   = "AllowExecutionFromApiGateway"
-  action         = "lambda:InvokeFunction"
-  function_name  = "${var.function_name}"
-  principal      = "apigateway.amazonaws.com"
+    statement_id   = "AllowExecutionFromApiGateway"
+    action         = "lambda:InvokeFunction"
+    function_name  = "${var.function_name}"
+    principal      = "apigateway.amazonaws.com"
 }
 
 output "invoke_url" {
     value = "${aws_api_gateway_deployment.methodDeployment.invoke_url}"
 }
-
-

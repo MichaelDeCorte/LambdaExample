@@ -15,23 +15,24 @@ module "variables" {
 }
 
 variable "api_id" {
-	type = "string"
+    type = "string"
 }
 
 variable "resource_id" {
-	type = "string"
+    type = "string"
 }
 
 variable "path_part" {
+    # "/foo//bar/{proxy+}"
     default = "{proxy+}"
 }
-    
+
 ############################################################
 
 resource "aws_api_gateway_resource" "apiResource" {
-  rest_api_id = "${var.api_id}"
-  parent_id   = "${var.resource_id}"
-  path_part   = "${var.path_part}"
+    rest_api_id = "${var.api_id}"
+    parent_id   = "${var.resource_id}"
+    path_part   = "${var.path_part}"
 }
 
 ############################################################    
