@@ -29,13 +29,6 @@ newSamTemplate.yaml
 coverage
 templates/
     
-#############################################################
-# node.js files
-# this section doesn't actually work: https://github.com/npm/npm/pull/11669
-**/node_modules/colors/screenshots/colors.png
-**/node_modules/**/README.md
-**/node_modules/**/Readme.md
-**/node_modules/**/CHANGELOG.md
 
 #############################################################
 # testing files
@@ -46,9 +39,17 @@ test/
 #############################################################
 # SonarQube
 .scannerwork/
-
+sonar.properties
+    
 #############################################################
 # System Files
 .DS_Store
 .??*
 .??*/**
+
+#############################################################
+# node.js files
+# this section doesn't actually work: https://github.com/npm/npm/pull/11669
+**/node_modules/**/README.md
+**/node_modules/**/Readme.md
+**/node_modules/**/CHANGELOG.md

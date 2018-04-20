@@ -47,7 +47,10 @@ $(PACKAGE): $(SRC)
 	mkdir $$TDIR; \
 	cd $$TDIR;	\
 	tar xf $$SDIR/$$TGZ;	\
-	cd package; zip --recurse-path --quiet ../$(PACKAGE) .;	\
+	cd package; 	\
+	find node_modules -name '*.md' -exec rm {} \; ;\
+	find . -name 'package*.json' -exec rm {} \; ;\
+	zip --recurse-path --quiet ../$(PACKAGE) .;	\
 	cd $$SDIR; \
 	mv $$TDIR/$(PACKAGE) . ;\
 	rm -rf $$TDIR; \
