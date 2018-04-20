@@ -1,4 +1,1 @@
-
-exports.uri = '${uri}';    
-
-    
+exports.uri = '${uri}';

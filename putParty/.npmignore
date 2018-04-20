@@ -1,0 +1,54 @@
+############################################################
+# Emacs files    
+\#*\#
+tmp/
+*~
+
+############################################################
+# TerraForm files
+# Compiled files
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tf
+.terraform/**
+*terraform*
+
+#############################################################
+# project files
+*.zip
+*.tgz
+*.test.out
+*.test.error
+.*.CloudFormation
+.*.terraform
+.*.local    
+newSamTemplate.yaml
+**/Makefile
+**/*.output
+coverage
+templates/
+    
+#############################################################
+# node.js files
+# this section doesn't actually work: https://github.com/npm/npm/pull/11669
+**/node_modules/colors/screenshots/colors.png
+**/node_modules/**/README.md
+**/node_modules/**/Readme.md
+**/node_modules/**/CHANGELOG.md
+
+#############################################################
+# testing files
+coverage/
+*.output        
+test/
+    
+#############################################################
+# SonarQube
+.scannerwork/
+
+#############################################################
+# System Files
+.DS_Store
+.??*
+.??*/**

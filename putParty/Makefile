@@ -13,15 +13,14 @@ INTTESTSRC= \
 		test/putParty-aws.test.json
 
 TFSOURCE=putParty.tf
-PACKAGE=.serverless/putParty.zip
+PACKAGE=putParty-0.0.2.zip
 .EXPORT_ALL_VARIABLES:
 
 AWS_SDK_LOAD_CONFIG=1
 
-# error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5 
-# LOG_LEVEL=silly
-LOG_LEVEL=debug
-# LOG_LEVEL=error
+# error', 'warn', 'info', 'debug', and 'trace'
+# LOG_LEVEL=trace
+LOG_LEVEL=error
 
 all: unit package environment install integration
 
@@ -37,8 +36,22 @@ all: unit package environment install integration
 ############################################################
 # Package
 $(PACKAGE): .unit.local
+
 $(PACKAGE): $(SRC)
-	npm run package
+	npm run dependencies
+	npm pack
+	set -e; \
+	TGZ=`echo $(PACKAGE) | sed 's@.[zZ][iI][pP]@.tgz@g'`; \
+	SDIR=`pwd`;\
+	TDIR=/tmp/$$$$.npmpackage; \
+	mkdir $$TDIR; \
+	cd $$TDIR;	\
+	tar xf $$SDIR/$$TGZ;	\
+	cd package; zip --recurse-path --quiet ../$(PACKAGE) .;	\
+	cd $$SDIR; \
+	mv $$TDIR/$(PACKAGE) . ;\
+	rm -rf $$TDIR; \
+	rm $$TGZ
 
 #############################################################
 # Install
@@ -51,11 +64,15 @@ $(PACKAGE): $(SRC)
 
 ############################################################
 # Unit Tests
-.unit.local: $(UNITTESTSRC) $(SRC)
-.unit.local: 
-	echo ==== lint
+.unit.lint: $(UNITTESTSRC) $(SRC)
+.unit.lint: 
 	npm run lint 
-	echo ==== unit test
+	touch .unit.lint
+
+
+.unit.local: $(UNITTESTSRC) $(SRC)
+.unit.local: .unit.lint
+.unit.local: 
 	npm run unit	
 	touch .unit.local
 
@@ -64,14 +81,20 @@ sonar:
 
 ############################################################
 # Integration Tests
-.integration.local: .unit.local
-.integration.local: .install.terraform 
-.integration.local: $(INTTESTSRC) $(SRC)
-.integration.local:
+.integration.aws: .unit.local
+.integration.aws: .install.terraform 
+.integration.aws: $(INTTESTSRC) $(SRC)
+.integration.aws:
 	npm run aws
-	npm run service
-	touch .integration.local
+	touch .integration.aws
 
+.integration.service: .unit.local
+.integration.service: .install.terraform
+.integration.service: .integration.aws
+.integration.service:  $(INTTESTSRC) $(SRC)
+.integration.service:
+	npm run service
+	touch .integration.service
 
 ############################################################
 # Clean
@@ -79,7 +102,7 @@ clean.terraform:
 	rm -f .install.terraform $(package)
 
 clean.local:
-	rm -f test/test.output .unit.local .integration.local
+	rm -f test/test.output .unit.local .integration.aws
 
 ############################################################
 # Init
@@ -88,17 +111,18 @@ init:
 	npm install --save-dev jest
 	npm install --save-dev jest-each
 	npm install --save-dev eslint-plugin-jest
-	npm install --save-dev serverless
-	npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
+	npm install --save-dev eslint-config-airbnb-base
 	npm install --save-dev aws-sdk
 	npm install --save-dev aws-sdk-mock
 	npm install --save-dev supertest
+	npm install --save-dev serverless
 	npm install string-hash
-	npm install promise
-	npm install winston
+	npm install log-driver
 	npm install
 	terraform init
 	terraform get
+
+# npm info "eslint-config-airbnb-base@latest" peerDependencies --json | command sed 's/[\{\},]//g ; s/: /@/g' | xargs npm install --save-dev "eslint-config-airbnb-base@latest"
 
 ############################################################
 environment: .environment.terraform
@@ -109,10 +133,12 @@ install: .install.terraform
 
 test: unit integration
 
+unit: .unit.lint
 unit: .unit.local
 
-integration: .integration.local
 integration: .unit.local
+integration: .integration.aws
+integration: .integration.service
 
 clean: clean.terraform clean.local
 

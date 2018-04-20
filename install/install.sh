@@ -51,4 +51,4 @@ echo ========== upgrade node
 brew upgrade node
 
 echo ========== upgrade npm
-npm i npm
+npm install --save-dev npm

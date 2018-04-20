@@ -10,8 +10,6 @@ exports.handler = (event, context, lambdaCallback) => {
     const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
     let body = null;
 
-    console.log('LOG_LEVEL=' + process.env.LOG_LEVEL);
-
     logger.debug('putParty.js: event: ' + JSON.stringify(event, null, 4));
     logger.debug('putParty.js: context: ' + JSON.stringify(context, null, 4));
     

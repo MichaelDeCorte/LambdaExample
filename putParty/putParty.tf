@@ -28,12 +28,13 @@ module "putParty" {
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
 
     filename		    = ".serverless/putParty.zip"
+    # filename		    = "thirdSource-0.0.2.zip"
     s3_bucket           = "${module.mdecorte-codebucket.id}"
     function_name		= "putParty"
     handler			    = "src/putParty.handler"
     variables           =
     {
-        LOG_LEVEL = "silly"
+        LOG_LEVEL = "debug"
     }
 }
 
@@ -46,13 +47,13 @@ module "apiGateway" {
     api_name = "party"
 }
 
-module "partyResource" {
-    source = "../Terraform/apiGateway/resource"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/resource"
+# module "partyResource" {
+#     source = "../Terraform/apiGateway/resource"
+#     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/resource"
 
-    api_id 			= "${module.apiGateway.api_id}"
-    resource_id     = "${module.apiGateway.root_resource_id}"
-}
+#     api_id 			= "${module.apiGateway.api_id}"
+#     resource_id     = "${module.apiGateway.root_resource_id}"
+# }
 
 module "partyMethod" {
     source = "../Terraform/apiGateway/method"
@@ -60,7 +61,8 @@ module "partyMethod" {
 
     stage_name 		= "uat"
     api_id 			= "${module.apiGateway.api_id}"
-    resource_id     = "${module.partyResource.resource_id}"
+    # resource_id     = "${module.partyResource.resource_id}"
+    resource_id     = "${module.apiGateway.root_resource_id}"
     function_uri	= "${module.putParty.invoke_arn}"    
     function_name	= "${module.putParty.function_name}"    
 }
