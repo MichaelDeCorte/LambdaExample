@@ -27,8 +27,7 @@ module "putParty" {
     source = "../Terraform/lambda/basic"
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
 
-    filename		    = ".serverless/putParty.zip"
-    # filename		    = "thirdSource-0.0.2.zip"
+    filename		    = "putParty-0.0.2.zip"
     s3_bucket           = "${module.mdecorte-codebucket.id}"
     function_name		= "putParty"
     handler			    = "src/putParty.handler"
