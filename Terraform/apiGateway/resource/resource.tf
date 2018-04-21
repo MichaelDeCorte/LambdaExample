@@ -23,7 +23,7 @@ variable "resource_id" {
 }
 
 variable "path_part" {
-    # "/foo//bar/{proxy+}"
+    # "/foo/bar/{proxy+}"
     default = "{proxy+}"
 }
 
@@ -38,5 +38,10 @@ resource "aws_api_gateway_resource" "apiResource" {
 ############################################################    
 output "resource_id" {
     value = "${aws_api_gateway_resource.apiResource.id}"
+}
+
+############################################################    
+output "subPath" {
+    value = "${aws_api_gateway_resource.apiResource.path}"
 }
 

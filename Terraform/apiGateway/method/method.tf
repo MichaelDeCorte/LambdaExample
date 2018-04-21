@@ -30,10 +30,6 @@ variable "function_uri" {
     type = "string"
 }    
 
-variable "function_name" {
-    type = "string"
-}    
-
 ##############################
 variable "logging_level" {
     # OFF ERROR INFO
@@ -51,17 +47,6 @@ variable "integration_http_method" {
 }
 
 
-# create CloudWatch LogGroup
-#
-# must be created before AWS creates LogGroup via aws_api_gateway_method_settings
-#
-module "apiLogGroup" {
-    source = "../../cloudwatch/logGroup"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/cloudwatch/logGroup"
-
-    name = "API-Gateway-Execution-Logs_${var.api_id}/${var.stage_name}"
-}    
-
 resource "aws_api_gateway_method" "apiMethod" {
     rest_api_id   = "${var.api_id}"
     resource_id   = "${var.resource_id}"
@@ -72,7 +57,6 @@ resource "aws_api_gateway_method" "apiMethod" {
 # enable logging for this method
 resource "aws_api_gateway_method_settings" "methodSettings" {
     depends_on = [
-        "module.apiLogGroup",
         "aws_api_gateway_deployment.methodDeployment"
     ]
 
@@ -135,13 +119,6 @@ resource "aws_api_gateway_deployment" "methodDeployment" {
     stage_name  = "${var.stage_name}"
 }
 
-resource "aws_lambda_permission" "allowApiGateway" {
-    statement_id   = "AllowExecutionFromApiGateway"
-    action         = "lambda:InvokeFunction"
-    function_name  = "${var.function_name}"
-    principal      = "apigateway.amazonaws.com"
-}
-
-output "invoke_url" {
+output "deployment_url" {
     value = "${aws_api_gateway_deployment.methodDeployment.invoke_url}"
 }

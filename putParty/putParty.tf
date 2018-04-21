@@ -46,25 +46,42 @@ module "apiGateway" {
     api_name = "party"
 }
 
-# module "partyResource" {
-#     source = "../Terraform/apiGateway/resource"
-#     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/resource"
+module "uatStage" {
+    source = "../Terraform/apiGateway/stagePrep"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/stagePrep"
 
-#     api_id 			= "${module.apiGateway.api_id}"
-#     resource_id     = "${module.apiGateway.root_resource_id}"
-# }
+    api_id 			= "${module.apiGateway.api_id}"
+    stage_name 		= "uat"
+}
+##########
+module "putPartyApi" {
+    source = "../Terraform/apiGateway/lambdaPrep"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/lambdaPrep"
 
-module "partyMethod" {
+    function_name	= "${module.putParty.function_name}"    
+}
+
+
+##########
+module "partyResource" {
+    source = "../Terraform/apiGateway/resource"
+    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/resource"
+
+    api_id 			= "${module.apiGateway.api_id}"
+    resource_id     = "${module.apiGateway.root_resource_id}"
+    path_part		= "party"
+}
+
+module "putPartyMethod" {
     source = "../Terraform/apiGateway/method"
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/method"
 
-    stage_name 		= "uat"
+    stage_name 		= "${module.uatStage.stage_name}"
     api_id 			= "${module.apiGateway.api_id}"
-    # resource_id     = "${module.partyResource.resource_id}"
-    resource_id     = "${module.apiGateway.root_resource_id}"
+    resource_id     = "${module.partyResource.resource_id}"
     function_uri	= "${module.putParty.invoke_arn}"    
-    function_name	= "${module.putParty.function_name}"    
 }
+
 
 ##############################
 module "uriTemplate" {
@@ -74,14 +91,18 @@ module "uriTemplate" {
     input = "templates/putParty-service.uri.js"
     output = "test/putParty-service.uri.js"
     variables = {
-        uri = "${module.partyMethod.invoke_url}"
+        # uri = "${module.putPartyMethod.invoke_url}"
+        uri = "${module.putPartyMethod.deployment_url}${module.partyResource.subPath}"
     }
 }    
 
 
 ############################################################
-# printout the api gateway url
-output "invoke_url" {
-    value = "${module.partyMethod.invoke_url}"
+# the api gateway url
+
+# the method url
+output "url" {
+    value = "${module.putPartyMethod.deployment_url}${module.partyResource.subPath}"
 }
+
 
