@@ -22,18 +22,6 @@ variable "api_id" {
     type = "string"
 }
 
-##############################
-# create CloudWatch LogGroup
-#
-# must be created before AWS creates LogGroup via aws_api_gateway_method_settings
-#
-module "apiStageLogGroup" {
-    source = "../../cloudwatch/logGroup"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/cloudwatch/logGroup"
-
-    name = "API-Gateway-Execution-Logs_${var.api_id}/${var.stage_name}"
-}    
-
 
 ############################################################
 

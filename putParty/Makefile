@@ -1,21 +1,24 @@
 #############################################################
 SRC= \
-	src/putParty.js						\
-	src/logger.js						\
-	src/guid.js
+	party/src/putParty.js					\
+	party/src/logger.js						\
+	party/src/guid.js
 
 UNITTESTSRC= \
-		test/putParty-unit.test.js		\
-		test/putParty-unit.test.json
+	party/test/putParty-unit.test.js		\
+	party/test/putParty-unit.test.json
 
 INTTESTSRC= \
-		test/putParty-aws.test.js 		\
-		test/putParty-aws.test.json
+	party/test/putParty-aws.test.js 		\
+	party/test/putParty-aws.test.json
 
-TFSOURCE=putParty.tf
+TFSOURCE=\
+	thirdSource.tf			\
+	party/putParty.tf
+
 PACKAGE=putParty-0.0.2.zip
-.EXPORT_ALL_VARIABLES:
 
+.EXPORT_ALL_VARIABLES:
 AWS_SDK_LOAD_CONFIG=1
 
 # error', 'warn', 'info', 'debug', and 'trace'

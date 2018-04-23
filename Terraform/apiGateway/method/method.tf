@@ -14,10 +14,6 @@ module "variables" {
     source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/variables"
 }
 
-variable "stage_name" {
-    type = "string"
-}
-
 variable "api_id" {
     type = "string"
 }
@@ -31,10 +27,6 @@ variable "function_uri" {
 }    
 
 ##############################
-variable "logging_level" {
-    # OFF ERROR INFO
-    default   = "INFO" 
-}
 
 variable "integration_type" {
     # AWS, AWS_PROXY, HTTP or HTTP_PROXY
@@ -46,36 +38,20 @@ variable "integration_http_method" {
     default     = "ANY" 
 }
 
-
-resource "aws_api_gateway_method" "apiMethod" {
+############################################################
+resource "aws_api_gateway_method" "apiMethodRequest" {
     rest_api_id   = "${var.api_id}"
     resource_id   = "${var.resource_id}"
     http_method   = "POST"
     authorization = "NONE"
 }
 
-# enable logging for this method
-resource "aws_api_gateway_method_settings" "methodSettings" {
-    depends_on = [
-        "aws_api_gateway_deployment.methodDeployment"
-    ]
-
+resource "aws_api_gateway_integration" "methodIntegrationRequest" {
     rest_api_id = "${var.api_id}"
-    stage_name  = "${var.stage_name}"
-    method_path = "*/*" # log all methods
+    # resource_id = "${aws_api_gateway_method.apiMethodRequest.resource_id}"
+    resource_id   = "${var.resource_id}"
+    http_method = "${aws_api_gateway_method.apiMethodRequest.http_method}"
     
-    settings {
-        metrics_enabled = true
-        logging_level   = "${var.logging_level}"
-        data_trace_enabled = true
-    }
-}
-
-resource "aws_api_gateway_integration" "methodIntegration" {
-    rest_api_id = "${var.api_id}"
-    resource_id = "${aws_api_gateway_method.apiMethod.resource_id}"
-    http_method = "${aws_api_gateway_method.apiMethod.http_method}"
-
     integration_http_method = "${var.integration_http_method}"
     type                    = "${var.integration_type}"
     uri                     = "${var.function_uri}"
@@ -84,11 +60,11 @@ resource "aws_api_gateway_integration" "methodIntegration" {
 ##############################
 resource "aws_api_gateway_method_response" "200MethodResponse" {
     depends_on = [
-        "aws_api_gateway_integration.methodIntegration"
+        "aws_api_gateway_integration.methodIntegrationRequest"
     ]
     rest_api_id = "${var.api_id}"
     resource_id   = "${var.resource_id}"
-    http_method = "${aws_api_gateway_method.apiMethod.http_method}"
+    http_method = "${aws_api_gateway_method.apiMethodRequest.http_method}"
     status_code = "200"
     response_models = {
         "application/json" = "Empty"
@@ -98,27 +74,32 @@ resource "aws_api_gateway_method_response" "200MethodResponse" {
 ##############################
 resource "aws_api_gateway_method_response" "500MethodResponse" {
     depends_on = [
-        "aws_api_gateway_integration.methodIntegration"
+        "aws_api_gateway_integration.methodIntegrationRequest"
     ]
     rest_api_id = "${var.api_id}"
     resource_id   = "${var.resource_id}"
-    http_method = "${aws_api_gateway_method.apiMethod.http_method}"
+    http_method = "${aws_api_gateway_method.apiMethodRequest.http_method}"
     status_code = "500"
     response_models = {
         "application/json" = "Error"
     }
 }
 
-# ##########
-resource "aws_api_gateway_deployment" "methodDeployment" {
+############################################################
+# hack for lack of depends_on
+variable "dependsOn" {
+    default = ""
+}
+
+resource "null_resource" "dependsOn" {
     depends_on = [
-        "aws_api_gateway_integration.methodIntegration",
+        "aws_api_gateway_method_response.200MethodResponse",
+        "aws_api_gateway_method_response.500MethodResponse"
     ]
-
-    rest_api_id = "${var.api_id}"
-    stage_name  = "${var.stage_name}"
 }
 
-output "deployment_url" {
-    value = "${aws_api_gateway_deployment.methodDeployment.invoke_url}"
+output "dependencyId" {
+    value 	= "${var.dependsOn}:${null_resource.dependsOn.id}"
 }
+
+

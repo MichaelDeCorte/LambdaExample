@@ -115,3 +115,16 @@ output "invoke_arn" {
 output "function_name" {
        value = "${aws_lambda_function.aws_lambda.function_name}"
 }
+
+############################################################
+# hack for lack of depends_on
+variable "depends_on" {
+    default = ""
+}
+
+resource "null_resource" "depends_on" {
+}
+
+output "depends_on" {
+    value = "${null_resource.depends_on.id}"
+}

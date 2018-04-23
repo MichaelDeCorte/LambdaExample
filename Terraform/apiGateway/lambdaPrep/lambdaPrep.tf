@@ -18,6 +18,10 @@ variable "function_name" {
     type = "string"
 }    
 
+variable "depends_on" {
+    default = ""
+}
+
 ##############################
 
 resource "aws_lambda_permission" "allowApiGateway" {
@@ -27,3 +31,9 @@ resource "aws_lambda_permission" "allowApiGateway" {
     principal      = "apigateway.amazonaws.com"
 }
 
+resource "null_resource" "depends_on" {
+}
+
+output "depends_on" {
+    value = "${null_resource.depends_on.id}"
+}
