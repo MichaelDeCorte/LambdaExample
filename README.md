@@ -2,24 +2,25 @@
 
 Todo
 - terraform source interperlation
-- better sub-module support
-- better test coverage
-- selenium?
-- cucumber?    
 - multiple services with one lambda? / issues with 
     https://stackoverflow.com/questions/41425511/aws-api-gateway-lambda-multiple-endpoint-functions-vs-single-endpoint
     https://github.com/balmbees/corgi
+- better test coverage
+- input validation
+- selenium?
+- cucumber?    
 - blog notes    
 - vpc
 - route 53    
 - version node libraries
 - static resources
-- jenkins    
-- replace make
+- jenkins    ???
+- replace make??
 - version service
 - load testing
 - memory testing
-- authentication    
+- authentication
+- production / test / ....      
 - source code security scanning (unclear if there are good open source packages to do this)
 - upgrade to node 8.10 # waiting on terraform support
 - local lambda?
@@ -39,6 +40,7 @@ Done
 - data at rest
 - AWS api gateway
 - CloudWatch log group retention policy
+- better sub-module support
 
 
 ============================================================    

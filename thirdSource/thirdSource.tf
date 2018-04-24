@@ -27,8 +27,8 @@ module "mdecorte-codebucket" {
 
 # install api gateway
 module "apiGateway" {
-    source = "../Terraform/apiGateway/api"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/api"
+    # source = "../Terraform/apiGateway/api"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/api"
 
     api_name 			= "thirdSource"
 }
@@ -37,7 +37,6 @@ module "apiGateway" {
 # create the resource and methods
 module "party" {
     source = "party"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
 
     api_id 			    = "${module.apiGateway.api_id}"
     resource_id     	= "${module.apiGateway.root_resource_id}"
@@ -47,8 +46,8 @@ module "party" {
 
 
 module "apiDeploy" {
-    source = "../Terraform/apiGateway/deployment"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/deployment"
+    # source = "../Terraform/apiGateway/deployment"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/deployment"
 
     dependsOn 		= "${module.party.dependencyId}"
 
@@ -59,8 +58,8 @@ module "apiDeploy" {
 #####
 # create a JS file with the URL for the stage
 module "uriTemplate" {
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/files"
     # source = "../Terraform/files"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/files"
 
     input = "party/templates/putParty-service.uri.js"
     output = "party/test/putParty-service.uri.js"

@@ -101,8 +101,8 @@ resource "aws_lambda_function" "aws_lambda" {
 # must be created before AWS creates LogGroup via aws_api_gateway_method_settings
 #
 module "lambdaLogGroup" {
-    source = "../../cloudwatch/logGroup"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/cloudwatch/logGroup"
+    # source = "../../cloudwatch/logGroup"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/cloudwatch/logGroup"
 
     name = "/aws/lambda/${var.function_name}"
 }    

@@ -24,8 +24,8 @@ resource "aws_api_gateway_rest_api" "gatewayApi" {
 }
 
 module "apiGatewayRole" {
-    source = "../role"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/role"
+    # source = "../role"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/role"
 }
 
 

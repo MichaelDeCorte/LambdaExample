@@ -27,8 +27,8 @@ variable "version" {
 
 #####
 module "partyResource" {
-    source = "../../Terraform/apiGateway/resource"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/resource"
+    # source = "../../Terraform/apiGateway/resource"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/resource"
 
     api_id 			= "${var.api_id}"
     resource_id     = "${var.resource_id}"
@@ -38,8 +38,8 @@ module "partyResource" {
 #####
 # define the lambda function
 module "party" {
-    source = "../../Terraform/lambda/basic"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
+    # source = "../../Terraform/lambda/basic"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
 
     filename		    = "${path.module}/party-${var.version}.zip"
     s3_bucket           = "${var.s3_bucket}"
@@ -50,8 +50,8 @@ module "party" {
 #####
 # attach the lambda function to an api method
 module "putPartyMethod" {
-    source = "../../Terraform/apiGateway/method"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/method"
+    # source = "../../Terraform/apiGateway/method"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/method"
 
     api_id 			= "${var.api_id}"
     resource_id     = "${module.partyResource.resource_id}"
@@ -61,8 +61,8 @@ module "putPartyMethod" {
 #####
 # permissions for the method
 module "putPartyPrep" {
-    source = "../../Terraform/apiGateway/lambdaPrep"
-    # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/lambdaPrep"
+    # source = "../../Terraform/apiGateway/lambdaPrep"
+    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/lambdaPrep"
 
     function_name	= "${module.party.function_name}"    
 }
