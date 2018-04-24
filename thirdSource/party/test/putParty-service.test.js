@@ -8,6 +8,9 @@ const uri = require('./putParty-service.uri.js').uri;
 function testFunc(testData, expectedResult, done) {
     expect.assertions(2);
 
+    logger.debug('uri: ' + uri);
+    logger.debug('testData: ' + JSON.stringify(testData, null, 4));
+
     requestTest.agent(uri)
         .post('/')
         .send(testData)

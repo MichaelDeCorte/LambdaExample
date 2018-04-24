@@ -17,7 +17,7 @@ function testFunc(testData, expectedResult, done) {
     // putParty Data via lambda
     /* eslint-disable */
     let putPartyData = {
-        FunctionName: 'putParty',
+        FunctionName: 'party',
         Payload: JSON.stringify( {
             'firstName': 'testFirstName',
             'lastName': 'testLastName'

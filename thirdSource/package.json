@@ -18,8 +18,7 @@
     "unit": "jest unit --no-color --coverage",
     "aws": "jest aws --no-color --coverage",
     "service": "jest service --no-color --coverage",
-    "dependencies": "bundle-deps",
-    "package": "serverless package"
+    "dependencies": "bundle-deps"
   },
   "devDependencies": {
     "aws-sdk": "^2.225.1",
@@ -107,7 +106,8 @@
       "function-paren-newline": "off",
       "padded-block": "off",
       "comma-dangle": "off",
-      "prefer-destructuring": "off"
+      "import/no-extraneous-dependencies": "off",
+     "prefer-destructuring": "off"
     },
     "env": {
       "node": true

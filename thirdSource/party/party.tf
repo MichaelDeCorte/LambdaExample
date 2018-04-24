@@ -21,6 +21,10 @@ variable "s3_bucket" {
     type = "string"
 }
 
+variable "version" {
+    default = "0.0.1"
+}
+
 #####
 module "partyResource" {
     source = "../../Terraform/apiGateway/resource"
@@ -33,14 +37,14 @@ module "partyResource" {
 
 #####
 # define the lambda function
-module "putParty" {
+module "party" {
     source = "../../Terraform/lambda/basic"
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/lambda/basic"
 
-    filename		    = "putParty-0.0.2.zip"
+    filename		    = "${path.module}/party-${var.version}.zip"
     s3_bucket           = "${var.s3_bucket}"
-    function_name		= "putParty"
-    handler			    = "party/src/putParty.handler"
+    function_name		= "party"
+    handler			    = "src/party.handler"
 }
 
 #####
@@ -51,7 +55,7 @@ module "putPartyMethod" {
 
     api_id 			= "${var.api_id}"
     resource_id     = "${module.partyResource.resource_id}"
-    function_uri	= "${module.putParty.invoke_arn}"    
+    function_uri	= "${module.party.invoke_arn}"    
 }
 
 #####
@@ -60,7 +64,7 @@ module "putPartyPrep" {
     source = "../../Terraform/apiGateway/lambdaPrep"
     # source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/lambdaPrep"
 
-    function_name	= "${module.putParty.function_name}"    
+    function_name	= "${module.party.function_name}"    
 }
 
 

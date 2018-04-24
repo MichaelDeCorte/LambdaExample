@@ -1,0 +1,190 @@
+.EXPORT_ALL_VARIABLES:
+
+NPM=/Users/mdecorte/Documents/Development/Lambda/thirdSource/node_modules/.bin
+
+# force cli to load ~/.aws/config
+# https://github.com/aws/aws-sdk-js/issues/1921
+AWS_SDK_LOAD_CONFIG=1 
+
+
+############################################################
+#
+init: initSubDirs initLocal
+
+initSubDirs:
+	$(recursiveCommand)
+
+initLocal:
+	@echo ========== $@ ==========
+	if [ ! -f .npmignore -a -f ../.npmignore ] ; then ln -s ../.npmignore .; fi
+	if [ ! -f .gitignore -a -f ../.gitignore ] ; then ln -s ../.gitignore .; fi
+	@ for f in $(NPMPACKAGES)    ;\
+	do \
+		npm install "$$f";\
+	done
+
+
+############################################################
+# Environment
+environment: .environment.terraform
+environment:
+	$(recursiveCommand)
+
+.environment.terraform: $(PACKAGE)
+.environment.terraform: $(TFSOURCE)
+.environment.terraform: .unit.lint
+.environment.terraform: .unit.test
+.environment.terraform: 
+	@echo ========== $@ ==========
+	terraform apply -auto-approve
+	touch .environment.terraform
+
+clean.environment:
+	rm -f .environment.terraform
+
+############################################################
+# Package
+package: $(PACKAGE)
+package:
+	$(recursiveCommand)
+
+$(PACKAGE): .unit.lint
+$(PACKAGE): .unit.test
+
+clean.package:
+	rm -f $(PACKAGE)
+
+define jsToZip
+	$(NPM)/bundle-deps
+	npm pack
+	@TGZ=$(basename $(PACKAGE)).tgz; \
+	SDIR=`pwd`;\
+	TDIR=/tmp/$$$$.npmpackage;\
+	mkdir $$TDIR; \
+	cd $$TDIR;	\
+	tar xf $$SDIR/$$TGZ;	\
+	cd package; 	\
+	if [ -d node_modules ] ; \
+	then \
+		find node_modules -name '*.md' -exec rm {} \; ;\
+		find node_modules -name 'package*.json' -exec rm {} \; ;\
+	fi;\
+	zip --recurse-path --quiet ../$(PACKAGE) .;	\
+	cd $$SDIR; \
+	mv $$TDIR/$(PACKAGE) . ;\
+	rm -rf $$TDIR; \
+	rm $$TGZ
+endef
+
+#############################################################
+# Install
+install: .install.terraform
+
+.install.terraform: terraform.tfstate 
+.install.terraform: $(PACKAGE)
+.install.terraform: .unit.lint
+.install.terraform: .unit.test
+.install.terraform:
+	@echo ========== $@ ==========
+	terraform apply -auto-approve
+	touch .install.terraform
+
+clean.install:
+	rm -f .install.terraform
+############################################################
+# Unit Tests
+lint: .unit.lint
+lint: 
+	$(recursiveCommand)
+
+
+.unit.lint: $(UNITTESTSRC) $(SRC)
+.unit.lint: 
+	@echo ========== $@ ==========
+	$(NPM)/eslint src/*.js test/*.js
+	touch .unit.lint
+
+
+unit: lint
+unit: .unit.test
+unit: 
+	$(recursiveCommand)
+
+.unit.test: $(UNITTESTSRC) $(SRC)
+.unit.test: .unit.lint
+.unit.test: 
+	@echo ========== $@ ==========
+	$(NPM)/jest unit --no-color --coverage
+	touch .unit.test
+
+sonar:
+	echo ==== sonarqube && sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) 
+
+clean.unit:
+	rm -f .unit.lint
+	rm -f .unit.test
+
+############################################################
+# Integration Tests
+integration: lint
+integration: unit
+integration: install
+integration: integration.aws
+integration: integration.service
+
+integration.aws: .integration.aws
+integration.aws:
+	$(recursiveCommand)
+
+.integration.aws: .unit.lint
+.integration.aws: .unit.lint
+.integration.aws: $(INTTESTSRC) $(SRC)
+.integration.aws:
+	@echo ========== $@ ==========
+	$(NPM)/jest aws --no-color --coverage
+	touch .integration.aws
+
+
+##########
+integration.service: .integration.service
+integration.service: 
+	$(recursiveCommand)
+
+.integration.service: .unit.lint
+.integration.service: .unit.test
+.integration.service: .integration.aws
+.integration.service:  $(INTTESTSRC) $(SRC)
+.integration.service:
+	@echo ========== $@ ==========
+	$(NPM)/jest service --no-color --coverage
+	touch .integration.service
+
+clean.integration:
+	rm -f .integration.aws
+	rm -f .integration.service
+
+############################################################
+
+test: lint unit integration.aws integration.service
+
+##############################
+clean: clean.unit
+clean: clean.package
+clean: clean.environment 
+clean: clean.install
+clean: clean.integration
+clean:
+	@echo ========== $@ ==========
+	$(recursiveCommand)
+
+veryclean:  clean
+	@echo ========== $@ ==========
+	terraform destroy    
+
+############################################################
+define recursiveCommand
+	@ for d in $(SUBPACKAGES)    ;\
+	do \
+		(set -x; cd $$d; make $@) ;\
+	done
+endef

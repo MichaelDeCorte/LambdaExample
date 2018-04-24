@@ -4,7 +4,7 @@ const AWS = require('aws-sdk-mock'); // eslint-disable-line import/no-extraneous
 const each = require('jest-each');
 const Promise = require('promise');
 const logger = require('../src/logger.js').logger;
-const putParty = require('../src/putParty').handler;
+const putParty = require('../src/party').handler;
 
 
 function testFunc(testData, testResult, done) {
