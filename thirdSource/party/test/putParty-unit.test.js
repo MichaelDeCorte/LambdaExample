@@ -1,31 +1,35 @@
 // https://github.com/mattphillips/jest-each
-
-const AWS = require('aws-sdk-mock'); // eslint-disable-line import/no-extraneous-dependencies
+// eslint-disable-next-line import/no-extraneous-dependencies
+const AWS = require('aws-sdk-mock'); 
 const each = require('jest-each');
 const Promise = require('promise');
-const logger = require('../src/logger.js').logger;
+const logger = require('common').logger;
 const putParty = require('../src/party').handler;
 
 
 function testFunc(testData, testResult, done) {
     const lambdaParam = testData;
 
-    logger.debug('putParty-unit.test.js: testData: ' + JSON.stringify(testData, null, 4));
-    logger.debug('putParty-unit.test.js: testResult: ' + JSON.stringify(testResult, null, 4));
+    logger.debug('putParty-unit.test.js: testData: '
+                 + JSON.stringify(testData, null, 4));
+    logger.debug('putParty-unit.test.js: testResult: ' +
+                 JSON.stringify(testResult, null, 4));
 
-    // https://facebook.github.io/jest/docs/en/expect.html
     expect.assertions(1);
 
     AWS.mock('DynamoDB',
              'putItem',
              (params, dynamoCallback) => {
+                // eslint-disable-next-line no-param-reassign
+                 delete testData.command;
                  dynamoCallback(null, /* errorCode */ testData);
                  AWS.restore('DynamoDB');
              });
 
     return new Promise(
         (resolve, reject) => {
-            logger.debug('putParty-unit.test.js: lambdaParam: ' + JSON.stringify(lambdaParam, null, 4));
+            logger.debug('putParty-unit.test.js: lambdaParam: '
+                         + JSON.stringify(lambdaParam, null, 4));
             putParty(lambdaParam,
                      null, // context
                      (error, result) => {
@@ -38,7 +42,8 @@ function testFunc(testData, testResult, done) {
         }
     ).then(
         (putPartyResult) => { 
-            logger.debug('putParty-unit.test.js: putPartyResult: ' + JSON.stringify(putPartyResult, null, 4));
+            logger.debug('putParty-unit.test.js: putPartyResult: '
+                         + JSON.stringify(putPartyResult, null, 4));
             try {
                 expect(putPartyResult.body.message).toEqual(testResult);
                 done();

@@ -1,10 +1,10 @@
 {
   "name": "putParty",
-  "license": "Apache-2.0",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "author": "Michael DeCorte",
-  "description": "For test",
   "private": true,
+  "description": "For test",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
@@ -13,13 +13,7 @@
     "url": "https://github.com/MichaelDeCorte/LambdaExample/issues"
   },
   "homepage": "https://github.com/MichaelDeCorte/LambdaExample#readme",
-  "scripts": {
-    "lint": "eslint */src/*.js */test/*.js",
-    "unit": "jest unit --no-color --coverage",
-    "aws": "jest aws --no-color --coverage",
-    "service": "jest service --no-color --coverage",
-    "dependencies": "bundle-deps",
-    "size": "download-size"
+  "dependencies": {
   },
   "devDependencies": {
     "aws-sdk": "^2.225.1",
@@ -35,10 +29,15 @@
     "npm": "^5.8.0",
     "supertest": "^3.0.0"
   },
-  "dependencies": {
-    "log-driver": "^1.2.7",
-    "promise": "^8.0.1",
-    "string-hash": "^1.1.3"
+  "bundledDependencies": [
+  ],
+  "scripts": {
+    "lint": "eslint */src/*.js */test/*.js",
+    "unit": "jest unit --no-color --coverage",
+    "aws": "jest aws --no-color --coverage",
+    "service": "jest service --no-color --coverage",
+    "dependencies": "bundle-deps",
+    "download-size": "download-size"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -114,10 +113,5 @@
     "env": {
       "node": true
     }
-  },
-  "bundledDependencies": [
-    "log-driver",
-    "promise",
-    "string-hash"
-  ]
+  }
 }

@@ -1,0 +1,16 @@
+{
+  "name": "common",
+  "version": "0.0.1",
+  "description": "For test",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
+  },
+  "devDependencies": {
+    "log-driver": "^1.2.7",
+    "promise": "^8.0.1"
+  },
+  "main": "src/index.js",
+  "bundledDependencies": []
+}

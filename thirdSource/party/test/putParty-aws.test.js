@@ -1,7 +1,8 @@
+/* eslint import/no-unresolved: off */
 const AWS = require('aws-sdk');
 const each = require('jest-each');
 const Promise = require('promise');
-const logger = require('../src/logger.js').logger;
+const logger = require('common').logger;
 
 // Initialize AWS credentials
 const credentials = new AWS.SharedIniFileCredentials(); 

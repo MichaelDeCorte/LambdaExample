@@ -1,6 +1,7 @@
 [
   [
     {
+      "command": "putParty",
       "firstName": "George",
       "lastName": "Washington"
     },
@@ -11,6 +12,7 @@
   ],
   [
     {
+      "command": "putParty",
       "firstName": "John",
       "lastName": "Adams"
     },
@@ -21,6 +23,7 @@
   ],
   [
     {
+      "command": "putParty",
       "firstName": "Thomas",
       "lastName": "Jefferson"
     },

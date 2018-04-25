@@ -3,34 +3,30 @@ include $(PACKAGEROOT)/config/make.header
 
 #############################################################
 SRC= \
-	src/party.js					\
-	src/putParty.js
+	src/index.js					\
+	src/methodRouter.js				\
+	src/logger.js					\
+	src/guid.js
 
-UNITTESTSRC= \
-	test/putParty-unit.test.js		\
-	test/putParty-unit.test.json
+UNITTESTSRC=
 
-INTTESTSRC= \
-	test/putParty-aws.test.js 		\
-	test/putParty-aws.test.json
+INTTESTSRC= 
 
-TFSOURCE=\
-	party.tf
+TFSOURCE=
 
-PACKAGE=party-0.0.1.zip
+PACKAGE=common-0.0.1.zip
 
 SUBPACKAGES=
+
+NPMPACKAGES= \
+	log-driver \
+	promise
 
 ############################################################
 
 all: unit package integration test
 
 init: .init
-init:
-	npm install string-hash
-	npm install log-driver
-	npm install promise
-	npm install ../common/common-0.0.1.tgz
 
 unit: .unit
 
@@ -40,16 +36,13 @@ environment: .do_no_run
 
 install: .do_no_run
 
-integration: .integration
+integration: 
 
 test: .test
 
 clean: .clean
 
 veryclean: .veryclean
-
-$(PACKAGE):: ../common/common-0.0.1.tgz
-	npm install $?
 
 $(PACKAGE):: $(SRC)
 	$(call jsToZip, $(PACKAGE))

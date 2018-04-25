@@ -1,4 +1,4 @@
-all: unit package install integration
+LOG_LEVEL=error
 
 
     

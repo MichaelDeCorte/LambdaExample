@@ -6,185 +6,263 @@ NPM=/Users/mdecorte/Documents/Development/Lambda/thirdSource/node_modules/.bin
 # https://github.com/aws/aws-sdk-js/issues/1921
 AWS_SDK_LOAD_CONFIG=1 
 
+############################################################
+#
+.PHONY: $(SUBPACKAGES)
+.PHONY: .do_not_run
 
 ############################################################
 #
-init: initSubDirs initLocal
+.PHONY: all
+.PHONY: .all
 
-initSubDirs:
-	$(recursiveCommand)
-
-initLocal:
-	@echo ========== $@ ==========
-	if [ ! -f .npmignore -a -f ../.npmignore ] ; then ln -s ../.npmignore .; fi
-	if [ ! -f .gitignore -a -f ../.gitignore ] ; then ln -s ../.gitignore .; fi
-	@ for f in $(NPMPACKAGES)    ;\
-	do \
-		npm install "$$f";\
-	done
-
+.all: .unit .environment .package .install .integration
 
 ############################################################
-# Environment
-environment: .environment.terraform
-environment:
+#
+.PHONY: init
+.PHONY: .init
+.PHONY: .clean.init
+.PHONY: .veryclean.init
+
+.init:
+ifeq ($(PACKAGE),)
 	$(recursiveCommand)
-
-.environment.terraform: $(PACKAGE)
-.environment.terraform: $(TFSOURCE)
-.environment.terraform: .unit.lint
-.environment.terraform: .unit.test
-.environment.terraform: 
+else
 	@echo ========== $@ ==========
-	terraform apply -auto-approve
-	touch .environment.terraform
+	@if [ ! -f .npmignore -a -f ../.npmignore ] ; then ln -s ../.npmignore .; fi
+	@if [ ! -f .gitignore -a -f ../.gitignore ] ; then ln -s ../.gitignore .; fi
+endif
 
-clean.environment:
-	rm -f .environment.terraform
+.clean.init:
 
-############################################################
-# Package
-package: $(PACKAGE)
-package:
-	$(recursiveCommand)
+.veryclean.init:
+	rm -rf node_modules
 
-$(PACKAGE): .unit.lint
-$(PACKAGE): .unit.test
-
-clean.package:
-	rm -f $(PACKAGE)
-
-define jsToZip
-	$(NPM)/bundle-deps
-	npm pack
-	@TGZ=$(basename $(PACKAGE)).tgz; \
-	SDIR=`pwd`;\
-	TDIR=/tmp/$$$$.npmpackage;\
-	mkdir $$TDIR; \
-	cd $$TDIR;	\
-	tar xf $$SDIR/$$TGZ;	\
-	cd package; 	\
-	if [ -d node_modules ] ; \
-	then \
-		find node_modules -name '*.md' -exec rm {} \; ;\
-		find node_modules -name 'package*.json' -exec rm {} \; ;\
-	fi;\
-	zip --recurse-path --quiet ../$(PACKAGE) .;	\
-	cd $$SDIR; \
-	mv $$TDIR/$(PACKAGE) . ;\
-	rm -rf $$TDIR; \
-	rm $$TGZ
-endef
-
-#############################################################
-# Install
-install: .install.terraform
-
-.install.terraform: terraform.tfstate 
-.install.terraform: $(PACKAGE)
-.install.terraform: .unit.lint
-.install.terraform: .unit.test
-.install.terraform:
-	@echo ========== $@ ==========
-	terraform apply -auto-approve
-	touch .install.terraform
-
-clean.install:
-	rm -f .install.terraform
 ############################################################
 # Unit Tests
-lint: .unit.lint
-lint: 
-	$(recursiveCommand)
+.PHONY: unit
+.PHONY: lint
+.PHONY: .lint
+.PHONY: .clean.lint
+.PHONY: .veryclean.lint
 
-
-.unit.lint: $(UNITTESTSRC) $(SRC)
+lint: .lint
+.lint: .unit.lint
 .unit.lint: 
+.unit.lint: $(SRC)
+.unit.lint: $(UNITTESTSRC) 
+.unit.lint: 
+ifeq ($(PACKAGE),)
+	$(recursiveCommand)
+else
 	@echo ========== $@ ==========
 	$(NPM)/eslint src/*.js test/*.js
 	touch .unit.lint
+endif
 
-
-unit: lint
-unit: .unit.test
-unit: 
-	$(recursiveCommand)
-
-.unit.test: $(UNITTESTSRC) $(SRC)
+.unit: .unit.lint
+.unit: .unit.test
+.unit.test: $(SRC)
+.unit.test: $(UNITTESTSRC) 
 .unit.test: .unit.lint
 .unit.test: 
+ifeq ($(PACKAGE),)
+	$(recursiveCommand)
+else
 	@echo ========== $@ ==========
-	$(NPM)/jest unit --no-color --coverage
-	touch .unit.test
+	@if find test -print | grep  -q '.*unit.*.js'; \
+	then \
+		set -v; \
+		$(NPM)/jest unit --no-color --coverage;\
+		touch .unit.test;\
+	fi
+endif
 
 sonar:
 	echo ==== sonarqube && sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) 
 
-clean.unit:
+.clean.unit:
 	rm -f .unit.lint
 	rm -f .unit.test
 
-############################################################
-# Integration Tests
-integration: lint
-integration: unit
-integration: install
-integration: integration.aws
-integration: integration.service
-
-integration.aws: .integration.aws
-integration.aws:
-	$(recursiveCommand)
-
-.integration.aws: .unit.lint
-.integration.aws: .unit.lint
-.integration.aws: $(INTTESTSRC) $(SRC)
-.integration.aws:
-	@echo ========== $@ ==========
-	$(NPM)/jest aws --no-color --coverage
-	touch .integration.aws
-
-
-##########
-integration.service: .integration.service
-integration.service: 
-	$(recursiveCommand)
-
-.integration.service: .unit.lint
-.integration.service: .unit.test
-.integration.service: .integration.aws
-.integration.service:  $(INTTESTSRC) $(SRC)
-.integration.service:
-	@echo ========== $@ ==========
-	$(NPM)/jest service --no-color --coverage
-	touch .integration.service
-
-clean.integration:
-	rm -f .integration.aws
-	rm -f .integration.service
+.veryclean.unit:
 
 ############################################################
+# Package
+.PHONY: package
+.PHONY: .clean.package
+.PHONY: .veryclean.package
 
-test: lint unit integration.aws integration.service
-
-##############################
-clean: clean.unit
-clean: clean.package
-clean: clean.environment 
-clean: clean.install
-clean: clean.integration
-clean:
-	@echo ========== $@ ==========
+$(PACKAGE):: .unit.lint
+$(PACKAGE):: .unit.test
+.package: $(PACKAGE)
+.package:
+ifeq ($(PACKAGE),)
 	$(recursiveCommand)
+else
+	touch .package
+endif
 
-veryclean:  clean
+DOTPACKAGES=$(patsubst %,%/.package,$(SUBPACKAGES))
+
+$(DOTPACKAGES):
+		echo make -C party .package;\
+		$(MAKE) -C party  .package;
+
+.clean.package:
+	rm -f $(PACKAGE)
+	rm -f .package
+	rm -f $(basename $(PACKAGE)).tgz
+
+.veryclean.package:
+
+define jsToZip 
+	$(NPM)/bundle-deps
+	npm pack
+	@ZIPFILE=$(strip $(1));\
+	TGZFILE=$(basename $(1)).tgz; \
+	SDIR=`pwd`;\
+	TDIR=/tmp/$$$$.npmpackage;\
+	mkdir $$TDIR; \
+	cd $$TDIR;	\
+	tar xf $$SDIR/$$TGZFILE;	\
+	cd package; 	\
+	if [ -d node_modules ] ; \
+	then \
+		find node_modules -name '*.md' -exec rm {} \; ;\
+	fi;\
+	zip --recurse-path --quiet ../$$ZIPFILE .;	\
+	cd $$SDIR; \
+	mv $$TDIR/$$ZIPFILE . ;\
+	rm -rf $$TDIR;
+endef
+
+############################################################
+# Environment
+.PHONY: environment
+.PHONY: .environment
+.PHONY: .clean.environment
+.PHONY: .veryclean.environment
+
+.environment: .unit.lint
+.environment: .unit.test
+.environment: .package
+.environment: terraform.tfstate
+
+terraform.tfstate: $(DOTPACKAGES)
+terraform.tfstate: $(TFSOURCE)
+terraform.tfstate:
+	@echo ========== $@ ========== `pwd`
+	terraform apply -auto-approve
+	touch .environment.terraform
+
+.clean.environment:
+	rm -f .environment.terraform
+
+.veryclean.environment:  
 	@echo ========== $@ ==========
 	terraform destroy    
 
+#############################################################
+# Install
+.PHONY: install
+.PHONY: .install
+.PHONY: .clean.install
+.PHONY: .veryclean.install
+
+.install: .environment
+
+.clean.install:
+
+############################################################
+# Integration Tests
+.PHONY: integration
+.PHONY: .integration
+.PHONY: .clean.integration
+
+.integration: .integration.aws
+.integration: .integration.service
+
+.integration.aws: $(INTTESTSRC) $(SRC)
+.integration.aws: .unit.lint
+.integration.aws: .unit.test
+.integration.aws: .package
+.integration.aws:
+ifeq ($(PACKAGE),)
+	$(recursiveCommand)
+else
+	@echo ========== $@ ==========
+	@if find test -print | grep  -q '.*aws.*.js'; \
+	then \
+		set -v; \
+		$(NPM)/jest aws --no-color --coverage;\
+		touch .integration.aws;\
+	fi
+endif
+
+##########
+.integration.service: $(INTTESTSRC) $(SRC)
+.integration.service: .unit.lint
+.integration.service: .unit.test
+.integration.service: .package
+.integration.service: .integration.aws
+.integration.service:
+ifeq ($(PACKAGE),)
+	$(recursiveCommand)
+else
+	@echo ========== $@ ==========
+	@if find test -print | grep  -q '.*service.*.js'; \
+	then \
+		set -v; \
+		$(NPM)/jest service --no-color --coverage;\
+		touch .integration.service;\
+	fi
+endif
+
+.clean.integration:
+	rm -f .integration.aws
+	rm -f .integration.service
+
+.veryclean.integration:
+
+############################################################
+.PHONY: test
+.PHONY: .test
+
+.test: .unit .integration
+
+##############################
+.PHONY: clean
+.PHONY: .clean
+.PHONY: veryclean
+.PHONY: .veryclean
+
+.clean: .clean.unit
+.clean: .clean.package
+.clean: .clean.environment 
+.clean: .clean.install
+.clean: .clean.integration
+.clean:
+	@echo ========== $@ ==========
+	$(recursiveCommand)
+
+.veryclean: .clean
+.veryclean: .veryclean.unit
+.veryclean: .veryclean.package
+.veryclean: .veryclean.environment
+.veryclean: .veryclean.install
+.veryclean: .veryclean.integration
+.veryclean:
+	@echo ========== $@ ==========
+	$(recursiveCommand)
+
 ############################################################
 define recursiveCommand
-	@ for d in $(SUBPACKAGES)    ;\
+	@ set -e ; \
+	for d in $(SUBPACKAGES)    ;\
 	do \
-		(set -x; cd $$d; make $@) ;\
+		echo make -C $$d $@;\
+		$(MAKE) -C $$d $@ ;\
 	done
 endef

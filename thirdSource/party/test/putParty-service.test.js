@@ -1,5 +1,6 @@
+/* eslint import/no-unresolved: off */
 const each = require('jest-each');
-const logger = require('../src/logger.js').logger;
+const logger = require('common').logger;
 const requestTest = require('supertest');
 const uri = require('./putParty-service.uri.js').uri;
 
