@@ -3,6 +3,13 @@ PACKAGEROOT=/Users/mdecorte/Documents/Development/Lambda/thirdSource
 include $(PACKAGEROOT)/config/make.header
 
 #############################################################
+
+LOG_LEVEL=error
+# LOG_LEVEL=warn
+# LOG_LEVEL=info
+# LOG_LEVEL=debug
+# LOG_LEVEL=trace
+
 SRC=
 
 UNITTESTSRC= 
@@ -18,8 +25,6 @@ SUBPACKAGES=\
 	common 				\
 	party
 
-# error', 'warn', 'info', 'debug', and 'trace'
-LOG_LEVEL=error
 
 
 ############################################################

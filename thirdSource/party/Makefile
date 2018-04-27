@@ -1,19 +1,26 @@
 PACKAGEROOT=/Users/mdecorte/Documents/Development/Lambda/thirdSource
 include $(PACKAGEROOT)/config/make.header
 
-# LOG_LEVEL=trace
 #############################################################
+
+#LOG_LEVEL=trace
+
 SRC= \
 	src/party.js					\
+	src/getParty.js					\
 	src/putParty.js
 
 UNITTESTSRC= \
+	test/getParty-unit.test.js		\
+	test/getParty-unit.test.json	\
 	test/putParty-unit.test.js		\
 	test/putParty-unit.test.json
 
 INTTESTSRC= \
-	test/putParty-aws.test.js 		\
-	test/putParty-aws.test.json
+	test/putGetParty-aws.test.js 	\
+	test/putGetParty-aws.test.json	\
+	test/putGetParty-service.test.js 	\
+	test/putGetParty-service.test.json 
 
 TFSOURCE=\
 	party.tf

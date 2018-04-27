@@ -1,0 +1,24 @@
+[
+  [
+    {
+      "putData": {
+        "command": "putParty",
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "getData": {
+        "command": "getParty",
+        "partyID": null,
+        "lastName": "Washington"
+      }
+    },
+
+    {
+      "testResult": {
+        "partyID": null,
+        "firstName": "George",
+        "lastName": "Washington"
+      }
+    }
+  ]
+]

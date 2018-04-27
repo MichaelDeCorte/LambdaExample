@@ -1,4 +1,4 @@
-LOG_LEVEL=error
+LOG_LEVEL ?= error
 
 
     

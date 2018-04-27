@@ -1,0 +1,32 @@
+[
+  [
+    {
+      "testData": {
+        "command": "getParty",
+        "partyID": "1829281149",
+        "lastName": "Washington"
+      },
+      "dynamoResponse": {
+        "ConsumedCapacity": {
+          "CapacityUnits": 1,
+          "TableName": "Party"
+        },
+        "Item": { 
+          "partyID": { "N": "1829281149" },
+          "firstName": { "S": "George" },
+          "lastName": { "S": "Washington" }
+        }
+      },
+      "dynamoError": null
+    },
+
+    {
+      "testResult": {
+        "partyID": "1829281149",
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "testError": null
+    }
+  ]
+]

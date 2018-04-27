@@ -49,7 +49,7 @@ module "party" {
 
 #####
 # attach the lambda function to an api method
-module "putPartyMethod" {
+module "partyMethod" {
     # source = "../../Terraform/apiGateway/method"
     source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/method"
 
@@ -60,7 +60,7 @@ module "putPartyMethod" {
 
 #####
 # permissions for the method
-module "putPartyPrep" {
+module "partyPrep" {
     # source = "../../Terraform/apiGateway/lambdaPrep"
     source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/lambdaPrep"
 
@@ -86,7 +86,7 @@ variable "dependsOn" {
 resource "null_resource" "dependsOn" {
 
     triggers = {
-        value = "${module.putPartyMethod.dependencyId}"
+        value = "${module.partyMethod.dependencyId}"
     }
 }
 

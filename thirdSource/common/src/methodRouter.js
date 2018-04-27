@@ -11,7 +11,7 @@ exports.methodRouter = (event, context, lambdaCallback, map) => {
         lambdaProxyIntegration = false;
     }
     
-    logger.debug('lambdaProxyIntegration: ' + lambdaProxyIntegration);
+    logger.trace('lambdaProxyIntegration: ' + lambdaProxyIntegration);
 
     let body = null;
     if (lambdaProxyIntegration) {
@@ -63,7 +63,7 @@ exports.methodRouter = (event, context, lambdaCallback, map) => {
         }
     ).catch(
         (error) => {
-            logger.error('Error: ' + JSON.stringify(error, null, 4));
+            logger.warn('Error: ' + JSON.stringify(error, null, 4));
 
             // lambdaCallback(
             //     '500', // errorCode

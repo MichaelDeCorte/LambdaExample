@@ -6,7 +6,7 @@ NPM=/Users/mdecorte/Documents/Development/Lambda/thirdSource/node_modules/.bin
 # https://github.com/aws/aws-sdk-js/issues/1921
 AWS_SDK_LOAD_CONFIG=1 
 
-JESTFLAGS=--passWithNoTests --no-color --coverage --bail
+JESTFLAGS=--passWithNoTests --no-color --coverage --bail --verbose
 ############################################################
 #
 .PHONY: $(SUBPACKAGES)
@@ -53,6 +53,7 @@ lint: .lint
 .unit.lint: 
 .unit.lint: $(SRC)
 .unit.lint: $(UNITTESTSRC) 
+.unit.lint: $(INTTESTSRC) 
 .unit.lint: 
 ifeq ($(PACKAGE),)
 	$(recursiveCommand)
@@ -181,7 +182,8 @@ terraform.tfstate:
 .integration: .integration.aws
 .integration: .integration.service
 
-.integration.aws: $(INTTESTSRC) $(SRC)
+.integration.aws: $(SRC)
+.integration.aws: $(INTTESTSRC) 
 .integration.aws: .unit.lint
 .integration.aws: .unit.test
 .integration.aws: .package
@@ -195,7 +197,8 @@ else
 endif
 
 ##########
-.integration.service: $(INTTESTSRC) $(SRC)
+.integration.service: $(SRC)
+.integration.service: $(INTTESTSRC)
 .integration.service: .unit.lint
 .integration.service: .unit.test
 .integration.service: .package

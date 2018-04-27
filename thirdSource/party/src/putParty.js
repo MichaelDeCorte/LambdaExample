@@ -8,9 +8,14 @@ exports.handler = (event, context, lambdaCallback) => {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
     logger.debug('context: ' + JSON.stringify(context, null, 4));
 
+    // create AWS service functions in handler to allow mocking
+    const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
+
     const partyID = guid(hash(event.lastName)).toString();
     logger.debug('partyID: ' + partyID);
-    const param = {
+
+
+    const dynamoParam = {
         'TableName': 'party',
         'ReturnConsumedCapacity': 'TOTAL',
         'Item': {
@@ -25,9 +30,6 @@ exports.handler = (event, context, lambdaCallback) => {
             },
         },
     };
-
-    // create AWS service functions in handler to allow mocking
-    const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
 
     function dynamoCallback(error, dynamoResponse) {
         logger.debug('dynamoResponse: ' + JSON.stringify(dynamoResponse, null, 4));
@@ -47,7 +49,7 @@ exports.handler = (event, context, lambdaCallback) => {
                 }
             };
 
-            logger.error('lambdaError:' + JSON.stringify(lambdaError, null, 4));
+            logger.warn('lambdaError:' + JSON.stringify(lambdaError, null, 4));
             lambdaCallback(
                 error,
                 lambdaError
@@ -76,8 +78,8 @@ exports.handler = (event, context, lambdaCallback) => {
     }
 
     // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
-    // console.log('main.js:Promise' + JSON.stringify(param));
+    // console.log('main.js:Promise' + JSON.stringify(dynamoParam));
     dynamodb.putItem(
-        param,
+        dynamoParam,
         dynamoCallback);
 };

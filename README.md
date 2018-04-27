@@ -14,6 +14,7 @@ Todo
 - version service
 - load testing
 - memory testing
+- logging at module aka log4j
 - authentication
 - production / test / ....      
 - source code security scanning (unclear if there are good open source packages to do this)

@@ -1,0 +1,15 @@
+[
+  [
+    {
+      "testData": {
+        "command": "putParty",
+        "firstName": "George",
+        "lastName": "Washington"
+      }
+    },
+
+    {
+      "testResult": "George Washington"
+    }
+  ]
+]

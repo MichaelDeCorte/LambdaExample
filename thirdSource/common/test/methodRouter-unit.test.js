@@ -14,9 +14,19 @@ let resultObject = {
     }
 };
 
-function testFunc(eventObject, contextObject, testResult, testError, done) {
+function testFunc(input, output, done) {
     expect.assertions(1);
 
+    let eventObject = input.eventObject;
+    let contextObject = input.contextObject;
+    let testResult = output.testResult;
+    let testError = output.testError;
+    
+    logger.trace('eventObject: ' + JSON.stringify(eventObject, null, 4));
+    logger.trace('contextObject: ' + JSON.stringify(contextObject, null, 4));
+    logger.trace('testResult: ' + JSON.stringify(testResult, null, 4));
+    logger.trace('testError: ' + JSON.stringify(testError, null, 4));
+    
     function func1(event, context, callback) {
         resultObject.body.message = 'func1 called';
         
@@ -51,8 +61,7 @@ function testFunc(eventObject, contextObject, testResult, testError, done) {
         }
     ).catch(
         (error) => {
-            logger.debug('Error: ' + error);
-            expect(error.toString()).toEqual(testError.error.toString());
+            expect(error.toString()).toEqual(testError.toString());
             done();
         }
     ).catch(
@@ -63,6 +72,6 @@ function testFunc(eventObject, contextObject, testResult, testError, done) {
 }
 
 // eslint-disable-next-line 
-const testData = require(__filename.replace(/.[^.]+$/, '.json'));
+const testSuite = require(__filename.replace(/.[^.]+$/, '.json'));
 
-each(testData).test('methodRouter unit tests', testFunc);
+each(testSuite).test('methodRouter unit tests', testFunc);

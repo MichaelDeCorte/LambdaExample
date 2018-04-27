@@ -1,107 +1,120 @@
 [
   [
     {
-      "command": "func1",
-      "firstName": "George"
-    },
-    {
-      "functionName": "lambdaFunction"
-    },
-    {
-      "body": {
-        "message": "func1 called"
+      "eventObject": {
+        "command": "func1",
+        "firstName": "George"
+      },
+      "contextObject": {
+        "functionName": "lambdaFunction"
       }
     },
     {
-      "error": null
-    }
-  ],
-  [
-    {
-      "resource": "/party",
-      "headers": {
-        "Content-Type": "application/json"
+      "testResult": {
+        "body": {
+          "message": "func1 called"
+        }
       },
-      "body": "{\"command\":\"func1\",\"firstName\": \"George\"}"
-    },
-    {
-      "functionName": "lambdaFunction"
-    },
-    {
-      "body": "{\"message\":\"func1 called\"}"
-    },
-    {
-      "error": null
+      "testError": null
     }
   ],
   [
     {
-      "resource": "/party",
-      "headers": {
-        "Content-Type": "application/json"
+      "eventObject": {
+        "resource": "/party",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{\"command\":\"func1\",\"firstName\": \"George\"}"
       },
-      "body": "{\"command\":\"undefined_func\",\"firstName\": \"George\"}"
-    },
-    {
-      "functionName": "lambdaFunction"
-    },
-    {
-      "body": "{\"message\":\"func not called \"}"
-    },
-    {
-      "error": "Error: Service request: unknown command: undefined_func"
-    }
-  ],
-  [
-    {
-      "resource": "/party",
-      "headers": {
-        "Content-Type": "application/json"
-      },
-      "body": "{\"commandxxx\":\"no_command_func\",\"firstName\": \"George\"}"
-    },
-    {
-      "functionName": "lambdaFunction"
-    },
-    {
-      "body": "{\"message\":\"func not called \"}"
-    },
-    {
-      "error": "Error: Service request: No command specified"
-    }
-  ],
-  [
-    {
-      "command":"undefined_func",
-      "firstName": "George"
-    },
-    {
-      "functionName": "lambdaFunction"
-    },
-    {
-      "body": {
-        "message": "func not called"
+      "contextObject": {
+        "functionName": "lambdaFunction"
       }
     },
     {
-      "error": "Error: Service request: unknown command: undefined_func"
+      "testResult": {
+        "body": "{\"message\":\"func1 called\"}"
+      },
+      "testError": null
     }
   ],
   [
     {
-      "commandxxx": "no_command_func",
-      "firstName": "George"
-    },
-    {
-      "functionName": "lambdaFunction"
-    },
-    {
-      "body": {
-        "message": "func not called"
+      "eventObject": {
+        "resource": "/party",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{\"command\":\"undefined_func\",\"firstName\": \"George\"}"
+      },
+      "contextObject": {
+        "functionName": "lambdaFunction"
       }
     },
     {
-      "error": "Error: Service request: No command specified"
+      "testResult": {
+        "body": "{\"message\":\"func not called \"}"
+      },
+      "testError": "Error: Service request: unknown command: undefined_func"
     }
+  ],
+  [
+    {
+      "eventObject": {
+        "resource": "/party",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{\"commandxxx\":\"no_command_func\",\"firstName\": \"George\"}"
+      },
+      "contextObject": {
+        "functionName": "lambdaFunction"
+      }
+    },
+    {
+      "testResult": {
+        "body": "{\"message\":\"func not called \"}"
+      },
+      "testError": "Error: Service request: No command specified"
+    }
+  ],
+  [
+    {
+      "eventObject": {
+        "command":"undefined_func",
+        "firstName": "George"
+      },
+      "contextObject": {
+        "functionName": "lambdaFunction"
+      }
+    },
+    {
+      "testResult": {
+        "body": {
+          "message": "func not called"
+        }
+      },
+      "testError": "Error: Service request: unknown command: undefined_func"
+    }
+  ],
+  [
+    {
+      "eventObject": {
+        "commandxxx": "no_command_func",
+        "firstName": "George"
+      },
+      "contextObject": {
+        "functionName": "lambdaFunction"
+      }
+    },
+    {
+      "testResult": {
+        "body": {
+          "message": "func not called"
+        }
+      },
+      "testError": "Error: Service request: No command specified"
+    }
+
   ]
 ]

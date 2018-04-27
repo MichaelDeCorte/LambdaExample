@@ -1,37 +1,37 @@
 [
   [
     {
-      "command": "putParty",
-      "firstName": "George",
-      "lastName": "Washington"
+      "testData": {
+        "command": "putParty",
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "dynamoError": null
     },
     {
-      "error": null
-    },
-    {
-      "ConsumedCapacity": {
-        "TableName": "party",
-        "CapacityUnits": 1 
-      }
-    },
-    {
-      "error": null
+      "testResult": {
+        "ConsumedCapacity": {
+          "TableName": "party",
+          "CapacityUnits": 1 
+        }
+      },
+      "errorResult": null
     }
   ],
   [
     {
-      "command": "putParty",
-      "firstName": "John",
-      "lastName": "Adams"
+      "testData": {
+        "command": "putParty",
+        "firstName": "John",
+        "lastName": "Adams"
+      },
+      "dynamoError": "ResourceNotFoundException"
     },
     {
-      "error": "ResourceNotFoundException"
-    },
-    {
-      "ConsumedCapacity": null
-    },
-    {
-      "error": "ResourceNotFoundException"
+      "testResult": {
+        "ConsumedCapacity": null
+      },
+      "errorResult": "ResourceNotFoundException"
     }
   ]
 ]
