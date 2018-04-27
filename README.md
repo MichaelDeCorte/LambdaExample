@@ -1,11 +1,6 @@
 # LambdaExample
 
 Todo
-- multiple services with one lambda? / issues with 
-    https://stackoverflow.com/questions/41425511/aws-api-gateway-lambda-multiple-endpoint-functions-vs-single-endpoint
-    https://github.com/balmbees/corgi
-    https://www.npmjs.com/package/vingle-corgi
-- better test coverage
 - input validation
 - selenium?
 - cucumber?    
@@ -41,6 +36,11 @@ Done
 - AWS api gateway
 - CloudWatch log group retention policy
 - better sub-module support
+- multiple services with one lambda? / issues with 
+    https://stackoverflow.com/questions/41425511/aws-api-gateway-lambda-multiple-endpoint-functions-vs-single-endpoint
+    https://github.com/balmbees/corgi
+    https://www.npmjs.com/package/vingle-corgi
+- better test coverage
 
 
 ============================================================    

@@ -1,0 +1,107 @@
+[
+  [
+    {
+      "command": "func1",
+      "firstName": "George"
+    },
+    {
+      "functionName": "lambdaFunction"
+    },
+    {
+      "body": {
+        "message": "func1 called"
+      }
+    },
+    {
+      "error": null
+    }
+  ],
+  [
+    {
+      "resource": "/party",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"command\":\"func1\",\"firstName\": \"George\"}"
+    },
+    {
+      "functionName": "lambdaFunction"
+    },
+    {
+      "body": "{\"message\":\"func1 called\"}"
+    },
+    {
+      "error": null
+    }
+  ],
+  [
+    {
+      "resource": "/party",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"command\":\"undefined_func\",\"firstName\": \"George\"}"
+    },
+    {
+      "functionName": "lambdaFunction"
+    },
+    {
+      "body": "{\"message\":\"func not called \"}"
+    },
+    {
+      "error": "Error: Service request: unknown command: undefined_func"
+    }
+  ],
+  [
+    {
+      "resource": "/party",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": "{\"commandxxx\":\"no_command_func\",\"firstName\": \"George\"}"
+    },
+    {
+      "functionName": "lambdaFunction"
+    },
+    {
+      "body": "{\"message\":\"func not called \"}"
+    },
+    {
+      "error": "Error: Service request: No command specified"
+    }
+  ],
+  [
+    {
+      "command":"undefined_func",
+      "firstName": "George"
+    },
+    {
+      "functionName": "lambdaFunction"
+    },
+    {
+      "body": {
+        "message": "func not called"
+      }
+    },
+    {
+      "error": "Error: Service request: unknown command: undefined_func"
+    }
+  ],
+  [
+    {
+      "commandxxx": "no_command_func",
+      "firstName": "George"
+    },
+    {
+      "functionName": "lambdaFunction"
+    },
+    {
+      "body": {
+        "message": "func not called"
+      }
+    },
+    {
+      "error": "Error: Service request: No command specified"
+    }
+  ]
+]

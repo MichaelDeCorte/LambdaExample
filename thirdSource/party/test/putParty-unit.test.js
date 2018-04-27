@@ -6,32 +6,38 @@ const Promise = require('promise');
 const logger = require('common').logger;
 const putParty = require('../src/party').handler;
 
+let dynamoResult = {
+    'ConsumedCapacity': {
+        'TableName': 'party',
+        'CapacityUnits': 1,
+    }
+};
 
-function testFunc(testData, testResult, done) {
+function testFunc(testData, dynamoError, testResult, errorResult, done) {
     const lambdaParam = testData;
 
-    logger.debug('putParty-unit.test.js: testData: '
+    logger.trace('testData: '
                  + JSON.stringify(testData, null, 4));
-    logger.debug('putParty-unit.test.js: testResult: ' +
+    logger.trace('dynamoError: ' +
+                 JSON.stringify(dynamoError, null, 4));
+    logger.trace('testResult: ' +
                  JSON.stringify(testResult, null, 4));
+    logger.trace('errorResult: ' +
+                 JSON.stringify(errorResult, null, 4));
 
     expect.assertions(1);
 
     AWS.mock('DynamoDB',
              'putItem',
              (params, dynamoCallback) => {
-                // eslint-disable-next-line no-param-reassign
-                 delete testData.command;
-                 dynamoCallback(null, /* errorCode */ testData);
+                 dynamoCallback(dynamoError.error, dynamoResult);
                  AWS.restore('DynamoDB');
              });
 
     return new Promise(
         (resolve, reject) => {
-            logger.debug('putParty-unit.test.js: lambdaParam: '
-                         + JSON.stringify(lambdaParam, null, 4));
             putParty(lambdaParam,
-                     null, // context
+                     { 'context': 'empty' }, 
                      (error, result) => {
                          if (error) {
                              reject(error);
@@ -41,19 +47,24 @@ function testFunc(testData, testResult, done) {
                      });
         }
     ).then(
-        (putPartyResult) => { 
-            logger.debug('putParty-unit.test.js: putPartyResult: '
-                         + JSON.stringify(putPartyResult, null, 4));
-            try {
-                expect(putPartyResult.body.message).toEqual(testResult);
-                done();
-            } catch (e) {
-                done.fail(e);
-            }
-        },
+        (lambdaResult) => { 
+            logger.debug('lambdaResult: '
+                         + JSON.stringify(lambdaResult, null, 4));
+            logger.trace('testResult: '
+                         + JSON.stringify(testResult, null, 4));
+            expect(lambdaResult.body.message).toEqual(testResult);
+            done();
+        }
+    ).catch(
         (lambdaError) => {
-            logger.error('putParty-unit.test.js: lambdaError: ' + lambdaError);
-            done.fail(lambdaError);
+            logger.debug('lambdaError: ' + JSON.stringify(lambdaError, null, 4));
+            logger.trace('errorResult: ' + JSON.stringify(errorResult, null, 4));
+            expect(lambdaError).toEqual(errorResult.error);
+            done();
+        }
+    ).catch( 
+        (error) => {
+            done.fail(error);
         }
     );
 }

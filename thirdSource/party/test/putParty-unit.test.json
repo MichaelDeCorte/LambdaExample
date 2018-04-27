@@ -6,8 +6,16 @@
       "lastName": "Washington"
     },
     {
-      "firstName": "George",
-      "lastName": "Washington"
+      "error": null
+    },
+    {
+      "ConsumedCapacity": {
+        "TableName": "party",
+        "CapacityUnits": 1 
+      }
+    },
+    {
+      "error": null
     }
   ],
   [
@@ -17,19 +25,13 @@
       "lastName": "Adams"
     },
     {
-      "firstName": "John",
-      "lastName": "Adams"
-    }
-  ],
-  [
-    {
-      "command": "putParty",
-      "firstName": "Thomas",
-      "lastName": "Jefferson"
+      "error": "ResourceNotFoundException"
     },
     {
-      "firstName": "Thomas",
-      "lastName": "Jefferson"
+      "ConsumedCapacity": null
+    },
+    {
+      "error": "ResourceNotFoundException"
     }
   ]
 ]

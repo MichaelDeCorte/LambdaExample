@@ -6,6 +6,7 @@ NPM=/Users/mdecorte/Documents/Development/Lambda/thirdSource/node_modules/.bin
 # https://github.com/aws/aws-sdk-js/issues/1921
 AWS_SDK_LOAD_CONFIG=1 
 
+JESTFLAGS=--passWithNoTests --no-color --coverage --bail
 ############################################################
 #
 .PHONY: $(SUBPACKAGES)
@@ -71,12 +72,8 @@ ifeq ($(PACKAGE),)
 	$(recursiveCommand)
 else
 	@echo ========== $@ ==========
-	@if find test -print | grep  -q '.*unit.*.js'; \
-	then \
-		set -v; \
-		$(NPM)/jest unit --no-color --coverage;\
-		touch .unit.test;\
-	fi
+	$(NPM)/jest unit $(JESTFLAGS)
+	touch .unit.test
 endif
 
 sonar:
@@ -193,12 +190,8 @@ ifeq ($(PACKAGE),)
 	$(recursiveCommand)
 else
 	@echo ========== $@ ==========
-	@if find test -print | grep  -q '.*aws.*.js'; \
-	then \
-		set -v; \
-		$(NPM)/jest aws --no-color --coverage;\
-		touch .integration.aws;\
-	fi
+	$(NPM)/jest aws $(JESTFLAGS)
+	touch .integration.aws
 endif
 
 ##########
@@ -212,12 +205,8 @@ ifeq ($(PACKAGE),)
 	$(recursiveCommand)
 else
 	@echo ========== $@ ==========
-	@if find test -print | grep  -q '.*service.*.js'; \
-	then \
-		set -v; \
-		$(NPM)/jest service --no-color --coverage;\
-		touch .integration.service;\
-	fi
+	$(NPM)/jest service $(JESTFLAGS)
+	touch .integration.service
 endif
 
 .clean.integration:
@@ -247,15 +236,15 @@ endif
 	@echo ========== $@ ==========
 	$(recursiveCommand)
 
-.veryclean: .clean
+.veryclean: .veryclean.environment
 .veryclean: .veryclean.unit
 .veryclean: .veryclean.package
-.veryclean: .veryclean.environment
 .veryclean: .veryclean.install
 .veryclean: .veryclean.integration
 .veryclean:
 	@echo ========== $@ ==========
 	$(recursiveCommand)
+
 
 ############################################################
 define recursiveCommand

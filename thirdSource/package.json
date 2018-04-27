@@ -13,10 +13,9 @@
     "url": "https://github.com/MichaelDeCorte/LambdaExample/issues"
   },
   "homepage": "https://github.com/MichaelDeCorte/LambdaExample#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "aws-sdk": "^2.225.1",
+    "aws-sdk": "^2.229.1",
     "aws-sdk-mock": "^1.7.0",
     "bundle-deps": "^1.0.0",
     "download-size": "^1.3.2",
@@ -29,8 +28,7 @@
     "npm": "^5.8.0",
     "supertest": "^3.0.0"
   },
-  "bundledDependencies": [
-  ],
+  "bundledDependencies": [],
   "scripts": {
     "lint": "eslint */src/*.js */test/*.js",
     "unit": "jest unit --no-color --coverage",
@@ -108,6 +106,10 @@
       "padded-block": "off",
       "comma-dangle": "off",
       "import/no-extraneous-dependencies": "off",
+      "arrow-body-style": [
+        "error",
+        "always"
+      ],
       "prefer-destructuring": "off"
     },
     "env": {

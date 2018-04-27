@@ -1,6 +1,7 @@
 PACKAGEROOT=/Users/mdecorte/Documents/Development/Lambda/thirdSource
 include $(PACKAGEROOT)/config/make.header
 
+# LOG_LEVEL=error
 #############################################################
 SRC= \
 	src/index.js					\
@@ -8,7 +9,9 @@ SRC= \
 	src/logger.js					\
 	src/guid.js
 
-UNITTESTSRC=
+UNITTESTSRC= \
+	test/guid-unit.test.js			\
+	test/methodRouter-unit.test.js
 
 INTTESTSRC= 
 
@@ -27,6 +30,9 @@ NPMPACKAGES= \
 all: unit package integration test
 
 init: .init
+	npm install --save-dev log-driver
+	npm install --save-dev promise
+	npm link
 
 unit: .unit
 

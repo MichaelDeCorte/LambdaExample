@@ -11,7 +11,7 @@ exports.methodRouter = (event, context, lambdaCallback, map) => {
         lambdaProxyIntegration = false;
     }
     
-    logger.debug('methodRouter.js: lambdaProxyIntegration: ' + lambdaProxyIntegration);
+    logger.debug('lambdaProxyIntegration: ' + lambdaProxyIntegration);
 
     let body = null;
     if (lambdaProxyIntegration) {
@@ -20,7 +20,7 @@ exports.methodRouter = (event, context, lambdaCallback, map) => {
         body = event;
     }
 
-    logger.debug('methodRouter.js: body: ' + JSON.stringify(body, null, 4));
+    logger.trace('body: ' + JSON.stringify(body, null, 4));
     
     return new Promise(
         (resolve, reject) => {
@@ -28,7 +28,7 @@ exports.methodRouter = (event, context, lambdaCallback, map) => {
                 throw new Error('Service request: No command specified');
             }
             
-            logger.debug('methodRouter.js: body.command: ' + String(body.command));
+            logger.trace('body.command: ' + String(body.command));
 
             if (!Object.prototype.hasOwnProperty.call(map, String(body.command))) {
                 throw new Error('Service request: unknown command: '
@@ -54,7 +54,7 @@ exports.methodRouter = (event, context, lambdaCallback, map) => {
                 lambdaResult.body = JSON.stringify(lambdaResult.body);
             }
 
-            logger.debug('methodRouter.js: lambdaResult:' +
+            logger.trace('lambdaResult:' +
                          JSON.stringify(lambdaResult, null, 4));
 
             lambdaCallback(
@@ -63,11 +63,14 @@ exports.methodRouter = (event, context, lambdaCallback, map) => {
         }
     ).catch(
         (error) => {
-            logger.debug('methodRouter.js: error:' + error);
+            logger.error('Error: ' + JSON.stringify(error, null, 4));
 
+            // lambdaCallback(
+            //     '500', // errorCode
+            //     error);
             lambdaCallback(
-                '500', // errorCode
-                error);
+                error,
+                null);
         }
     );
 };

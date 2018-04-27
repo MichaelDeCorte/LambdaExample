@@ -5,11 +5,11 @@ const logger = require('common').logger;
 const guid = require('common').generateGUID;
 
 exports.handler = (event, context, lambdaCallback) => {
-    logger.debug('putParty.js: event: ' + JSON.stringify(event, null, 4));
-    logger.debug('putParty.js: context: ' + JSON.stringify(context, null, 4));
+    logger.debug('event: ' + JSON.stringify(event, null, 4));
+    logger.debug('context: ' + JSON.stringify(context, null, 4));
 
     const partyID = guid(hash(event.lastName)).toString();
-    logger.debug('putParty.js: partyID: ' + partyID);
+    logger.debug('partyID: ' + partyID);
     const param = {
         'TableName': 'party',
         'ReturnConsumedCapacity': 'TOTAL',
@@ -30,7 +30,10 @@ exports.handler = (event, context, lambdaCallback) => {
     const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
 
     function dynamoCallback(error, dynamoResponse) {
-        logger.debug('putParty.js: dynamoResponse: ' + JSON.stringify(dynamoResponse, null, 4));
+        logger.debug('dynamoResponse: ' + JSON.stringify(dynamoResponse, null, 4));
+
+        logger.trace('error:' + error);
+        logger.trace('error:' + JSON.stringify(error));
 
         if (error) {
             let lambdaError = {
@@ -40,11 +43,11 @@ exports.handler = (event, context, lambdaCallback) => {
                     'Content-Type': '*/*'
                 },
                 'body': {
-                    'message': 'error',
+                    'message': error,
                 }
             };
 
-            logger.error('putParty.js: lambdaError:' + JSON.stringify(lambdaError, null, 4));
+            logger.error('lambdaError:' + JSON.stringify(lambdaError, null, 4));
             lambdaCallback(
                 error,
                 lambdaError
@@ -62,7 +65,7 @@ exports.handler = (event, context, lambdaCallback) => {
                 }
             };
 
-            logger.debug('putParty.js: lambdaResult:' +
+            logger.debug('lambdaResult:' +
                          JSON.stringify(lambdaResult, null, 4));
 
             lambdaCallback(

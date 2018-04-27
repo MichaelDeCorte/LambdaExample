@@ -1,6 +1,7 @@
 PACKAGEROOT=/Users/mdecorte/Documents/Development/Lambda/thirdSource
 include $(PACKAGEROOT)/config/make.header
 
+# LOG_LEVEL=trace
 #############################################################
 SRC= \
 	src/party.js					\
