@@ -18,15 +18,13 @@ function testFunc(input, output, done) {
 
     // prepare a lambda putParty request object
     function prepPutPartyRequest(data) {
-        /* eslint-disable */
         let putPartyRequest = {
-            FunctionName: 'party',
-            Payload: JSON.stringify( {
+            'FunctionName': 'party',
+            'Payload': JSON.stringify({
                 'firstName': 'testFirstName',
                 'lastName': 'testLastName'
-            } )
+            })
         };
-        /* eslint-enable */
         putPartyRequest.Payload = JSON.stringify(data);
 
         return putPartyRequest;
@@ -55,16 +53,14 @@ function testFunc(input, output, done) {
     // prepare a lambda getItem request object
     function prepGetPartyRequest(putPartyResult) {
         logger.debug('putPartyResult: ' + JSON.stringify(putPartyResult, null, 4));
-        /* eslint-disable */
         let getPartyRequest = {
-            FunctionName: 'party',
-            Payload: JSON.stringify({
+            'FunctionName': 'party',
+            'Payload': JSON.stringify({
                 'command': 'getParty',            
                 'partyID': JSON.parse(putPartyResult.Payload).body.partyID,
                 'lastName': testData.lastName,
             })
         };
-        /* eslint-enable */
 
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
