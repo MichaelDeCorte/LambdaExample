@@ -3,7 +3,7 @@ include $(PACKAGEROOT)/config/make.header
 
 #############################################################
 
-#LOG_LEVEL=trace
+# LOG_LEVEL=trace
 
 SRC= \
 	src/party.js					\

@@ -2,6 +2,7 @@
 const AWS = require('aws-sdk'); 
 const hash = require('string-hash');
 const logger = require('common').logger;
+const Promise = require('promise');
 const guid = require('common').generateGUID;
 
 exports.handler = (event, context, lambdaCallback) => {
@@ -14,72 +15,84 @@ exports.handler = (event, context, lambdaCallback) => {
     const partyID = guid(hash(event.lastName)).toString();
     logger.debug('partyID: ' + partyID);
 
+    // prepare a dynamo putData request object
+    function prepPutPartyRequest(data) {
+        logger.trace('data: ' + JSON.stringify(data, null, 4));
 
-    const dynamoParam = {
-        'TableName': 'party',
-        'ReturnConsumedCapacity': 'TOTAL',
-        'Item': {
-            'partyID': {
-                'N': partyID,
-            },
-            'firstName': {
-                'S': event.firstName,
-            },
-            'lastName': {
-                'S': event.lastName,
-            },
-        },
-    };
-
-    function dynamoCallback(error, dynamoResponse) {
-        logger.debug('dynamoResponse: ' + JSON.stringify(dynamoResponse, null, 4));
-
-        logger.trace('error:' + error);
-        logger.trace('error:' + JSON.stringify(error));
-
-        if (error) {
-            let lambdaError = {
-                'statusCode': 500,
-                'isBase64Encoded': false,
-                'headers': {
-                    'Content-Type': '*/*'
+        let putPartyRequest = {
+            'TableName': 'party',
+            'ReturnConsumedCapacity': 'TOTAL',
+            'Item': {
+                'partyID': {
+                    'N': partyID,
                 },
-                'body': {
-                    'message': error,
-                }
-            };
-
-            logger.warn('lambdaError:' + JSON.stringify(lambdaError, null, 4));
-            lambdaCallback(
-                error,
-                lambdaError
-            );
-        } else {
-            let lambdaResult = {
-                'statusCode': 200,
-                'isBase64Encoded': false,
-                'headers': {
-                    'Content-Type': '*/*'
+                'firstName': {
+                    'S': data.firstName,
                 },
-                'body': {
-                    'partyID': partyID,
-                    'message': dynamoResponse,
-                }
-            };
+                'lastName': {
+                    'S': data.lastName,
+                },
+            },
+        };
 
-            logger.debug('lambdaResult:' +
-                         JSON.stringify(lambdaResult, null, 4));
+        return putPartyRequest;
+    }
+    
+    // call dynamo putData
+    function putParty(data) {
+        logger.trace('data: ' + JSON.stringify(data, null, 4));
 
-            lambdaCallback(
-                null, // errorCode
-                lambdaResult
-            );
-        }
+        return new Promise(
+            (resolve, reject) => {
+                dynamodb.putItem(
+                    data,
+                    (error, result) => {
+                        if (error) {
+                            logger.warn('getItem:'
+                                         + error +
+                                         JSON.stringify(data, null, 4));
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    });
+            }
+        );
     }
 
-    // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html
-    // console.log('main.js:Promise' + JSON.stringify(dynamoParam));
-    dynamodb.putItem(
-        dynamoParam,
-        dynamoCallback);
+    let lambdaResult = {
+        'statusCode': null,
+        'isBase64Encoded': false,
+        'headers': {
+            'Content-Type': '*/*'
+        },
+        'body': {
+            'partyID': null,
+            'message': null,
+        }
+    };
+
+    let putPartyRequest = prepPutPartyRequest(event);
+    putParty(putPartyRequest)
+        .then(
+            (result) => {
+                logger.trace('Result: ' + JSON.stringify(result, null, 4));
+                lambdaResult.statusCode = 200;
+                lambdaResult.body.partyID = partyID;
+                lambdaResult.body.message = result;
+
+                logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
+                lambdaCallback(null, lambdaResult);
+            }
+        )
+        .catch(
+            (error) => {
+                logger.warn(error);
+                lambdaResult.statusCode = 500;
+                lambdaResult.body.message = error;
+
+                logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
+                lambdaCallback(error, lambdaResult);
+            }
+        );
 };

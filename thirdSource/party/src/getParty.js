@@ -17,15 +17,12 @@ exports.handler = (event, context, lambdaCallback) => {
         let getPartyRequest = {
             'TableName': 'party',
             'Key': {
-                'partyID': { 'N': 0 },
-                'lastName': { 'S': 'no data' },
+                'partyID': { 'N': data.partyID },
+                'lastName': { 'S': data.lastName },
             },
             'ProjectionExpression': 'partyID, firstName, lastName',
             'ReturnConsumedCapacity': 'TOTAL',
         };
-
-        getPartyRequest.Key.partyID = { 'N': data.partyID };
-        getPartyRequest.Key.lastName = { 'S': data.lastName };
 
         return getPartyRequest;
     }
