@@ -14,13 +14,20 @@ Todo
 - version service
 - load testing
 - memory testing
-- logging at module aka log4j
+- module location within package / packageroot
 - authentication
 - production / test / ....      
 - source code security scanning (unclear if there are good open source packages to do this)
 - upgrade to node 8.10 # waiting on terraform support
 - local lambda?
     https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
+- Swagger is API Documentation spec.
+- dynamo orm
+    https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
+    https://github.com/clarkie/dynogels
+    https://github.com/automategreen/dynamoose
+    https://www.npmjs.com/package/dynamodb-data-types
+    https://www.npmjs.com/package/dynamodb-marshaler
     
 Done
 - AWS stubbing
@@ -42,6 +49,38 @@ Done
     https://github.com/balmbees/corgi
     https://www.npmjs.com/package/vingle-corgi
 - better test coverage
+- logging at module aka log4j
+
+Blog
+- hello world
+    - setup ~/.aws
+    - setup aws cli
+    - setup terraform
+    - setup npm
+    - initial TF script
+    - cli testing
+- automation
+    - makefile
+    - eslint
+    - logging
+    - testing
+        - jest
+        - unit tests
+- lambda party service
+    - method router
+    - promises
+    - dynamo integration
+    - more terraform
+    - testing
+        - jest each
+        - more unit
+        - aws integration tests
+- aws api
+    - testing
+        - jest each
+        - more unit
+        - more integration tests
+        - service integration tests
 
 
 ============================================================    

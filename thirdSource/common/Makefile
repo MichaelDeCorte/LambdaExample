@@ -21,17 +21,14 @@ PACKAGE=common-0.0.1.zip
 
 SUBPACKAGES=
 
-NPMPACKAGES= \
-	log-driver \
-	promise
 
 ############################################################
 
 all: unit package integration test
 
 init: .init
-	npm install --save-dev log-driver
-	npm install --save-dev promise
+	npm install log-driver  
+	npm install --save-dev promise # --save-dev because it's install with other packages
 	npm link
 
 unit: .unit

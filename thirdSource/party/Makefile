@@ -35,14 +35,17 @@ all: unit package integration test
 
 init: .init
 init:
-	npm install string-hash
-	npm install log-driver
 	npm install promise
-	npm install ../common/common-0.0.1.tgz
+	npm install string-hash
 
+node_modules/common: ../common/common-0.0.1.tgz
+	set -v; npm install -f ../common/common-0.0.1.tgz
+
+.unit: node_modules/common
 unit: .unit
 
 package: .package
+package: node_modules/common
 
 environment: .do_no_run
 

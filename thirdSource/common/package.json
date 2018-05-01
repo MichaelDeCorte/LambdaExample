@@ -9,9 +9,9 @@
     "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
   },
   "devDependencies": {
-    "log-driver": "^1.2.7",
-    "promise": "^8.0.1",
-    "common": "file:."
+    "common": "file:.",
+    "npm": "^6.0.0",
+    "promise": "^8.0.1"
   },
   "dependencies": {},
   "bundledDependencies": []

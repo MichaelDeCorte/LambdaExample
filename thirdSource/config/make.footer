@@ -1,5 +1,7 @@
 .EXPORT_ALL_VARIABLES:
 
+LOG_LEVEL ?= error
+
 NPM=/Users/mdecorte/Documents/Development/Lambda/thirdSource/node_modules/.bin
 
 # force cli to load ~/.aws/config
@@ -30,7 +32,7 @@ JESTFLAGS=--passWithNoTests --no-color --coverage --bail --verbose
 ifeq ($(PACKAGE),)
 	$(recursiveCommand)
 else
-	@echo ========== $@ ==========
+	$(header)
 	@if [ ! -f .npmignore -a -f ../.npmignore ] ; then ln -s ../.npmignore .; fi
 	@if [ ! -f .gitignore -a -f ../.gitignore ] ; then ln -s ../.gitignore .; fi
 endif
@@ -58,7 +60,7 @@ lint: .lint
 ifeq ($(PACKAGE),)
 	$(recursiveCommand)
 else
-	@echo ========== $@ ==========
+	$(header)
 	$(NPM)/eslint src/*.js test/*.js
 	touch .unit.lint
 endif
@@ -72,7 +74,6 @@ endif
 ifeq ($(PACKAGE),)
 	$(recursiveCommand)
 else
-	@echo ========== $@ ==========
 	$(NPM)/jest unit $(JESTFLAGS)
 	touch .unit.test
 endif
@@ -151,7 +152,7 @@ endef
 terraform.tfstate: $(DOTPACKAGES)
 terraform.tfstate: $(TFSOURCE)
 terraform.tfstate:
-	@echo ========== $@ ========== `pwd`
+	$(header)
 	terraform apply -auto-approve
 	touch .environment.terraform
 
@@ -159,7 +160,7 @@ terraform.tfstate:
 	rm -f .environment.terraform
 
 .veryclean.environment:  
-	@echo ========== $@ ==========
+	$(header)
 	terraform destroy    
 
 #############################################################
@@ -191,7 +192,7 @@ terraform.tfstate:
 ifeq ($(PACKAGE),)
 	$(recursiveCommand)
 else
-	@echo ========== $@ ==========
+	$(header)
 	$(NPM)/jest aws $(JESTFLAGS)
 	touch .integration.aws
 endif
@@ -207,7 +208,7 @@ endif
 ifeq ($(PACKAGE),)
 	$(recursiveCommand)
 else
-	@echo ========== $@ ==========
+	$(header)
 	$(NPM)/jest service $(JESTFLAGS)
 	touch .integration.service
 endif
@@ -236,7 +237,7 @@ endif
 .clean: .clean.install
 .clean: .clean.integration
 .clean:
-	@echo ========== $@ ==========
+	$(header)
 	$(recursiveCommand)
 
 .veryclean: .veryclean.environment
@@ -245,7 +246,7 @@ endif
 .veryclean: .veryclean.install
 .veryclean: .veryclean.integration
 .veryclean:
-	@echo ========== $@ ==========
+	$(header)
 	$(recursiveCommand)
 
 
@@ -258,3 +259,7 @@ define recursiveCommand
 		$(MAKE) -C $$d $@ ;\
 	done
 endef
+
+define header
+	@echo ========== $$(basename $$(pwd))  $@ ==========
+endef    
