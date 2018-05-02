@@ -57,8 +57,7 @@ function testFunc(input, output, done) {
             'FunctionName': 'party',
             'Payload': JSON.stringify({
                 'command': 'getParty',            
-                'partyID': JSON.parse(putPartyResult.Payload).body.partyID,
-                'lastName': testData.lastName,
+                'partyID': JSON.parse(putPartyResult.Payload).body.partyID
             })
         };
 

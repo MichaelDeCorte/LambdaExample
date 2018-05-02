@@ -3,8 +3,7 @@
     {
       "testData": {
         "command": "getParty",
-        "partyID": "1829281149",
-        "lastName": "Washington"
+        "partyID": "1829281149"
       },
       "dynamoResponse": {
         "ConsumedCapacity": {

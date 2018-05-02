@@ -41,6 +41,7 @@ init:
 	npm install --save-dev aws-sdk
 	npm install --save-dev aws-sdk-mock
 	npm install --save-dev supertest
+	npm install --save-dev jsonlint
 	terraform init
 	terraform get
 

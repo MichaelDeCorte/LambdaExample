@@ -8,8 +8,7 @@
       },
       "getData": {
         "command": "getParty",
-        "partyID": null,
-        "lastName": "Washington"
+        "partyID": null
       }
     },
 

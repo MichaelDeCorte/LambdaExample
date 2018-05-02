@@ -36,7 +36,8 @@
     "aws": "jest aws --no-color --coverage",
     "service": "jest service --no-color --coverage",
     "dependencies": "bundle-deps",
-    "download-size": "download-size"
+    "download-size": "download-size",
+    "jsonlint": "jsonlint"
   },
   "logger": {
     "default": "false",

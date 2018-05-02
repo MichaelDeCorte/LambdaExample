@@ -23,8 +23,7 @@ exports.handler = (event, context, lambdaCallback) => {
         let getPartyRequest = {
             'TableName': 'party',
             'Key': {
-                'partyID': Number(data.partyID),
-                'lastName': String(data.lastName),
+                'partyID': Number(data.partyID)
             },
             'ProjectionExpression': 'partyID, firstName, lastName',
             'ReturnConsumedCapacity': 'TOTAL',
@@ -72,9 +71,7 @@ exports.handler = (event, context, lambdaCallback) => {
             (result) => {
                 logger.trace('Result: ' + JSON.stringify(result, null, 4));
                 lambdaResult.statusCode = 200;
-                lambdaResult.body.partyID = result.Item.partyID;
-                lambdaResult.body.firstName = result.Item.firstName;
-                lambdaResult.body.lastName = result.Item.lastName;
+                lambdaResult.body = result.Item;
 
                 logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
                 lambdaCallback(null, lambdaResult);
