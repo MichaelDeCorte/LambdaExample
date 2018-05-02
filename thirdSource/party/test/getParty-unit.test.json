@@ -12,9 +12,9 @@
           "TableName": "Party"
         },
         "Item": { 
-          "partyID": { "N": "1829281149" },
-          "firstName": { "S": "George" },
-          "lastName": { "S": "Washington" }
+          "partyID": "1829281149",
+          "firstName": "George",
+          "lastName": "Washington"
         }
       },
       "dynamoError": null

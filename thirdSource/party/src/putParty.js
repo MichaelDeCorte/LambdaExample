@@ -9,8 +9,16 @@ exports.handler = (event, context, lambdaCallback) => {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
     logger.debug('context: ' + JSON.stringify(context, null, 4));
 
+
     // create AWS service functions in handler to allow mocking
     const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
+
+    const dynamoClient = new AWS.DynamoDB.DocumentClient(
+        {
+            'service': dynamodb,
+            'convertEmptyValues': true
+        });
+
 
     const partyID = guid(hash(event.lastName)).toString();
     logger.debug('partyID: ' + partyID);
@@ -23,18 +31,11 @@ exports.handler = (event, context, lambdaCallback) => {
             'TableName': 'party',
             'ReturnConsumedCapacity': 'TOTAL',
             'Item': {
-                'partyID': {
-                    'N': partyID,
-                },
-                'firstName': {
-                    'S': data.firstName,
-                },
-                'lastName': {
-                    'S': data.lastName,
-                },
+                'partyID': Number(partyID),
+                'firstName': String(data.firstName),
+                'lastName': String(data.lastName),
             },
         };
-
         return putPartyRequest;
     }
     
@@ -44,7 +45,7 @@ exports.handler = (event, context, lambdaCallback) => {
 
         return new Promise(
             (resolve, reject) => {
-                dynamodb.putItem(
+                dynamoClient.put(
                     data,
                     (error, result) => {
                         if (error) {

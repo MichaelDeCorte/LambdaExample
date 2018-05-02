@@ -6,7 +6,7 @@ const Promise = require('promise');
 const logger = require('common').logger;
 const party = require('../src/party').handler;
 
-let dynamoResult = {
+let dynamoResponse = {
     'ConsumedCapacity': {
         'TableName': 'party',
         'CapacityUnits': 1,
@@ -30,12 +30,22 @@ function testFunc(input, output, done) {
 
     expect.assertions(1);
 
-    AWS.mock('DynamoDB',
-             'putItem',
-             (params, dynamoCallback) => {
-                 dynamoCallback(dynamoError, dynamoResult);
-                 AWS.restore('DynamoDB');
+    AWS.mock('DynamoDB.DocumentClient',
+             'put',
+             (params, dynamoClientCallback) => {
+                 logger.trace('mockClient: ' + JSON.stringify(params, null, 4));
+                 dynamoClientCallback(dynamoError, dynamoResponse);
+                 AWS.restore('DynamoDB.DocumentClient');
              });
+
+
+    // AWS.mock('DynamoDB',
+    //          'putItem',
+    //          (params, dynamoCallback) => {
+    //              logger.trace('mock: ' + JSON.stringify(params, null, 4));
+    //              dynamoCallback(dynamoError, dynamoResponse);
+    //              AWS.restore('DynamoDB');
+    //          });
 
     return new Promise(
         (resolve, reject) => {

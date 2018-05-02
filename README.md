@@ -1,7 +1,7 @@
 # LambdaExample
 
 Todo
-- input validation
+- input validation, https://www.npmjs.com/package/joi
 - selenium?
 - cucumber?    
 - blog notes    
@@ -50,6 +50,7 @@ Done
     https://www.npmjs.com/package/vingle-corgi
 - better test coverage
 - logging at module aka log4j
+- orm, https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
 
 Blog
 - hello world

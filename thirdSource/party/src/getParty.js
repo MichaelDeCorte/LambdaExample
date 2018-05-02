@@ -10,6 +10,12 @@ exports.handler = (event, context, lambdaCallback) => {
     // create AWS service functions in handler to allow mocking
     const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
 
+    const dynamoClient = new AWS.DynamoDB.DocumentClient(
+        {
+            'service': dynamodb,
+            'convertEmptyValues': true
+        });
+
     // prepare a dynamo getData request object
     function prepGetPartyRequest(data) {
         logger.trace('data: ' + JSON.stringify(data, null, 4));
@@ -17,8 +23,8 @@ exports.handler = (event, context, lambdaCallback) => {
         let getPartyRequest = {
             'TableName': 'party',
             'Key': {
-                'partyID': { 'N': data.partyID },
-                'lastName': { 'S': data.lastName },
+                'partyID': Number(data.partyID),
+                'lastName': String(data.lastName),
             },
             'ProjectionExpression': 'partyID, firstName, lastName',
             'ReturnConsumedCapacity': 'TOTAL',
@@ -34,7 +40,7 @@ exports.handler = (event, context, lambdaCallback) => {
 
         return new Promise(
             (resolve, reject) => {
-                dynamodb.getItem(
+                dynamoClient.get(
                     data,
                     (error, result) => {
                         if (error) {
@@ -66,9 +72,9 @@ exports.handler = (event, context, lambdaCallback) => {
             (result) => {
                 logger.trace('Result: ' + JSON.stringify(result, null, 4));
                 lambdaResult.statusCode = 200;
-                lambdaResult.body.partyID = result.Item.partyID.N;
-                lambdaResult.body.firstName = result.Item.firstName.S;
-                lambdaResult.body.lastName = result.Item.lastName.S;
+                lambdaResult.body.partyID = result.Item.partyID;
+                lambdaResult.body.firstName = result.Item.firstName;
+                lambdaResult.body.lastName = result.Item.lastName;
 
                 logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
                 lambdaCallback(null, lambdaResult);

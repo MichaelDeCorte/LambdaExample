@@ -27,13 +27,21 @@ function testFunc(input, output, done) {
 
     expect.assertions(1);
 
-    AWS.mock('DynamoDB',
-             'getItem',
-             (params, dynamoCallback) => {
-                 dynamoCallback(dynamoError,
-                                dynamoResponse);
-                 AWS.restore('DynamoDB');
+    AWS.mock('DynamoDB.DocumentClient',
+             'get',
+             (params, dynamoClientCallback) => {
+                 logger.trace('mockClient: ' + JSON.stringify(params, null, 4));
+                 dynamoClientCallback(dynamoError, dynamoResponse);
+                 AWS.restore('DynamoDB.DocumentClient');
              });
+
+    // AWS.mock('DynamoDB',
+    //          'getItem',
+    //          (params, dynamoCallback) => {
+    //              dynamoCallback(dynamoError,
+    //                             dynamoResponse);
+    //              AWS.restore('DynamoDB');
+    //          });
 
     return new Promise(
         (resolve, reject) => {

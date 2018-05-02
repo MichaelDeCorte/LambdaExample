@@ -27,7 +27,8 @@ function testFunc(input, output, done) {
                     let statusCode = response.status;
                     let partyID = JSON.parse(response.text).partyID;
                     getData.partyID =  partyID;
-                    testResult.partyID =  partyID;
+                    testResult.partyID = Number(partyID);
+
                     expect(statusCode).toEqual(200);
                     expect(parseInt(partyID, 10)).toBeGreaterThan(0);
                 }
@@ -42,11 +43,12 @@ function testFunc(input, output, done) {
             .then(
                 (response) => {
                     logger.debug('response: ' + JSON.stringify(response, null, 4));
+                    logger.trace('testResult: ' + JSON.stringify(testResult, null, 4));
                     let statusCode = response.status;
                     let body = JSON.parse(response.text);
+
                     expect(statusCode).toEqual(200);
-                    expect(testResult).toEqual(body);
-                    logger.debug('got here!');
+                    expect(body).toEqual(testResult);
                     done();
                 }
             );
