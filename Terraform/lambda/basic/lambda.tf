@@ -34,9 +34,9 @@ variable "handler" {
 }
 
 variable "runtime" {
-    default = "nodejs6.10"
+    # default = "nodejs6.10"
     # waiting on terraform support
-    # default = "nodejs8.10"
+    default = "nodejs8.10"
 }
 
 # turn on versioning of lambda function
