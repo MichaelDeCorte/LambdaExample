@@ -10,7 +10,6 @@ Todo
 - version node libraries
 - static resources
 - jenkins    ???
-- replace make??
 - version service
 - load testing
 - memory testing
@@ -18,16 +17,10 @@ Todo
 - authentication
 - production / test / ....      
 - source code security scanning (unclear if there are good open source packages to do this)
-- upgrade to node 8.10 # waiting on terraform support
 - local lambda?
     https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
 - Swagger is API Documentation spec.
-- dynamo orm
-    https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
-    https://github.com/clarkie/dynogels
-    https://github.com/automategreen/dynamoose
-    https://www.npmjs.com/package/dynamodb-data-types
-    https://www.npmjs.com/package/dynamodb-marshaler
+- replace make??
     
 Done
 - AWS stubbing
@@ -50,7 +43,13 @@ Done
     https://www.npmjs.com/package/vingle-corgi
 - better test coverage
 - logging at module aka log4j
-- orm, https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
+- dynamo orm
+    https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html
+    https://github.com/clarkie/dynogels
+    https://github.com/automategreen/dynamoose
+    https://www.npmjs.com/package/dynamodb-data-types
+    https://www.npmjs.com/package/dynamodb-marshaler
+- upgrade to node 8.10 # terraform init -upgrade
 
 Blog
 - hello world
