@@ -28,6 +28,7 @@ all: unit package integration test
 
 init: .init
 	npm install log-driver  
+	npm install --save-dev joi
 	npm install --save-dev promise # --save-dev because it's install with other packages
 	npm link
 

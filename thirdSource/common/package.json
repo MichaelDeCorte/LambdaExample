@@ -10,9 +10,14 @@
   },
   "devDependencies": {
     "common": "file:.",
+    "joi": "^13.2.0",
     "npm": "^6.0.0",
     "promise": "^8.0.1"
   },
-  "dependencies": {},
-  "bundledDependencies": []
+  "dependencies": {
+    "log-driver": "^1.2.7"
+  },
+  "bundledDependencies": [
+    "log-driver"
+  ]
 }

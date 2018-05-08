@@ -18,6 +18,7 @@
       "testError": null
     }
   ],
+  
   [
     {
       "eventObject": {
@@ -38,6 +39,7 @@
       "testError": null
     }
   ],
+  
   [
     {
       "eventObject": {
@@ -55,9 +57,10 @@
       "testResult": {
         "body": "{\"message\":\"func not called \"}"
       },
-      "testError": "Error: Service request: unknown command: undefined_func"
+      "testError": "Error: UnknownCommand"
     }
   ],
+  
   [
     {
       "eventObject": {
@@ -75,9 +78,10 @@
       "testResult": {
         "body": "{\"message\":\"func not called \"}"
       },
-      "testError": "Error: Service request: No command specified"
+      "testError": "Error: InvalidCommand"
     }
   ],
+  
   [
     {
       "eventObject": {
@@ -94,9 +98,10 @@
           "message": "func not called"
         }
       },
-      "testError": "Error: Service request: unknown command: undefined_func"
+      "testError": "Error: UnknownCommand"
     }
   ],
+  
   [
     {
       "eventObject": {
@@ -113,7 +118,7 @@
           "message": "func not called"
         }
       },
-      "testError": "Error: Service request: No command specified"
+      "testError": "Error: InvalidCommand"
     }
 
   ]

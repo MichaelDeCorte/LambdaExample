@@ -4,6 +4,20 @@ const hash = require('string-hash');
 const logger = require('common').logger;
 const Promise = require('promise');
 const guid = require('common').generateGUID;
+const Joi = require('joi');
+
+const alphaSpaceRE = /^[A-Za-z ]*$/;
+const eventSchema = Joi.object().keys(
+    {
+        'lastName': Joi.string().regex(alphaSpaceRE).min(1).max(30).trim().truncate().required(),
+        'firstName': Joi.string().regex(alphaSpaceRE).min(1).max(30).trim().truncate().required(),
+    });
+
+const joiOptions = {
+    'abortEarly': false,
+    'convert': true,
+    'stripUnknown': true,
+};
 
 exports.handler = (event, context, lambdaCallback) => {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
@@ -20,23 +34,45 @@ exports.handler = (event, context, lambdaCallback) => {
         });
 
 
-    const partyID = guid(hash(event.lastName)).toString();
-    logger.debug('partyID: ' + partyID);
+    let partyID;
+
+    function validateEvent(data) {
+        return new Promise(
+            (resolve, reject) => {
+                const dataValidated = Joi.validate(data, eventSchema, joiOptions);
+                logger.trace('dataValidated:' +
+                             JSON.stringify(dataValidated, null, 4));
+                if (dataValidated.error) {
+                    reject(new Error('DataValidationError'));
+                } else {
+                    resolve(dataValidated);
+                }
+            }
+        );
+    }
 
     // prepare a dynamo putData request object
     function prepPutPartyRequest(data) {
         logger.trace('data: ' + JSON.stringify(data, null, 4));
 
-        let putPartyRequest = {
-            'TableName': 'party',
-            'ReturnConsumedCapacity': 'TOTAL',
-            'Item': {
-                'partyID': Number(partyID),
-                'firstName': String(data.firstName),
-                'lastName': String(data.lastName),
-            },
-        };
-        return putPartyRequest;
+        return new Promise(
+            // eslint-disable-next-line no-unused-vars
+            (resolve, reject) => {
+                partyID = guid(hash(data.lastName)).toString();
+                logger.debug('partyID: ' + partyID);
+
+                let putPartyRequest = {
+                    'TableName': 'party',
+                    'ReturnConsumedCapacity': 'TOTAL',
+                    'Item': {
+                        'partyID': Number(partyID),
+                        'firstName': String(data.firstName),
+                        'lastName': String(data.lastName),
+                    }
+                };
+                resolve(putPartyRequest);
+            }
+        );
     }
     
     // call dynamo putData
@@ -73,8 +109,10 @@ exports.handler = (event, context, lambdaCallback) => {
         }
     };
 
-    let putPartyRequest = prepPutPartyRequest(event);
-    putParty(putPartyRequest)
+
+    validateEvent(event)
+        .then(prepPutPartyRequest)
+        .then(putParty)
         .then(
             (result) => {
                 logger.trace('Result: ' + JSON.stringify(result, null, 4));

@@ -2,6 +2,18 @@
 const AWS = require('aws-sdk'); 
 const logger = require('common').logger;
 const Promise = require('promise');
+const Joi = require('joi');
+
+const eventSchema = Joi.object().keys(
+    {
+        'partyID': Joi.number().required(),
+    });
+
+const joiOptions = {
+    'abortEarly': false,
+    'convert': true,
+    'stripUnknown': true,
+};
 
 exports.handler = (event, context, lambdaCallback) => {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
@@ -16,20 +28,40 @@ exports.handler = (event, context, lambdaCallback) => {
             'convertEmptyValues': true
         });
 
+    function validateEvent(data) {
+        return new Promise(
+            (resolve, reject) => {
+                logger.trace('data:' +
+                             JSON.stringify(data, null, 4));
+                const dataValidated = Joi.validate(data, eventSchema, joiOptions);
+                logger.trace('dataValidated:' +
+                             JSON.stringify(dataValidated, null, 4));
+                if (dataValidated.error) {
+                    reject(new Error('DataValidationError'));
+                } else {
+                    resolve(dataValidated);
+                }
+            }
+        );
+    }
+
     // prepare a dynamo getData request object
     function prepGetPartyRequest(data) {
-        logger.trace('data: ' + JSON.stringify(data, null, 4));
-
-        let getPartyRequest = {
-            'TableName': 'party',
-            'Key': {
-                'partyID': Number(data.partyID)
-            },
-            'ProjectionExpression': 'partyID, firstName, lastName',
-            'ReturnConsumedCapacity': 'TOTAL',
-        };
-
-        return getPartyRequest;
+        return new Promise(
+            // eslint-disable-next-line no-unused-vars
+            (resolve, reject) => {
+                logger.trace('data: ' + JSON.stringify(data, null, 4));
+                let getPartyRequest = {
+                    'TableName': 'party',
+                    'Key': {
+                        'partyID': Number(data.partyID)
+                    },
+                    'ProjectionExpression': 'partyID, firstName, lastName',
+                    'ReturnConsumedCapacity': 'TOTAL',
+                };
+                resolve(getPartyRequest);
+            }
+        );
     }
 
     // call dynamo getData
@@ -43,11 +75,14 @@ exports.handler = (event, context, lambdaCallback) => {
                     data,
                     (error, result) => {
                         if (error) {
-                            logger.warn('getItem:'
-                                         + error +
-                                         JSON.stringify(data, null, 4));
+                            logger.error('getItem: error: ' + error 
+                                         + ' data: ' + JSON.stringify(data, null, 4) 
+                                         + 'result: ' + JSON.stringify(result, null, 4));
                             reject(error);
                         } else {
+                            logger.trace('getItem:' 
+                                         + ' data: ' + JSON.stringify(data, null, 4) 
+                                         + 'result: ' + JSON.stringify(result, null, 4));
                             resolve(result);
                         }
                     });
@@ -65,13 +100,18 @@ exports.handler = (event, context, lambdaCallback) => {
         }
     };
 
-    let getPartyRequest = prepGetPartyRequest(event);
-    getParty(getPartyRequest)
+    validateEvent(event)
+        .then(prepGetPartyRequest)
+        .then(getParty)
         .then(
             (result) => {
                 logger.trace('Result: ' + JSON.stringify(result, null, 4));
                 lambdaResult.statusCode = 200;
-                lambdaResult.body = result.Item;
+                if (result.Item) {
+                    lambdaResult.body = result.Item;
+                } else {
+                    lambdaResult.body = null;
+                }
 
                 logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
                 lambdaCallback(null, lambdaResult);

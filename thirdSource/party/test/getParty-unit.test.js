@@ -35,14 +35,6 @@ function testFunc(input, output, done) {
                  AWS.restore('DynamoDB.DocumentClient');
              });
 
-    // AWS.mock('DynamoDB',
-    //          'getItem',
-    //          (params, dynamoCallback) => {
-    //              dynamoCallback(dynamoError,
-    //                             dynamoResponse);
-    //              AWS.restore('DynamoDB');
-    //          });
-
     return new Promise(
         (resolve, reject) => {
             party(lambdaParam,
@@ -66,7 +58,7 @@ function testFunc(input, output, done) {
         (lambdaError) => {
             logger.debug('lambdaError: ' + JSON.stringify(lambdaError, null, 4));
             logger.trace('testError: ' + JSON.stringify(testError, null, 4));
-            expect(lambdaError).toEqual(testError);
+            expect(lambdaError.toString()).toEqual(testError.toString());
             done();
         }
     ).catch( 

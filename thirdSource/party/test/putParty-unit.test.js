@@ -15,7 +15,11 @@ let dynamoResponse = {
 
 function testFunc(input, output, done) {
     const lambdaParam = input.testData;
-    let dynamoError = input.dynamoError;
+    let dynamoError = null;
+    if (input.dynamoError) {
+        dynamoError = new Error(input.dynamoError);
+    }
+        
     let testResult = output.testResult;
     let errorResult = output.errorResult;
     
@@ -70,9 +74,10 @@ function testFunc(input, output, done) {
         }
     ).catch(
         (lambdaError) => {
-            logger.debug('lambdaError: ' + JSON.stringify(lambdaError, null, 4));
+            logger.debug('lambdaError: ' + lambdaError.toString());
             logger.trace('errorResult: ' + JSON.stringify(errorResult, null, 4));
-            expect(lambdaError).toEqual(errorResult);
+            logger.trace('errorResult: ' + errorResult);
+            expect(lambdaError.toString()).toBe(errorResult.toString());
             done();
         }
     ).catch( 

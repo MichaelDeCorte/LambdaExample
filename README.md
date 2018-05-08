@@ -1,15 +1,17 @@
 # LambdaExample
 
 Todo
+- cloudwatch alarms http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
+- x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html?shortFooter=true
 - input validation, https://www.npmjs.com/package/joi
+    https://github.com/hapijs/joi/blob/v13.2.0/API.md#objectwithoutkey-peers
 - selenium?
 - cucumber?    
 - blog notes    
-- vpc
+- vpc / https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
 - route 53    
 - version node libraries
 - static resources
-- jenkins    ???
 - version service
 - load testing
 - memory testing
@@ -21,6 +23,9 @@ Todo
     https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
 - Swagger is API Documentation spec.
 - replace make??
+- jenkins   codepipeline
+- service discovery
+    https://read.acloud.guru/service-discovery-as-a-service-the-missing-serverless-lynchpin-541d001466f4
     
 Done
 - AWS stubbing
@@ -50,8 +55,16 @@ Done
     https://www.npmjs.com/package/dynamodb-data-types
     https://www.npmjs.com/package/dynamodb-marshaler
 - upgrade to node 8.10 # terraform init -upgrade
+- AWS Lambda best practices
+    https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
+            Waiting on below to move aws declaration outside of method
+            https://github.com/dwyl/aws-sdk-mock/issues/93
+
 
 Blog
+- hackernoon.com
+- medium.com
+- dzone.com    
 - hello world
     - setup ~/.aws
     - setup aws cli

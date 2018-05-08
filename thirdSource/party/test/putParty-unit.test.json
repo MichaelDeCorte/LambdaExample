@@ -18,6 +18,7 @@
       "errorResult": null
     }
   ],
+  
   [
     {
       "testData": {
@@ -31,7 +32,58 @@
       "testResult": {
         "ConsumedCapacity": null
       },
-      "errorResult": "ResourceNotFoundException"
+      "errorResult": "Error: ResourceNotFoundException"
+    }
+  ],
+  
+  [
+    {
+      "testData": {
+        "command": "putParty",
+        "lastName": "Jefferson"
+      },
+      "dynamoError": null
+    },
+    {
+      "testResult": {
+        "ConsumedCapacity": null
+      },
+      "errorResult": "Error: DataValidationError"
+    }
+  ],
+
+  [
+    {
+      "testData": {
+        "command": "putParty",
+        "firstName": "James1",
+        "lastName": "Madison"
+      },
+      "dynamoError": null
+    },
+    {
+      "testResult": {
+        "ConsumedCapacity": null
+      },
+      "errorResult": "Error: DataValidationError"
+    }
+  ],
+
+  [
+    {
+      "testData": {
+        "command": "putParty",
+        "firstName": "James",
+        "lastName": "Monroe2"
+      },
+      "dynamoError": null
+    },
+    {
+      "testResult": {
+        "ConsumedCapacity": null
+      },
+      "errorResult": "Error: DataValidationError"
     }
   ]
+    
 ]

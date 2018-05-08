@@ -27,5 +27,47 @@
       },
       "testError": null
     }
+  ],
+
+  [
+    {
+      "testData": {
+        "command": "getParty",
+        "partyID": "1829281149"
+      },
+      "dynamoResponse": {
+        "ConsumedCapacity": {
+          "CapacityUnits": 1,
+          "TableName": "Party"
+        }
+      },
+      "dynamoError": null
+    },
+
+    {
+      "testResult": null,
+      "testError": null
+    }
+  ],
+
+  [
+    {
+      "testData": {
+        "command": "getParty",
+        "partyID": "aaaa"
+      },
+      "dynamoResponse": {
+        "ConsumedCapacity": {
+          "CapacityUnits": 1,
+          "TableName": "Party"
+        }
+      },
+      "dynamoError": null
+    },
+
+    {
+      "testResult": null,
+      "testError": "Error: DataValidationError"
+    }
   ]
 ]

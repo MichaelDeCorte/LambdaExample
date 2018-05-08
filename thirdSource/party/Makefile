@@ -31,12 +31,13 @@ SUBPACKAGES=
 
 ############################################################
 
-all: unit package integration test
+all: unit package
 
 init: .init
 init:
 	npm install promise
 	npm install string-hash
+	npm install joi
 
 node_modules/common: ../common/common-0.0.1.tgz
 	set -v; npm install -f ../common/common-0.0.1.tgz
@@ -51,9 +52,9 @@ environment: .do_no_run
 
 install: .do_no_run
 
-integration: .integration
+integration: 
 
-test: .test
+test: 
 
 clean: .clean
 

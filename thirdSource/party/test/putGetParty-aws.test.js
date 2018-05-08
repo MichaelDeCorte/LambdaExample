@@ -14,7 +14,9 @@ const lambda = new AWS.Lambda();
 // test service
 function testFunc(input, output, done) {
     let testData = input.testData;
+    let partyID = output.partyID;
     let testResult = output.testResult;
+    let testError = output.testError;
 
     // prepare a lambda putParty request object
     function prepPutPartyRequest(data) {
@@ -53,11 +55,14 @@ function testFunc(input, output, done) {
     // prepare a lambda getItem request object
     function prepGetPartyRequest(putPartyResult) {
         logger.debug('putPartyResult: ' + JSON.stringify(putPartyResult, null, 4));
+        if (!partyID) {
+            partyID = JSON.parse(putPartyResult.Payload).body.partyID;
+        }
         let getPartyRequest = {
             'FunctionName': 'party',
             'Payload': JSON.stringify({
                 'command': 'getParty',            
-                'partyID': JSON.parse(putPartyResult.Payload).body.partyID
+                'partyID': partyID
             })
         };
 
@@ -94,10 +99,16 @@ function testFunc(input, output, done) {
         logger.debug('actualResult: ' + JSON.stringify(actualResult, null, 4));
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
-                let t = JSON.parse(actualResult.Payload).body.firstName
-                    + ' ' 
-                    + JSON.parse(actualResult.Payload).body.lastName;
-                expect(t).toBe(testResult);
+                let body = JSON.parse(actualResult.Payload).body;
+                let t;
+                logger.trace('body: ' + JSON.stringify(body, null, 4));
+                logger.trace('testResult: ' + JSON.stringify(testResult, null, 4));
+                if (body) {
+                    t = body.firstName + ' ' + body.lastName;
+                } else {
+                    t = null;
+                }
+                expect(t).toEqual(testResult);
                 done();
             }
         );
@@ -110,7 +121,13 @@ function testFunc(input, output, done) {
         .then(validatePartyData)
         .catch(
             (error) => {
-                done.fail(error);
+                logger.error('error: ' + error);
+                if (testError) {
+                    expect(error.toString()).toBe(testError.toString());
+                    done();
+                } else {
+                    done.fail(error);
+                }
             }
         );
 }
@@ -118,5 +135,5 @@ function testFunc(input, output, done) {
 // eslint-disable-next-line 
 const testSuite = require(__filename.replace(/.[^.]+$/, '.json'));
 
-each(testSuite).test('putParty integration tests', testFunc);
+each(testSuite).test('putParty aws API integration tests', testFunc);
 

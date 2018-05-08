@@ -9,7 +9,25 @@
     },
 
     {
-      "testResult": "George Washington"
+      "partyID": null,
+      "testResult": "George Washington",
+      "testError": null
+    }
+  ],
+
+  [
+    {
+      "testData": {
+        "command": "putParty",
+        "firstName": "John",
+        "lastName": "Adams"
+      }
+    },
+
+    {
+      "partyID": 8888,
+      "testResult": null,
+      "testError": "an Error"
     }
   ]
 ]
