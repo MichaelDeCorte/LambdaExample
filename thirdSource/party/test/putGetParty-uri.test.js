@@ -2,7 +2,7 @@
 const each = require('jest-each');
 const logger = require('common').logger;
 const requestTest = require('supertest');
-const uri = require('./party-service.uri.js').uri;
+const uri = require('./party.uri.js').uri;
 
 // Initialize AWS credentials
 

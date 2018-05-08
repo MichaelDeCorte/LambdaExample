@@ -17,10 +17,10 @@ UNITTESTSRC= \
 	test/putParty-unit.test.json
 
 INTTESTSRC= \
-	test/putGetParty-aws.test.js 	\
-	test/putGetParty-aws.test.json	\
-	test/putGetParty-service.test.js 	\
-	test/putGetParty-service.test.json 
+	test/putGetParty-api.test.js 	\
+	test/putGetParty-api.test.json	\
+	test/putGetParty-uri.test.js 	\
+	test/putGetParty-uri.test.json 
 
 TFSOURCE=\
 	party.tf
