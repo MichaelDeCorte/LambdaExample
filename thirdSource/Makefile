@@ -5,7 +5,7 @@ include $(PACKAGEROOT)/config/make.header
 #############################################################
 
 # LOG_LEVEL=false
-LOG_LEVEL=error
+# LOG_LEVEL=error
 # LOG_LEVEL=warn
 # LOG_LEVEL=info
 # LOG_LEVEL=debug

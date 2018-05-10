@@ -1,22 +1,20 @@
 # LambdaExample
 
 Todo
+- authentication
 - cloudwatch alarms http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
 - x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html?shortFooter=true
-- input validation, https://www.npmjs.com/package/joi
-    https://github.com/hapijs/joi/blob/v13.2.0/API.md#objectwithoutkey-peers
+- aws config
+- aws ElastiCache
+- route 53    
 - selenium?
 - cucumber?    
 - blog notes    
 - vpc / https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
-- route 53    
 - version node libraries
-- static resources
 - version service
 - load testing
 - memory testing
-- module location within package / packageroot
-- authentication
 - production / test / ....      
 - source code security scanning (unclear if there are good open source packages to do this)
 - local lambda?
@@ -26,7 +24,10 @@ Todo
 - jenkins   codepipeline
 - service discovery
     https://read.acloud.guru/service-discovery-as-a-service-the-missing-serverless-lynchpin-541d001466f4
-    
+- review jest Cli options
+- db 
+    https://www.npmjs.com/package/dynamodb   waiting for promise support
+
 Done
 - AWS stubbing
 - terraform deploy
@@ -59,6 +60,8 @@ Done
     https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
             Waiting on below to move aws declaration outside of method
             https://github.com/dwyl/aws-sdk-mock/issues/93
+- input validation, https://www.npmjs.com/package/joi
+    https://github.com/hapijs/joi/blob/v13.2.0/API.md#objectwithoutkey-peers
 
 
 Blog
@@ -110,7 +113,10 @@ ISSUES
 
 - no support for looping or conditionals
 - no support for depends_on between modules        
-
+- taint syntax is just wrong...
+    https://github.com/hashicorp/terraform/issues/11570
+- can't taint template_files
+    https://github.com/terraform-providers/terraform-provider-template/issues/2    
 
 ------------------------------------------------------------
 Best practice

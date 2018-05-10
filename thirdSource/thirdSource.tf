@@ -62,7 +62,7 @@ module "uriTemplate" {
     source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/files"
 
     input = "party/templates/party.uri.js"
-    output = "party/test/party.uri.js"
+    output = "party/test/party.${var.stage_name}.uri.js"
     variables = {
         uri = "${module.apiDeploy.deployment_url}${module.party.subPath}"
     }

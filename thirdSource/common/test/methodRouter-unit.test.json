@@ -78,7 +78,7 @@
       "testResult": {
         "body": "{\"message\":\"func not called \"}"
       },
-      "testError": "Error: InvalidCommand"
+      "testError": "Error: DataValidationError"
     }
   ],
   
@@ -118,8 +118,7 @@
           "message": "func not called"
         }
       },
-      "testError": "Error: InvalidCommand"
+      "testError": "Error: DataValidationError"
     }
-
   ]
 ]

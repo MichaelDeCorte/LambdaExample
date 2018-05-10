@@ -39,14 +39,10 @@ init:
 	npm install string-hash
 	npm install joi
 
-node_modules/common: ../common/common-0.0.1.tgz
-	set -v; npm install -f ../common/common-0.0.1.tgz
-
 .unit: node_modules/common
 unit: .unit
 
 package: .package
-package: node_modules/common
 
 environment: .do_no_run
 
@@ -60,10 +56,12 @@ clean: .clean
 
 veryclean: .veryclean
 
-$(PACKAGE):: ../common/common-0.0.1.tgz
-	npm install $?
+node_modules/common: ../common/common-0.0.1.tgz
+	npm install -f ../common/common-0.0.1.tgz
 
-$(PACKAGE):: $(SRC)
+$(PACKAGE): node_modules/common
+
+$(PACKAGE): $(SRC)
 	$(call jsToZip, $(PACKAGE))
 
 

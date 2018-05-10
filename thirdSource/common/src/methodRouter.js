@@ -1,6 +1,65 @@
+// const logger = require('./logger.js').logger;
 const logger = require('./logger.js').logger;
+const validator = require('./validator.js').validator;
 const Promise = require('promise');
 const Joi = require('joi');
+
+/* eslint no-param-reassign: off */
+
+let lambdaProxyIntegration;
+
+function entry(event, context) {
+    // called from AWS API Gateway
+    if (Object.prototype.hasOwnProperty.call(event, 'body')) { 
+        event = JSON.parse(event.body);
+        lambdaProxyIntegration = true;
+    } else {
+        lambdaProxyIntegration = false;
+    }
+    
+    logger.trace('lambdaProxyIntegration: ' + lambdaProxyIntegration);
+    event.lambdaProxyIntegration = true;
+    return { event, context };
+}
+
+function command(event, map) {
+    if (Object.prototype.hasOwnProperty.call(map, String(event.command))) {
+        logger.trace('method: ' + map[String(event.command)]);
+        return map[String(event.command)];
+    } 
+
+    logger.trace('UnknownCommand: ' +  String(event.command));
+    throw new Error('UnknownCommand: ' +  String(event.command));
+}
+
+function response(result, error) {
+    logger.trace('result: ' + JSON.stringify(result, null, 4) +
+                 '\nerror: ' + error);
+    
+    if (!result) {
+        result = {
+            'statusCode': null,
+            'isBase64Encoded': false,
+            'headers': {
+                'Content-Type': '*/*'
+            },
+            'body': {
+            }
+        };
+    }
+
+    if (error) {
+        result.statusCode = 500;
+        result.body.message = error;
+        logger.error(error);
+    }
+
+    if (lambdaProxyIntegration) {
+        result.body = JSON.stringify(result.body);
+    }
+
+    return { result, error };
+}
 
 const eventSchema = Joi.object().keys(
     {
@@ -12,96 +71,36 @@ const eventSchema = Joi.object().keys(
             .required(),
     });
 
-const joiOptions = {
-    'abortEarly': false,
-    'allowUnknown': true,
-};
+exports.methodRouter = (eventArg, contextArg, map) => {
+    return new Promise(
+        (resolve, reject) => {
+            let { event, context } = entry(eventArg, contextArg);
 
+            event = validator(event, eventSchema);
 
-let lambdaProxyIntegration = null;
-
-/* eslint no-prototype-builtins: "off" */
-exports.methodRouter = (event, context, lambdaCallback, map) => {
-    function validateEvent(data) {
-        return new Promise(
-            (resolve, reject) => {
-                const dataValidated = Joi.validate(data, eventSchema, joiOptions);
-                logger.trace('dataValidated:' + JSON.stringify(dataValidated, null, 4));
-                if (dataValidated.error) {
-                    logger.error('InvalidCommand: ' + JSON.stringify(dataValidated, null, 4));
-                    reject(new Error('InvalidCommand'));
-                } else if (!map.hasOwnProperty(String(dataValidated.value.command))) {
-                    logger.error('UnknownCommand: ' + String(dataValidated.value.command));
-                    throw new Error('UnknownCommand');
-                } else {
-                    resolve(dataValidated.value);
-                }
+            if (map.eventSchema) {
+                event = validator(event, map.eventSchema);
             }
-        );
-    }
 
-    function invokeMethod(body) {
-        logger.trace('body: ' + JSON.stringify(body, null, 4));
+            let method = command(event, map);
 
-        return new Promise(
-            (resolve, reject) => {
-                let method = map[String(body.command)];
-
-                method(body,
-                       context,
-                       (error, result) => {
-                           if (error) {
-                               reject(error);
-                           } else {
-                               resolve(result);
-                           }
-                       });
-            }
-        );
-    }
-
-    // called from AWS API Gateway
-    if (Object.prototype.hasOwnProperty.call(event, 'body')) { 
-        lambdaProxyIntegration = true;
-    } else {
-        lambdaProxyIntegration = false;
-    }
-    
-    logger.trace('lambdaProxyIntegration: ' + lambdaProxyIntegration);
-
-    let body = null;
-    if (lambdaProxyIntegration) {
-        body = JSON.parse(event.body);
-    } else {
-        body = event;
-    }
-
-    validateEvent(body)
-        .then(invokeMethod)
+            method(event,
+                   context,
+                   (error, result) => {
+                       if (error) {
+                           reject(error);
+                       } else {
+                           resolve(result);
+                       }
+                   });
+        })
         .then(
-            (lambdaResult) => {
-                if (lambdaProxyIntegration) {
-                    // eslint-disable-next-line no-param-reassign
-                    lambdaResult.body = JSON.stringify(lambdaResult.body);
-                }
-
-                logger.trace('lambdaResult:' +
-                             JSON.stringify(lambdaResult, null, 4));
-
-                lambdaCallback(
-                    null, // errorCode
-                    lambdaResult);
-            }
-        ).catch(
+            (result) => {
+                return response(result, null);
+            })
+        .catch(
             (error) => {
-                logger.warn('Error: ' + JSON.stringify(error, null, 4));
-
-                // lambdaCallback(
-                //     '500', // errorCode
-                //     error);
-                lambdaCallback(
-                    error,
-                    null);
-            }
-        );
+                logger.trace('1');
+                return response(null, error);
+            });
 };

@@ -45,6 +45,9 @@ module "party" {
     s3_bucket           = "${var.s3_bucket}"
     function_name		= "party"
     handler			    = "src/party.handler"
+    variables			= {
+        LOG_LEVEL = "trace"
+    }
 }
 
 #####

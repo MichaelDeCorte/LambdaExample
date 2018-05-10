@@ -77,7 +77,9 @@ function testFunc(input, output, done) {
             logger.debug('lambdaError: ' + lambdaError.toString());
             logger.trace('errorResult: ' + JSON.stringify(errorResult, null, 4));
             logger.trace('errorResult: ' + errorResult);
-            expect(lambdaError.toString()).toBe(errorResult.toString());
+            let e = lambdaError.toString().replace(/(^Error: [^ :]+)[^]*$/m, '$1');
+
+            expect(e).toEqual(errorResult.toString());
             done();
         }
     ).catch( 

@@ -7,6 +7,7 @@ SRC= \
 	src/index.js					\
 	src/methodRouter.js				\
 	src/logger.js					\
+	src/validator.js				\
 	src/guid.js
 
 UNITTESTSRC= \
@@ -48,7 +49,7 @@ clean: .clean
 
 veryclean: .veryclean
 
-$(PACKAGE):: $(SRC)
+$(PACKAGE): $(SRC)
 	$(call jsToZip, $(PACKAGE))
 
 

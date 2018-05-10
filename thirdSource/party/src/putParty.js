@@ -37,13 +37,13 @@ exports.handler = (event, context, lambdaCallback) => {
     let partyID;
 
     function validateEvent(data) {
+        logger.trace('data:' + JSON.stringify(data, null, 4));
+
         return new Promise(
             (resolve, reject) => {
                 const dataValidated = Joi.validate(data, eventSchema, joiOptions);
-                logger.trace('dataValidated:' +
-                             JSON.stringify(dataValidated, null, 4));
                 if (dataValidated.error) {
-                    reject(new Error('DataValidationError'));
+                    reject(new Error('DataValidationError: ' + JSON.stringify(dataValidated)));
                 } else {
                     resolve(dataValidated);
                 }

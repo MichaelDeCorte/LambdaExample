@@ -1,6 +1,6 @@
 .EXPORT_ALL_VARIABLES:
 
-LOG_LEVEL ?= error
+LOG_LEVEL ?= false
 
 NPM=/Users/mdecorte/Documents/Development/Lambda/thirdSource/node_modules/.bin
 
@@ -30,9 +30,9 @@ JESTFLAGS=--passWithNoTests --no-color --coverage --bail --verbose
 
 .init:
 ifeq ($(PACKAGE),)
-	$(recursiveCommand)
+	$(call recursiveMake)
 else
-	$(header)
+	$(printHeader)
 	@if [ ! -f .npmignore -a -f ../.npmignore ] ; then ln -s ../.npmignore .; fi
 	@if [ ! -f .gitignore -a -f ../.gitignore ] ; then ln -s ../.gitignore .; fi
 endif
@@ -58,9 +58,9 @@ lint: .lint
 .unit.lint: $(INTTESTSRC) 
 .unit.lint: 
 ifeq ($(PACKAGE),)
-	$(recursiveCommand)
+	$(call recursiveMake)
 else
-	$(header)
+	$(printHeader)
 	$(NPM)/eslint src/*.js test/*.js
 	touch .unit.lint
 endif
@@ -72,9 +72,9 @@ endif
 .unit.test: .unit.lint
 .unit.test: 
 ifeq ($(PACKAGE),)
-	$(recursiveCommand)
+	$(call recursiveMake)
 else
-	$(NPM)/jest unit $(JESTFLAGS)
+	$(call jestCommand,unit)
 	touch .unit.test
 endif
 
@@ -93,12 +93,12 @@ sonar:
 .PHONY: .clean.package
 .PHONY: .veryclean.package
 
-$(PACKAGE):: .unit.lint
-$(PACKAGE):: .unit.test
+$(PACKAGE): .unit.lint
+$(PACKAGE): .unit.test
 .package: $(PACKAGE)
 .package:
 ifeq ($(PACKAGE),)
-	$(recursiveCommand)
+	$(call recursiveMake)
 else
 	touch .package
 endif
@@ -152,7 +152,7 @@ endef
 terraform.tfstate: $(DOTPACKAGES)
 terraform.tfstate: $(TFSOURCE)
 terraform.tfstate:
-	$(header)
+	$(printHeader)
 	terraform apply -auto-approve
 	touch .environment.terraform
 
@@ -160,7 +160,7 @@ terraform.tfstate:
 	rm -f .environment.terraform
 
 .veryclean.environment:  
-	$(header)
+	$(printHeader)
 	terraform destroy    
 
 #############################################################
@@ -180,42 +180,42 @@ terraform.tfstate:
 .PHONY: .integration
 .PHONY: .clean.integration
 
-.integration: .integration.aws
-.integration: .integration.service
+.integration: .integration.api
+.integration: .integration.uri
 
-.integration.aws: $(SRC)
-.integration.aws: $(INTTESTSRC) 
-.integration.aws: .unit.lint
-.integration.aws: .unit.test
-.integration.aws: .package
-.integration.aws:
+.integration.api: $(SRC)
+.integration.api: $(INTTESTSRC) 
+.integration.api: .unit.lint
+.integration.api: .unit.test
+.integration.api: .package
+.integration.api:
 ifeq ($(PACKAGE),)
-	$(recursiveCommand)
+	$(call recursiveMake)
 else
-	$(header)
-	$(NPM)/jest aws $(JESTFLAGS)
-	touch .integration.aws
+	$(printHeader)
+	$(call jestCommand,api)
+	touch .integration.api
 endif
 
 ##########
-.integration.service: $(SRC)
-.integration.service: $(INTTESTSRC)
-.integration.service: .unit.lint
-.integration.service: .unit.test
-.integration.service: .package
-.integration.service: .integration.aws
-.integration.service:
+.integration.uri: $(SRC)
+.integration.uri: $(INTTESTSRC)
+.integration.uri: .unit.lint
+.integration.uri: .unit.test
+.integration.uri: .package
+.integration.uri: .integration.api
+.integration.uri:
 ifeq ($(PACKAGE),)
-	$(recursiveCommand)
+	$(call recursiveMake)
 else
-	$(header)
-	$(NPM)/jest service $(JESTFLAGS)
-	touch .integration.service
+	$(printHeader)
+	$(call jestCommand,uri)
+	touch .integration.uri
 endif
 
 .clean.integration:
-	rm -f .integration.aws
-	rm -f .integration.service
+	rm -f .integration.api
+	rm -f .integration.uri
 
 .veryclean.integration:
 
@@ -237,8 +237,8 @@ endif
 .clean: .clean.install
 .clean: .clean.integration
 .clean:
-	$(header)
-	$(recursiveCommand)
+	$(printHeader)
+	$(call recursiveMake)
 
 .veryclean: .veryclean.environment
 .veryclean: .veryclean.unit
@@ -246,12 +246,12 @@ endif
 .veryclean: .veryclean.install
 .veryclean: .veryclean.integration
 .veryclean:
-	$(header)
-	$(recursiveCommand)
+	$(printHeader)
+	$(call recursiveMake)
 
 
 ############################################################
-define recursiveCommand
+define recursiveMake
 	@ set -e ; \
 	for d in $(SUBPACKAGES)    ;\
 	do \
@@ -260,6 +260,15 @@ define recursiveCommand
 	done
 endef
 
-define header
+############################################################
+define jestCommand
+    @if ( cd test ; ls | grep -n "$(1)");  	\
+    then                                			\
+		$(NPM)/jest "$(1)" $(JESTFLAGS);  			\
+    fi
+endef
+
+############################################################
+define printerHeader
 	@echo ========== $$(basename $$(pwd))  $@ ==========
 endef    

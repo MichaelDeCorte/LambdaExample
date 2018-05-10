@@ -150,7 +150,11 @@ function LogDriver() {
 
                     if (this.levels.indexOf(logLevel) <=
                         this.levels.indexOf(location.configuredLogLevel)) {
-                        process.stderr.write(location.logOutput + '\n');  // use stderr.write instead of console.log as jest redefines console.log
+                        // console.error(location.logOutput + '\n');
+                        // use stderr.write instead of console.log
+                        // as jest redefines console.log
+                        // except aws doesn't log stdout or stderr
+                        process.stdout.write(location.logOutput + '\n');
                     }
                 };
         });

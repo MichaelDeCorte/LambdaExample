@@ -1,5 +1,4 @@
 const each = require('jest-each');
-const Promise = require('promise');
 const methodRouter = require('common').methodRouter;
 const logger = require('common').logger;
 
@@ -37,38 +36,32 @@ function testFunc(input, output, done) {
     }
 
     let routerMap = {
-        'func1': func1,
+        'func1': func1
     };
 
-    return new Promise(
-        (resolve, reject) => {
-            return methodRouter(eventObject,
-                                contextObject,
-                                (error, result) => {
-                                    if (error) {
-                                        reject(error);
-                                    } else {
-                                        resolve(result);
-                                    }
-                                },
-                                routerMap);
-        }
-    ).then(
-        (result) => { 
-            logger.debug('result: ' + JSON.stringify(result));
-            expect(result.body).toEqual(testResult.body);
-            done();
-        }
-    ).catch(
-        (error) => {
-            expect(error.toString()).toEqual(testError.toString());
-            done();
-        }
-    ).catch(
-        (error) => {
-            done.fail(error);
-        }
-    );
+    methodRouter(eventObject,
+                 contextObject,
+                 routerMap)
+        .then(
+            ({ result, error }) => {
+                logger.trace('result: ' + JSON.stringify(result));
+                logger.trace('error: ' + error);
+
+                if (error) {
+                    let e = error.toString().replace(/(^Error: [^ :]+)[^]*$/m, '$1');
+                    expect(e).toEqual(testError.toString());
+                    done();
+                } else {
+                    expect(result.body).toEqual(testResult.body);
+                    done();
+                }
+            })
+        .catch(
+            (error) => {
+                done.fail(error);
+                logger.trace('here');
+                done();
+            });
 }
 
 // eslint-disable-next-line 
