@@ -124,7 +124,7 @@ function testFunc(input, output, done) {
                 logger.error('error: ' + error);
                 if (testError) {
                     let e = error.toString().replace(/(^Error: [^ :]+)[^]*$/m, '$1');
-                    expect(e).toBe(testError.toString());
+                    expect(e).toBe(testError);
                     done();
                 } else {
                     done.fail(error);

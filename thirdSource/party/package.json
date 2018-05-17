@@ -9,17 +9,30 @@
   },
   "dependencies": {
     "common": "file:../common/common-0.0.1.tgz",
-    "joi": "^13.2.0",
+    "joi": "^13.3.0",
+    "methodRouter": "file:../methodRouter/methodRouter-0.0.1.tgz",
     "promise": "^8.0.1",
     "string-hash": "^1.1.3"
   },
   "logger": {
     "default": "trace"
   },
+  "methodRouter": {
+    "getParty": {
+      "fileName": "getParty.js"
+    },
+    "putParty": {
+      "fileName": "putParty.js"
+    },
+    "t": {
+      "fileName": "t.js"
+    }
+  },
   "devDependencies": {},
   "bundledDependencies": [
     "common",
     "joi",
+    "methodRouter",
     "promise",
     "string-hash"
   ]

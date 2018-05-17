@@ -19,9 +19,8 @@ const joiOptions = {
     'stripUnknown': true,
 };
 
-exports.handler = (event, context, lambdaCallback) => {
+function handler(event, context, lambdaCallback) {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
-    logger.debug('context: ' + JSON.stringify(context, null, 4));
 
 
     // create AWS service functions in handler to allow mocking
@@ -33,12 +32,8 @@ exports.handler = (event, context, lambdaCallback) => {
             'convertEmptyValues': true
         });
 
-
     let partyID;
-
     function validateEvent(data) {
-        logger.trace('data:' + JSON.stringify(data, null, 4));
-
         return new Promise(
             (resolve, reject) => {
                 const dataValidated = Joi.validate(data, eventSchema, joiOptions);
@@ -53,8 +48,6 @@ exports.handler = (event, context, lambdaCallback) => {
 
     // prepare a dynamo putData request object
     function prepPutPartyRequest(data) {
-        logger.trace('data: ' + JSON.stringify(data, null, 4));
-
         return new Promise(
             // eslint-disable-next-line no-unused-vars
             (resolve, reject) => {
@@ -77,17 +70,16 @@ exports.handler = (event, context, lambdaCallback) => {
     
     // call dynamo putData
     function putParty(data) {
-        logger.trace('data: ' + JSON.stringify(data, null, 4));
-
         return new Promise(
             (resolve, reject) => {
                 dynamoClient.put(
                     data,
                     (error, result) => {
                         if (error) {
+                            logger.error('Dynamo error');
                             logger.warn('getItem:'
-                                         + error +
-                                         JSON.stringify(data, null, 4));
+                                        + error +
+                                        JSON.stringify(data, null, 4));
                             reject(error);
                         } else {
                             resolve(result);
@@ -109,29 +101,27 @@ exports.handler = (event, context, lambdaCallback) => {
         }
     };
 
-
     validateEvent(event)
         .then(prepPutPartyRequest)
         .then(putParty)
         .then(
             (result) => {
-                logger.trace('Result: ' + JSON.stringify(result, null, 4));
                 lambdaResult.statusCode = 200;
                 lambdaResult.body.partyID = partyID;
                 lambdaResult.body.message = result;
 
-                logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
                 lambdaCallback(null, lambdaResult);
             }
         )
         .catch(
             (error) => {
-                logger.warn(error);
+                logger.error(error);
                 lambdaResult.statusCode = 500;
-                lambdaResult.body.message = error;
+                lambdaResult.body.message = error.toString();
 
-                logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
                 lambdaCallback(error, lambdaResult);
             }
         );
-};
+}
+
+module.exports = handler;

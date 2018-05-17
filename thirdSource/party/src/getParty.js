@@ -15,9 +15,8 @@ const joiOptions = {
     'stripUnknown': true,
 };
 
-exports.handler = (event, context, lambdaCallback) => {
+function handler(event, context, lambdaCallback) {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
-    logger.debug('context: ' + JSON.stringify(context, null, 4));
 
     // create AWS service functions in handler to allow mocking
     const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
@@ -31,10 +30,10 @@ exports.handler = (event, context, lambdaCallback) => {
     function validateEvent(data) {
         return new Promise(
             (resolve, reject) => {
-                logger.trace('data:' +
+                logger.error('data:' +
                              JSON.stringify(data, null, 4));
                 const dataValidated = Joi.validate(data, eventSchema, joiOptions);
-                logger.trace('dataValidated:' +
+                logger.error('dataValidated:' +
                              JSON.stringify(dataValidated, null, 4));
                 if (dataValidated.error) {
                     reject(new Error('DataValidationError'));
@@ -50,7 +49,6 @@ exports.handler = (event, context, lambdaCallback) => {
         return new Promise(
             // eslint-disable-next-line no-unused-vars
             (resolve, reject) => {
-                logger.trace('data: ' + JSON.stringify(data, null, 4));
                 let getPartyRequest = {
                     'TableName': 'party',
                     'Key': {
@@ -67,8 +65,6 @@ exports.handler = (event, context, lambdaCallback) => {
     // call dynamo getData
     // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html
     function getParty(data) {
-        logger.trace('data: ' + JSON.stringify(data, null, 4));
-
         return new Promise(
             (resolve, reject) => {
                 dynamoClient.get(
@@ -80,9 +76,6 @@ exports.handler = (event, context, lambdaCallback) => {
                                          + 'result: ' + JSON.stringify(result, null, 4));
                             reject(error);
                         } else {
-                            logger.trace('getItem:' 
-                                         + ' data: ' + JSON.stringify(data, null, 4) 
-                                         + 'result: ' + JSON.stringify(result, null, 4));
                             resolve(result);
                         }
                     });
@@ -105,7 +98,6 @@ exports.handler = (event, context, lambdaCallback) => {
         .then(getParty)
         .then(
             (result) => {
-                logger.trace('Result: ' + JSON.stringify(result, null, 4));
                 lambdaResult.statusCode = 200;
                 if (result.Item) {
                     lambdaResult.body = result.Item;
@@ -113,18 +105,18 @@ exports.handler = (event, context, lambdaCallback) => {
                     lambdaResult.body = null;
                 }
 
-                logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
                 lambdaCallback(null, lambdaResult);
             }
         )
         .catch(
             (error) => {
-                logger.warn(error);
+                logger.error(error);
                 lambdaResult.statusCode = 500;
                 lambdaResult.body.message = error;
 
-                logger.trace('lambdaResult: ' + JSON.stringify(lambdaResult, null, 4));
                 lambdaCallback(error, lambdaResult);
             }
         );
-};
+}
+
+module.exports = handler;

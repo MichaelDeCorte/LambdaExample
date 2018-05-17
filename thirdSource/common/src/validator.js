@@ -7,7 +7,7 @@ const joiOptions = {
     'allowUnknown': true,
 };
 
-exports.validator = (data, dataSchema) => {
+function validator(data, dataSchema) {
     logger.trace('data:' + data);
     logger.trace('data:' + JSON.stringify(data, null, 4));
 
@@ -22,4 +22,6 @@ exports.validator = (data, dataSchema) => {
         throw new Error('DataValidationError: ' + JSON.stringify(dataValidated.value, null, 4));
     } 
     return dataValidated.value;
-};
+}
+
+module.exports = validator;

@@ -1,6 +1,7 @@
 # LambdaExample
 
 Todo
+- lock local node to 8.10
 - authentication
 - cloudwatch alarms http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
 - x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html?shortFooter=true

@@ -24,6 +24,7 @@ PACKAGE=
 
 SUBPACKAGES=\
 	common 				\
+	methodRouter		\
 	party
 
 

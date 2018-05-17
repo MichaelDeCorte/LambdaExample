@@ -40,6 +40,7 @@ init:
 	npm install joi
 
 .unit: node_modules/common
+.unit: node_modules/methodRouter
 unit: .unit
 
 package: .package
@@ -59,7 +60,11 @@ veryclean: .veryclean
 node_modules/common: ../common/common-0.0.1.tgz
 	npm install -f ../common/common-0.0.1.tgz
 
+node_modules/methodRouter: ../methodRouter/methodRouter-0.0.1.tgz
+	npm install -f ../methodRouter/methodRouter-0.0.1.tgz
+
 $(PACKAGE): node_modules/common
+$(PACKAGE): node_modules/methodRouter
 
 $(PACKAGE): $(SRC)
 	$(call jsToZip, $(PACKAGE))

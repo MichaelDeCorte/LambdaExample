@@ -2,6 +2,7 @@
 
 module.exports = {
     'logger': require('./logger').logger,
-    'generateGUID': require('./guid').generateGUID,
-    'methodRouter': require('./methodRouter').methodRouter,
+    'generateGUID': require('./guid'),
+    'validator': require('./validator'),
+    'packageConfig': require('./packageConfig'),
 };

@@ -1,36 +1,11 @@
-const fs = require('fs');
+const packageConfig = require('../src/packageConfig.js');
 
-// returns the package.json object
-// or if not already loaded, load the package.json found at 'path', saves it, and returns it
-let packageConfig = {};
-
-function loadPackageConfig(path) {
-    if (Object.keys(packageConfig).length === 0) {
-        // eslint-disable-next-line
-        packageConfig = require(path + '/package.json');
-    }
-    return packageConfig;
-}
-
-// returns the parent path to path that has a package.json
-// throws an error if none found
-function getPackageRoot(path) {
-    let pathArray = path.split(/[/\\]/);
-    let packageRoot;
-
-    while (pathArray.length) {
-        pathArray.pop();
-        packageRoot = pathArray.join('/');
-        if (fs.existsSync(packageRoot + '/package.json')) {
-            return packageRoot;
-        }
-    }
-    throw new Error('package.json not found. ' + path);
-}
+// returns the package.json object or if not already loaded, load the
+// package.json found at 'path', saves it, and returns it
 
 // based upon the package.json config
 // returns the configured logLevel for this item
-function getConfiguredLogLevel(config, name, subline) {
+function getConfiguredLogLevel(config, name, subpath) {
     /* eslint no-cond-assign: off */
     let t;
     let configuredLogLevel;
@@ -38,7 +13,7 @@ function getConfiguredLogLevel(config, name, subline) {
     if (process.env.LOG_LEVEL) {
         configuredLogLevel = process.env.LOG_LEVEL;
     } else if ('logger' in config) {
-        if ((t = '[' + name + ']' + subline) in config.logger) {
+        if ((t = '[' + name + ']' + subpath) in config.logger) {
             configuredLogLevel = config.logger[t];
         } else if ((t = '[' + name + ']') in config.logger) {
             configuredLogLevel = config.logger[t];
@@ -59,7 +34,8 @@ function getConfiguredLogLevel(config, name, subline) {
 // location: {
 //     "root":          "/Users/mdecorte/thirdSource/common",
 //     "name":          "common",
-//     "errSubline":    "src/guid.js:14:12",
+//     "errSubpath":    "src/guid.js:14:12",
+//     "subpath":        "src/guid.js",         -- not actually stored
 //     "configuredLogLevel": "trace",
 //     "logOutput":     "09:12:39.0320 May 01 [trace] [common]src/guid.js:14:12 "log something"
 // }
@@ -73,36 +49,37 @@ function loggerLocation() {
     const logLine = errLineFull.slice(errLineFull.indexOf('/'), errLineFull.indexOf(':'));
 
     let location;
-    let packageName;        
-    let packageRoot;        
+    let moduleName;        
+    let moduleRoot;        
 
     // pull location object from map
     // or create location object and put it in map
     if (logLine in logMap) {  
         location = logMap[logLine];
     } else {
-        packageRoot = getPackageRoot(logLine);
-        packageName = packageRoot.split(/[/\\]/).pop();
+        moduleRoot = packageConfig.getModuleRoot(logLine);
+        moduleName = moduleRoot.split(/[/\\]/).pop();
 
         location = {
-            'root': packageRoot,
-            'name': packageName,
+            'root': moduleRoot,
+            'name': moduleName,
         };
     }
     
-    let config = loadPackageConfig(location.root);
-    
-    let errSubline = errLineFull.slice(errLineFull.search(location.root) +
+    let errSubpath = errLineFull.slice(errLineFull.search(location.root) +
                                             location.root.length + 1, errLineFull.length - 1);
-    let subline = errSubline.slice(0, errSubline.indexOf(':'));
+    let subpath = errSubpath.slice(0, errSubpath.indexOf(':'));
+    let config = packageConfig.loadPackageConfig();
 
     if (!(logLine in logMap)) {
-        location.configuredLogLevel = getConfiguredLogLevel(config, location.name, subline);
+        location.configuredLogLevel = getConfiguredLogLevel(config,
+                                                            location.name,
+                                                            subpath);
 
         logMap[logLine] = location;
     }
 
-    location.errSubline = errSubline;
+    location.errSubpath = errSubpath;
     
     return location;
 }
@@ -126,12 +103,11 @@ function formatLogOutput(...args) {
     args.shift();
 
     let location = loggerLocation();
-    // console.log('location: ' + JSON.stringify(location, null,4));
     location.logOutput =
         loggerTime() 
         + ' [' + logLevel + '] '
         + '[' + location.name + ']'
-        + location.errSubline
+        + location.errSubpath
         + ' "' + args + '"';
 
     return location;
@@ -150,26 +126,20 @@ function LogDriver() {
 
                     if (this.levels.indexOf(logLevel) <=
                         this.levels.indexOf(location.configuredLogLevel)) {
-                        // console.error(location.logOutput + '\n');
-                        // use stderr.write instead of console.log
+                        // use stdout.write for aws
+                        // and console.log outside of aws
                         // as jest redefines console.log
-                        // except aws doesn't log stdout or stderr
-                        process.stdout.write(location.logOutput + '\n');
+                        if ((process.env.LAMBDA_TASK_ROOT && process.env.AWS_EXECUTION_ENV)) {
+                            console.log(location.logOutput);
+                        } else {
+                            process.stdout.write(location.logOutput + '\n');
+                        }
                     }
                 };
         });
 }
 
 let factory = () => {
-    let dir = __dirname;
-    try {
-        while (dir = getPackageRoot(dir));
-    } catch (err) {
-        // do nothing
-    }
-
-    packageConfig = loadPackageConfig(dir);
-
     // the logging methods will be created under "logger"  e.g. factory.logger.warn
     factory.logger = new LogDriver();  
     return factory.logger;

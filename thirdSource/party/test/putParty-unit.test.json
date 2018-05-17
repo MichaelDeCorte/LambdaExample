@@ -15,7 +15,7 @@
           "CapacityUnits": 1 
         }
       },
-      "errorResult": null
+      "testError": null
     }
   ],
   
@@ -32,7 +32,7 @@
       "testResult": {
         "ConsumedCapacity": null
       },
-      "errorResult": "Error: ResourceNotFoundException"
+      "testError": "Error: ResourceNotFoundException"
     }
   ],
   
@@ -48,7 +48,7 @@
       "testResult": {
         "ConsumedCapacity": null
       },
-      "errorResult": "Error: DataValidationError"
+      "testError": "Error: DataValidationError"
     }
   ],
 
@@ -65,7 +65,7 @@
       "testResult": {
         "ConsumedCapacity": null
       },
-      "errorResult": "Error: DataValidationError"
+      "testError": "Error: DataValidationError"
     }
   ],
 
@@ -82,7 +82,7 @@
       "testResult": {
         "ConsumedCapacity": null
       },
-      "errorResult": "Error: DataValidationError"
+      "testError": "Error: DataValidationError"
     }
   ]
     

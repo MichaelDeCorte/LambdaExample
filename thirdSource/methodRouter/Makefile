@@ -4,24 +4,16 @@ include $(PACKAGEROOT)/config/make.header
 # LOG_LEVEL=error
 #############################################################
 SRC= \
-	src/index.js					\
-	src/logger.js					\
-	src/validator.js				\
-	src/packageConfig.js			\
-	src/guid.js
+	src/methodRouter.js
 
 UNITTESTSRC= \
-	test/guid-unit.test.js	\
-	test/packageConfig-module.unit.test.js	\
-	test/packageConfig-moduleLoad.unit.test.js	\
-	test/packageConfig-package.unit.test.js	\
-	test/packageConfig-packageLoad.unit.test.js	
+	test/methodRouter-unit.test.js
 
 INTTESTSRC= 
 
 TFSOURCE=
 
-PACKAGE=common-0.0.1.zip
+PACKAGE=methodRouter-0.0.1.zip
 
 SUBPACKAGES=
 
@@ -31,11 +23,12 @@ SUBPACKAGES=
 all: unit package integration test
 
 init: .init
-	npm install log-driver  
 	npm install --save-dev joi
 	npm install --save-dev promise # --save-dev because it's install with other packages
+	npm install --save ../common
 	npm link
 
+.unit: node_modules/common
 unit: .unit
 
 package: .package
@@ -51,6 +44,14 @@ test: .test
 clean: .clean
 
 veryclean: .veryclean
+
+node_modules/common:
+	npm install --save-dev ../common
+
+# node_modules/common: ../common/common-0.0.1.tgz
+# 	npm install -f ../common/common-0.0.1.tgz
+
+# $(PACKAGE): node_modules/common
 
 $(PACKAGE): $(SRC)
 	$(call jsToZip, $(PACKAGE))
