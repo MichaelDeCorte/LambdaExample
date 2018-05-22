@@ -26,6 +26,11 @@ Todo
 - service discovery
     https://read.acloud.guru/service-discovery-as-a-service-the-missing-serverless-lynchpin-541d001466f4
 - review jest Cli options
+- Orchestration
+    - AWS Step Functions
+    - AWS Simple Workflow
+    - https://read.acloud.guru/some-lessons-learned-about-lambda-orchestration-1a8b72a33fd2
+- AWS code build, local testing, https://aws.amazon.com/about-aws/whats-new/2018/05/aws-codebuild-now-supports-local-testing-and-debugging    
 - db 
     https://www.npmjs.com/package/dynamodb   waiting for promise support
 
