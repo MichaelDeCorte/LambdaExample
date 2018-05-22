@@ -7,12 +7,12 @@ then
 fi
 
 echo ========== install aws
-# if ! which aws
-# then
+if ! which aws
+then
     sudo -H pip install awscli --upgrade --user
-# fi
+    sudo chmod 755 $(sudo find ~/Library/Python/ -type d -print)
+fi
 
-sudo chmod 755 $(sudo find ~/Library/Python/ -type d -print)
 
 cp aws-config ~/bin
 chmod 755 ~/bin/aws-config
@@ -35,20 +35,31 @@ then
     aws iam get-user
 fi
 
-echo ========== install brew
-if ! which brew
+if [ ! which node ]
 then
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    NODE=node-v8.10.0-darwin-x64
+    echo ========== install node
+    curl -L https://nodejs.org/download/release/v8.10.0/"$NODE".tar.gz > "$NODE".tar.gz
+    tar -xf "$NODE".tar.gz
+    rm "$NODE".tar.gz
+    mv "$NODE" "$HOME"/bin
+    ln -fs  "$HOME"/bin/"$NODE"/bin/node /usr/local/bin/node
 fi
 
-echo ========== install node
-if ! which node
-then
-    brew install node
-fi
+# echo ========== install brew
+# if ! which brew
+# then
+#     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# fi
 
-echo ========== upgrade node
-brew upgrade node
 
-echo ========== upgrade npm
-npm install --save-dev npm
+# if ! which node
+# then
+#    brew install node
+# fi
+
+# echo ========== upgrade node
+# brew upgrade node
+
+# echo ========== upgrade npm
+# npm install --save-dev npm
