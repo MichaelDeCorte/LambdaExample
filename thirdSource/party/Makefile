@@ -40,7 +40,7 @@ init:
 	npm install joi
 
 .unit: node_modules/common
-.unit: node_modules/methodRouter
+npm.unit: node_modules/methodRouter
 unit: .unit
 
 package: .package

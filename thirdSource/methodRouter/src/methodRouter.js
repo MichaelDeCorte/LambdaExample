@@ -85,7 +85,7 @@ let functionMap = packageConfig.loadPackageConfig().methodRouter || {};
 /* eslint no-param-reassign: off */
 let lambdaProxyIntegration;
 
-function entry(event, context) {
+function apiGatewayPre(event, context, callback) {
     // called from AWS API Gateway
     if (Object.prototype.hasOwnProperty.call(event, 'body')) { 
         event = JSON.parse(event.body);
@@ -93,12 +93,26 @@ function entry(event, context) {
     } else {
         lambdaProxyIntegration = false;
     }
-    
-    return { event, context };
+    return { event, context, callback };
 }
 
+function validateArgsPre(event, context, callback) {
+    const eventSchema = Joi.object().keys(
+        {
+            'command': Joi
+                .string()
+                .regex(/^[A-Za-z0-9-_]*$/)
+                .min(1)
+                .max(15)
+                .required(),
+        });
+    event = validator(event, eventSchema);
+    return { event, context, callback };
+}
+
+
 // eslint-disable-next-line no-unused-vars
-function response(error, result) {
+function lambdaPost(error, result) {
     if (!result) {
         result = {
             'statusCode': null,
@@ -117,38 +131,42 @@ function response(error, result) {
         logger.error(error);
     }
 
+    return { error, result };
+}
+
+// eslint-disable-next-line no-unused-vars
+function apiGatewayPost(error, result) {
     if (lambdaProxyIntegration) {
         result.body = JSON.stringify(result.body);
     }
 
-    return { 'error': error, 'result': result };
+    return { error, result };
 }
 
-const eventSchema = Joi.object().keys(
-    {
-        'command': Joi
-            .string()
-            .regex(/^[A-Za-z0-9-_]*$/)
-            .min(1)
-            .max(15)
-            .required(),
-    });
 
-
-function methodRouter(eventArg, contextArg, lambdaCallback, map) {
-    logger.trace('eventArg: ' + JSON.stringify(eventArg, null, 4));
+function methodRouter(event, context, callback, map) {
+    logger.trace('event: ' + JSON.stringify(event, null, 4));
     return new Promise(
         (resolve, reject) => {
             map = map || functionMap;
 
-            let { event, context } = entry(eventArg, contextArg);
+            if (!(map.pre instanceof Array)) map.pre = [];
+            if (!(map.post instanceof Array)) map.post = [];
 
-            event = validator(event, eventSchema);
+            if (map.pre[0] !== apiGatewayPre) {
+                map.pre.unshift(validateArgsPre);
+                map.pre.unshift(apiGatewayPre);
+                map.post.unshift(apiGatewayPost);
+                map.post.unshift(lambdaPost);
+            }
 
-            // if (map.eventSchema) {
-            //     event = validator(event, map.eventSchema);
-            // }
-
+            map.pre.forEach(
+                (func) => {
+                    ({ event, context, callback } 
+                     = func(event, context, callback));
+                }
+            );
+            
             let method = getMethod(event.command, map);
 
             method(event,
@@ -162,14 +180,28 @@ function methodRouter(eventArg, contextArg, lambdaCallback, map) {
                    });
         })
         .then(
-            (resultArg) => {
-                let { error, result } = response(null, resultArg);
-                lambdaCallback(error, result);
+            (result) => {
+                let error = null;
+                map.post.forEach(
+                    (func) => {
+                        ({ error, result }
+                         = func(error, result));
+                    }
+                );
+                
+                callback(error, result);
             })
         .catch(
-            (errorArg) => {
-                let { error, result } = response(errorArg, null);
-                lambdaCallback(error, result);
+            (error) => {
+                let result = null;
+                map.post.forEach(
+                    (func) => {
+                        ({ error, result }
+                         = func(error, result));
+                    }
+                );
+                
+                callback(error, result);
             });
 }
 

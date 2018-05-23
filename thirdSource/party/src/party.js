@@ -6,5 +6,4 @@
 // eslint-disable-next-line no-unused-vars
 const AWS = require('aws-sdk');
 
-
 module.exports.handler = require('methodRouter').methodRouter;

@@ -1,8 +1,10 @@
 # LambdaExample
 
 Todo
-- lock local node to 8.10
 - authentication
+- debugger in chrome
+        https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27
+- git branches
 - cloudwatch alarms http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
 - x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html?shortFooter=true
 - aws config
@@ -10,7 +12,6 @@ Todo
 - route 53    
 - selenium?
 - cucumber?    
-- blog notes    
 - vpc / https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
 - version node libraries
 - version service
@@ -22,10 +23,9 @@ Todo
     https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
 - Swagger is API Documentation spec.
 - replace make??
-- jenkins   codepipeline
+- jenkins codepipeline
 - service discovery
     https://read.acloud.guru/service-discovery-as-a-service-the-missing-serverless-lynchpin-541d001466f4
-- review jest Cli options
 - Orchestration
     - AWS Step Functions
     - AWS Simple Workflow
@@ -68,6 +68,8 @@ Done
             https://github.com/dwyl/aws-sdk-mock/issues/93
 - input validation, https://www.npmjs.com/package/joi
     https://github.com/hapijs/joi/blob/v13.2.0/API.md#objectwithoutkey-peers
+- lock local node to 8.10
+- AOP / no.  Requires ES7 or Babel
 
 
 Blog
