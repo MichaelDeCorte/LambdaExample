@@ -4,24 +4,9 @@ const hash = require('string-hash');
 const logger = require('common').logger;
 const Promise = require('promise');
 const guid = require('common').generateGUID;
-const Joi = require('joi');
-
-const alphaSpaceRE = /^[A-Za-z ]*$/;
-const eventSchema = Joi.object().keys(
-    {
-        'lastName': Joi.string().regex(alphaSpaceRE).min(1).max(30).trim().truncate().required(),
-        'firstName': Joi.string().regex(alphaSpaceRE).min(1).max(30).trim().truncate().required(),
-    });
-
-const joiOptions = {
-    'abortEarly': false,
-    'convert': true,
-    'stripUnknown': true,
-};
 
 function handler(event, context, lambdaCallback) {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
-
 
     // create AWS service functions in handler to allow mocking
     const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
@@ -33,18 +18,6 @@ function handler(event, context, lambdaCallback) {
         });
 
     let partyID;
-    function validateEvent(data) {
-        return new Promise(
-            (resolve, reject) => {
-                const dataValidated = Joi.validate(data, eventSchema, joiOptions);
-                if (dataValidated.error) {
-                    reject(new Error('DataValidationError: ' + JSON.stringify(dataValidated)));
-                } else {
-                    resolve(dataValidated);
-                }
-            }
-        );
-    }
 
     // prepare a dynamo putData request object
     function prepPutPartyRequest(data) {
@@ -101,8 +74,7 @@ function handler(event, context, lambdaCallback) {
         }
     };
 
-    validateEvent(event)
-        .then(prepPutPartyRequest)
+    prepPutPartyRequest(event)
         .then(putParty)
         .then(
             (result) => {

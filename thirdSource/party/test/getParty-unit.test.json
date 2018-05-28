@@ -69,5 +69,27 @@
       "testResult": null,
       "testError": "Error: DataValidationError"
     }
+  ],
+
+  [
+    {
+      "testData": {
+        "command": "getParty",
+        "partyID": "aaaa"
+      },
+      "dynamoResponse": {
+        "ConsumedCapacity": {
+          "CapacityUnits": 1,
+          "TableName": "Party"
+        }
+      },
+      "dynamoError": "Error: AccessDeniedException"
+    },
+
+    {
+      "testResult": null,
+      "testError": "Error: AccessDeniedException"
+    }
   ]
+
 ]

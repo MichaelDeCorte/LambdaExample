@@ -2,18 +2,6 @@
 const AWS = require('aws-sdk'); 
 const logger = require('common').logger;
 const Promise = require('promise');
-const Joi = require('joi');
-
-const eventSchema = Joi.object().keys(
-    {
-        'partyID': Joi.number().required(),
-    });
-
-const joiOptions = {
-    'abortEarly': false,
-    'convert': true,
-    'stripUnknown': true,
-};
 
 function handler(event, context, lambdaCallback) {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
@@ -26,23 +14,6 @@ function handler(event, context, lambdaCallback) {
             'service': dynamodb,
             'convertEmptyValues': true
         });
-
-    function validateEvent(data) {
-        return new Promise(
-            (resolve, reject) => {
-                logger.error('data:' +
-                             JSON.stringify(data, null, 4));
-                const dataValidated = Joi.validate(data, eventSchema, joiOptions);
-                logger.error('dataValidated:' +
-                             JSON.stringify(dataValidated, null, 4));
-                if (dataValidated.error) {
-                    reject(new Error('DataValidationError'));
-                } else {
-                    resolve(dataValidated);
-                }
-            }
-        );
-    }
 
     // prepare a dynamo getData request object
     function prepGetPartyRequest(data) {
@@ -93,8 +64,7 @@ function handler(event, context, lambdaCallback) {
         }
     };
 
-    validateEvent(event)
-        .then(prepGetPartyRequest)
+    prepGetPartyRequest(event)
         .then(getParty)
         .then(
             (result) => {

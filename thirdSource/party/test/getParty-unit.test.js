@@ -8,11 +8,11 @@ const lambdaMethod = require('../src/party').handler;
 
 let partyMap = {
     'getParty': {
-        'fileName': 'getParty',
+        'method': 'getParty',
         'eventValidate': 'partyValidate'
     },
     'putParty': {
-        'fileName': 'putParty',
+        'method': 'putParty',
         'eventSchema': 'eventSchema',
     }
 };

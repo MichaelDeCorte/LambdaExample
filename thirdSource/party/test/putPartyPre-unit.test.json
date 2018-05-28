@@ -1,0 +1,69 @@
+[
+   [
+    {
+      "event": {
+        "command": "putParty",
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "context": null,
+      "callback": null
+    },
+    {
+      "testResult": {
+        "command": "putParty",
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "testError": null
+    }
+  ],
+
+   [
+    {
+      "event": {
+        "command": "putParty",
+        "lastName": "Jefferson"
+      },
+      "context": null,
+      "callback": null
+    },
+    {
+      "testResult": null,
+      "testError": "Error: DataValidationError"
+    }
+  ],
+
+  [
+    {
+      "event": {
+        "command": "putParty",
+        "firstName": "James1",
+        "lastName": "Madison"
+      },
+      "context": null,
+      "callback": null
+    },
+    {
+      "testResult": null,
+      "testError": "Error: DataValidationError"
+    }
+  ],
+
+  [
+    {
+      "event": {
+        "command": "putParty",
+        "firstName": "James",
+        "lastName": "Monroe2"
+      },
+      "context": null,
+      "callback": null
+    },
+    {
+      "testResult": null,
+      "testError": "Error: DataValidationError"
+    }
+  ]
+    
+]

@@ -1,0 +1,33 @@
+[
+  [
+    {
+      "event": {
+        "partyID": 1829281149
+      },
+      "context": null,
+      "callback": null
+    },
+
+    {
+      "testResult": {
+        "partyID": 1829281149
+      },
+      "testError": null
+    }
+  ],
+
+  [
+    {
+      "event": {
+        "NoPartyID": 1829281149
+      },
+      "context": null,
+      "callback": null
+    },
+
+    {
+      "testResult": null,
+      "testError": "Error: DataValidationError"
+    }
+  ]
+]

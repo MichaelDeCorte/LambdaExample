@@ -19,13 +19,15 @@
   },
   "methodRouter": {
     "getParty": {
-      "fileName": "getParty.js"
+      "method": "getParty.js",
+      "pre": [],
+      "post": []
     },
     "putParty": {
-      "fileName": "putParty.js"
+      "method": "putParty.js"
     },
     "t": {
-      "fileName": "t.js"
+      "method": "t.js"
     }
   },
   "devDependencies": {},

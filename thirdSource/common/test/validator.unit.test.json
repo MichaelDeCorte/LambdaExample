@@ -1,0 +1,44 @@
+[
+  [
+    {
+      "data": {
+        "firstName": "George",
+        "lastName": "Washington"
+      }
+    },
+
+    {
+      "testResult": {
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "testError": null
+    }
+  ],
+
+  [
+    {
+      "data": null
+    },
+
+    {
+      "testResult": null,
+      "testError": null
+    }
+  ],
+  
+  [
+    {
+      "data": {
+        "xxxfirstName": "George",
+        "lastName": "Washington"
+      }
+    },
+
+    {
+      "testResult": null,
+      "testError": "Error: DataValidationError"
+    }
+  ]  
+  
+]

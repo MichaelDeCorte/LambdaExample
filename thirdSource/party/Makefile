@@ -8,7 +8,8 @@ include $(PACKAGEROOT)/config/make.header
 SRC= \
 	src/party.js					\
 	src/getParty.js					\
-	src/putParty.js
+	src/putParty.js					\
+	src/putPartyPre.js
 
 UNITTESTSRC= \
 	test/getParty-unit.test.js		\
@@ -40,6 +41,8 @@ init:
 	npm install joi
 
 .unit: node_modules/common
+.unit: node_modules/methodRouter
+
 npm.unit: node_modules/methodRouter
 unit: .unit
 
@@ -63,8 +66,8 @@ node_modules/common: ../common/common-0.0.1.tgz
 node_modules/methodRouter: ../methodRouter/methodRouter-0.0.1.tgz
 	npm install -f ../methodRouter/methodRouter-0.0.1.tgz
 
-$(PACKAGE): node_modules/common
-$(PACKAGE): node_modules/methodRouter
+# $(PACKAGE): node_modules/common
+# $(PACKAGE): node_modules/methodRouter
 
 $(PACKAGE): $(SRC)
 	$(call jsToZip, $(PACKAGE))

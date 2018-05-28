@@ -18,7 +18,6 @@ function loadMethod(fileName) {
 
         let methodPath = require.resolve(fileName, paths);
 
-
         // eslint-disable-next-line 
         let method = require(methodPath);
         return method;
@@ -28,20 +27,21 @@ function loadMethod(fileName) {
     }
 }
 
-function getMethod(command, map) {
+function initMap(command, map) {
     logger.trace('map[ ' + command + ' ] = ' + JSON.stringify(map[command], null, 4));
-
-    if (!Object.prototype.hasOwnProperty.call(map, String(command))) {
+    
+    if (!map[command]) {
         logger.error('UnknownCommand: ' +  String(command));
         throw new Error('UnknownCommand: ' +  String(command));
     }
 
-    if (map[command].method) {
-        map[command].method = loadMethod(map[command].fileName, map);
+    // init 'method'
+    // replace map property string with method
+    if (typeof map[command].method === 'string') {
+        map[command].method = loadMethod(map[command].method);
     }
-    let method = map[command].method;
 
-    method = map[command].method || loadMethod(map[command].fileName, map);
+    let method = map[command].method;
     
     if (typeof method !== 'function') {
         logger.error('UnknownMethod: ' + command + ' : '
@@ -50,37 +50,25 @@ function getMethod(command, map) {
                         + JSON.stringify(map[command], null, 4));
     }
 
-    return method;
+    // init 'pre' and 'post'
+    ['pre', 'post'].forEach(
+        (property) => {
+            if (!Array.isArray(map[command][property])) {
+                map[command][property] = [];
+            }
+
+            for (let i = map[command][property].length - 1; i >= 0; i--) {
+                if (typeof map[command][property][i] === 'string') {
+                    map[command][property][i] = loadMethod(map[command][property][i]);
+                }
+            }
+        }
+    );
+
+    return map;
 }
 
-// this will preload all of the methods
-// this is required on lambda as aws-sdk fails if the modules
-// are lazy loaded.
-// don't know why.....
-// workaroud is to load aws-sdk early
-// function mapInit(map) {
-//     return map;
-
-//     // eslint-disable-next-line
-//     if (!map) {
-//         return null;
-//     }
-//     Object.keys(map).forEach(
-//         (methodKey) => {
-//             if (map[methodKey].fileName &&
-//                 (typeof map[methodKey].fileName === 'string')) {
-//                 map[methodKey].method = loadMethod(map[methodKey].fileName);
-//             }
-//         }
-//     );
-//     // eslint-disable-next-line
-//     return map;
-// }
-
-
 let functionMap = packageConfig.loadPackageConfig().methodRouter || {};
-
-// functionMap = mapInit(functionMap);
 
 /* eslint no-param-reassign: off */
 let lambdaProxyIntegration;
@@ -150,8 +138,11 @@ function methodRouter(event, context, callback, map) {
         (resolve, reject) => {
             map = map || functionMap;
 
-            if (!(map.pre instanceof Array)) map.pre = [];
-            if (!(map.post instanceof Array)) map.post = [];
+            if (!(map.pre instanceof Array))
+                map.pre = [];
+
+            if (!(map.post instanceof Array))
+                map.post = [];
 
             if (map.pre[0] !== apiGatewayPre) {
                 map.pre.unshift(validateArgsPre);
@@ -167,21 +158,35 @@ function methodRouter(event, context, callback, map) {
                 }
             );
             
-            let method = getMethod(event.command, map);
+            map = initMap(event.command, map);
 
-            method(event,
-                   context,
-                   (error, result) => {
-                       if (error) {
-                           reject(error);
-                       } else {
-                           resolve(result);
-                       }
-                   });
+            map[event.command].pre.forEach(
+                (func) => {
+                    ({ event, context, callback } 
+                     = func(event, context, callback));
+                }
+            );
+            
+            map[event.command].method(event,
+                                      context,
+                                      (error, result) => {
+                                          if (error) {
+                                              reject(error);
+                                          } else {
+                                              resolve(result);
+                                          }
+                                      });
         })
         .then(
             (result) => {
                 let error = null;
+                map[event.command].post.forEach(
+                    (func) => {
+                        ({ event, context, callback } 
+                         = func(event, context, callback));
+                    }
+                );
+            
                 map.post.forEach(
                     (func) => {
                         ({ error, result }
@@ -194,6 +199,7 @@ function methodRouter(event, context, callback, map) {
         .catch(
             (error) => {
                 let result = null;
+                // don't run the method level post functions for errors
                 map.post.forEach(
                     (func) => {
                         ({ error, result }

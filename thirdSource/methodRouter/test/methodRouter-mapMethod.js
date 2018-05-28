@@ -17,5 +17,4 @@ function func1(event, context, callback) {
         resultObject
     );
 }
-
 module.exports = func1;

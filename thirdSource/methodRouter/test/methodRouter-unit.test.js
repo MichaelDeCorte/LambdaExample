@@ -19,7 +19,10 @@ function testFunc(input, output, done) {
     /* eslint global-require: "off" */
     let routerMap = {
         'func1': {
-            'fileName': path.join(__dirname, '/../test/methodRouter-functionMap.js'),
+            'method': path.join(__dirname, '/../test/methodRouter-mapMethod.js'),
+            'pre': [
+                path.join(__dirname, '/../test/methodRouter-mapPre.js'),
+            ]
         }
     };
 

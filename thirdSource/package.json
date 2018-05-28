@@ -121,10 +121,8 @@
       ],
       "prefer-destructuring": "off",
       "no-underscore-dangle": "off",
-      "curly": [
-          "error",
-          "multi-line"
-        ]
+      "curly": "off",
+      "no-plusplus": "off"
     },
     "env": {
       "node": true
