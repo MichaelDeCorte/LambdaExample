@@ -1,15 +1,20 @@
+https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=139l5vat7ia75ckr20iuhhjv0f&redirect_uri=https%3A%2F%2Fwww.google.com
+
+    
 # LambdaExample
 
 Todo
 - authentication
+    cognito https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html
+    api https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html
+- route 53    
+- aws ElastiCache
+- aws config
 - debugger in chrome
         https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27
 - git branches
 - cloudwatch alarms http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
 - x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html?shortFooter=true
-- aws config
-- aws ElastiCache
-- route 53    
 - selenium?
 - cucumber?    
 - vpc / https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
@@ -21,7 +26,6 @@ Todo
 - source code security scanning (unclear if there are good open source packages to do this)
 - local lambda?
     https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
-- Swagger is API Documentation spec.
 - replace make??
 - jenkins codepipeline
 - service discovery

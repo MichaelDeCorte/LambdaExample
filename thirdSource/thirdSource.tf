@@ -1,24 +1,31 @@
 ############################################################
 # Inialization
-module "variables" {
-    # source = "../Terraform/variables"
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/variables"
-}
-
-provider "aws" {
-    region     = "${module.variables.region}"
-    
+module "globals" {
+    source = "Terraform/globals"
 }
 
 variable "stage_name" {
     default = "uat"
 }
 
+locals {
+    region = "${module.globals.globals["region"]}"
+    awsProfile = "${module.globals.globals["awsProfile"]}"
+
+}
+
+provider "aws" {
+    region  = "${local.region["region"]}"
+    profile = "${local.awsProfile["profile"]}"
+}
+
 ##########
 # s3 to store code
 module "mdecorte-codebucket" {
     # source = "../Terraform/s3"
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/s3"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
+
+    globals = "${module.globals.globals}"
 
     bucket = "mdecorte-codebucket"
     acl    = "private"
@@ -28,7 +35,9 @@ module "mdecorte-codebucket" {
 # install api gateway
 module "apiGateway" {
     # source = "../Terraform/apiGateway/api"
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/api"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/api"
+
+    globals = "${module.globals.globals}"
 
     api_name 			= "thirdSource"
 }
@@ -37,6 +46,8 @@ module "apiGateway" {
 # create the resource and methods
 module "party" {
     source = "party"
+
+    globals = "${module.globals.globals}"
 
     api_id 			    = "${module.apiGateway.api_id}"
     resource_id     	= "${module.apiGateway.root_resource_id}"
@@ -47,7 +58,9 @@ module "party" {
 
 module "apiDeploy" {
     # source = "../Terraform/apiGateway/deployment"
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/apiGateway/deployment"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/deployment"
+
+    globals = "${module.globals.globals}"
 
     dependsOn 		= "${module.party.dependencyId}"
 
@@ -55,11 +68,19 @@ module "apiDeploy" {
     stage_name 		= "${var.stage_name}"
 }
 
+module "login" {
+    source = "login"
+
+    globals = "${module.globals.globals}"
+}
+
 #####
 # create a JS file with the URL for the stage
 module "uriTemplate" {
     # source = "../Terraform/files"
-    source = "git@github.com:MichaelDeCorte/LambdaExample.git//Terraform/files"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
+
+    globals = "${module.globals.globals}"
 
     input = "party/templates/party.uri.js"
     output = "party/test/party.${var.stage_name}.uri.js"
@@ -71,4 +92,11 @@ module "uriTemplate" {
 output "url" {
     value = "${module.apiDeploy.deployment_url}${module.party.subPath}"
 }
+
+output "loginUrl" {
+    value = "${module.login.url}"
+}
+
+
+
 
