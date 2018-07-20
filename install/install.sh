@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 echo ========== install pip
 if ! which pip
 then
@@ -53,13 +54,33 @@ fi
 # fi
 
 
-# if ! which node
-# then
-#    brew install node
-# fi
+if ! which node
+then
+   brew install node
+fi
 
-# echo ========== upgrade node
-# brew upgrade node
+echo ========== upgrade node
+brew upgrade node
 
-# echo ========== upgrade npm
-# npm install --save-dev npm
+
+echo ========== install git-crypt
+if ! which git-crypt
+then
+    brew install git-crypt
+fi    
+
+if [ -f $HOME/.ssh/git-crypt.key ]
+then
+    git-crypt keygen $HOME/.ssh/git-crypt.key
+fi
+
+if [ ! -f $HOME/.ssh/git-crypt.key ]
+then
+    git-crypt keygen $HOME/.ssh/mdecorte-git-crypt.key
+fi
+echo RUN
+echo cd REPO
+echo git-crypt init
+echo emacs .gitattributes
+echo add
+echo "secrets.tf filter=git-crypt diff=git-crypt"
