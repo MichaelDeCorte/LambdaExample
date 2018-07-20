@@ -19,7 +19,7 @@ JESTFLAGS=--passWithNoTests --no-color --coverage --bail --verbose
 .PHONY: all
 .PHONY: .all
 
-.all: .unit .environment .package .install .integration
+.all: unit environment package install integration
 
 ############################################################
 #
@@ -30,7 +30,7 @@ JESTFLAGS=--passWithNoTests --no-color --coverage --bail --verbose
 
 .init:
 ifeq ($(PACKAGE),)
-	$(call recursiveMake)
+	$(call recursiveMake,init)
 else
 	$(printHeader)
 	@if [ ! -f .npmignore -a -f ../.npmignore ] ; then ln -s ../.npmignore .; fi
@@ -58,7 +58,7 @@ lint: .lint
 .unit.lint: $(INTTESTSRC) 
 .unit.lint: 
 ifeq ($(PACKAGE),)
-	$(call recursiveMake)
+	$(call recursiveMake,.unit.lint)
 else
 	$(printHeader)
 	$(NPM)/eslint src/*.js test/*.js
@@ -72,7 +72,7 @@ endif
 .unit.test: .unit.lint
 .unit.test: 
 ifeq ($(PACKAGE),)
-	$(call recursiveMake)
+	$(call recursiveMake,.unit.test)
 else
 	$(call jestCommand,unit)
 	touch .unit.test
@@ -90,28 +90,30 @@ sonar:
 ############################################################
 # Package
 .PHONY: package
+.PHONY: .package.recurse
 .PHONY: .clean.package
 .PHONY: .veryclean.package
 
+
 $(PACKAGE): .unit.lint
 $(PACKAGE): .unit.test
-.package: $(PACKAGE)
-.package:
-ifeq ($(PACKAGE),)
-	$(call recursiveMake)
+
+ifeq ($(SUBPACKAGES),)
+DOTPACKAGEFILES = 
 else
-	touch .package
+DOTPACKAGEFILES = $(shell find . -name .package.file -print)
 endif
 
-DOTPACKAGES=$(patsubst %,%/.package,$(SUBPACKAGES))
-
-$(DOTPACKAGES):
-		echo make -C party .package;\
-		$(MAKE) -C party  .package;
+.package: $(PACKAGE)
+.package: $(DOTPACKAGEFILES)
+.package:
+ifeq ($(PACKAGE),)
+	$(call recursiveMake,package)
+endif
 
 .clean.package:
 	rm -f $(PACKAGE)
-	rm -f .package
+	rm -f .package.file
 	rm -f $(basename $(PACKAGE)).tgz
 
 .veryclean.package:
@@ -135,6 +137,7 @@ define jsToZip
 	cd $$SDIR; \
 	mv $$TDIR/$$ZIPFILE . ;\
 	rm -rf $$TDIR;
+	touch .package.file
 endef
 
 ############################################################
@@ -147,9 +150,10 @@ endef
 .environment: .unit.lint
 .environment: .unit.test
 .environment: .package
-.environment: terraform.tfstate
+.environment:
+	@$(MAKE) terraform.tfstate
 
-terraform.tfstate: $(DOTPACKAGES)
+terraform.tfstate: $(DOTPACKAGEFILES)
 terraform.tfstate: $(TFSOURCE)
 terraform.tfstate:
 	$(printHeader)
@@ -187,10 +191,10 @@ terraform.tfstate:
 .integration.api: $(INTTESTSRC) 
 .integration.api: .unit.lint
 .integration.api: .unit.test
-.integration.api: .package
+.integration.api: package
 .integration.api:
 ifeq ($(PACKAGE),)
-	$(call recursiveMake)
+	$(call recursiveMake,.integration.api)
 else
 	$(printHeader)
 	$(call jestCommand,api)
@@ -202,11 +206,11 @@ endif
 .integration.uri: $(INTTESTSRC)
 .integration.uri: .unit.lint
 .integration.uri: .unit.test
-.integration.uri: .package
+.integration.uri: package
 .integration.uri: .integration.api
 .integration.uri:
 ifeq ($(PACKAGE),)
-	$(call recursiveMake)
+	$(call recursiveMake,.integration.uri)
 else
 	$(printHeader)
 	$(call jestCommand,uri)
@@ -239,7 +243,7 @@ endif
 .clean: .clean.general
 .clean:
 	$(printHeader)
-	$(call recursiveMake)
+	$(call recursiveMake,clean)
 
 .veryclean: .veryclean.environment
 .veryclean: .veryclean.unit
@@ -248,7 +252,7 @@ endif
 .veryclean: .veryclean.integration
 .veryclean:
 	$(printHeader)
-	$(call recursiveMake)
+	$(call recursiveMake,veryclean)
 
 .clean.general:
 	rm -f *~ */*~
@@ -259,8 +263,8 @@ define recursiveMake
 	@ set -e ; \
 	for d in $(SUBPACKAGES)    ;\
 	do \
-		echo make -C $$d $@;\
-		$(MAKE) -C $$d $@ ;\
+		echo ===== make -C $$d $(1);\
+		$(MAKE) -C $$d $(1) ;\
 	done
 endef
 
