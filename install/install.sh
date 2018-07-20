@@ -80,7 +80,7 @@ then
 fi
 echo RUN
 echo cd REPO
-echo git-crypt init
+echo git-crypt unlock ~/.ssh/mdecorte-git-crypt.key 
 echo emacs .gitattributes
 echo add
 echo "secrets.tf filter=git-crypt diff=git-crypt"
