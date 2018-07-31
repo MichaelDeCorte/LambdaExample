@@ -13,8 +13,8 @@ const lambda = new AWS.Lambda();
 
 // test service
 function testFunc(input, output, done) {
-    let testData = input.testData;
-    let partyID = output.partyID;
+    let putTestData = input.putTestData;
+    let scanTestData = input.scanTestData;
     let expectedResult = output.expectedResult;
     let expectedError = output.expectedError;
 
@@ -52,39 +52,33 @@ function testFunc(input, output, done) {
         );
     }
 
-    // prepare a lambda getItem request object
-    function prepGetPartyRequest(putPartyResult) {
+    // prepare a lambda request object
+    function prepScanPartyRequest(putPartyResult) {
         logger.debug('putPartyResult: ' + JSON.stringify(putPartyResult, null, 4));
-        if (!partyID) {
-            partyID = JSON.parse(putPartyResult.Payload).body.partyID;
-        }
-        let getPartyRequest = {
+        let scanPartyRequest = {
             'FunctionName': 'party',
-            'Payload': JSON.stringify({
-                'command': 'getParty',            
-                'partyID': partyID
-            })
+            'Payload': JSON.stringify(scanTestData)
         };
 
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
-                resolve(getPartyRequest);
+                resolve(scanPartyRequest);
             }
         );
     }
 
-    // call lambda getParty
-    function getParty(getPartyRequest) {
-        logger.debug('getPartyRequest: ' + JSON.stringify(getPartyRequest, null, 4));
+    // call lambda scanParty
+    function scanParty(scanPartyRequest) {
+        logger.debug('scanPartyRequest: ' + JSON.stringify(scanPartyRequest, null, 4));
 
         return new Promise(
             (resolve, reject) => {
-                lambda.invoke(getPartyRequest,
+                lambda.invoke(scanPartyRequest,
                               (error, result) => {
                                   if (error) {
                                       logger.warn('lambda.invoke:'
                                                    + error +
-                                                   JSON.stringify(getPartyRequest, null, 4));
+                                                   JSON.stringify(scanPartyRequest, null, 4));
                                       reject(error);
                                   } else {
                                       resolve(result);
@@ -100,24 +94,26 @@ function testFunc(input, output, done) {
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
                 let body = JSON.parse(actualResult.Payload).body;
-                let t;
                 logger.trace('body: ' + JSON.stringify(body, null, 4));
                 logger.trace('expectedResult: ' + JSON.stringify(expectedResult, null, 4));
-                if (body) {
-                    t = body.firstName + ' ' + body.lastName;
-                } else {
-                    t = null;
+                let element = null;
+
+                // only look at the first element for test purposes
+                if (body.length > 0) {
+                    element = body[0];
+                    element.partyID = null;
                 }
-                expect(t).toEqual(expectedResult);
+
+                expect(element).toEqual(expectedResult);
                 done();
             }
         );
     }
 
-    let putPartyRequest = prepPutPartyRequest(testData);
+    let putPartyRequest = prepPutPartyRequest(putTestData);
     putParty(putPartyRequest)
-        .then(prepGetPartyRequest)
-        .then(getParty)
+        .then(prepScanPartyRequest)
+        .then(scanParty)
         .then(validatePartyData)
         .catch(
             (error) => {
@@ -136,5 +132,5 @@ function testFunc(input, output, done) {
 // eslint-disable-next-line 
 const testSuite = require(__filename.replace(/.[^.]+$/, '.json'));
 
-each(testSuite).test('putParty aws API integration tests', testFunc);
+each(testSuite).test('putScanParty aws API integration tests', testFunc);
 

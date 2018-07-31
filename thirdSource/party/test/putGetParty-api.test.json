@@ -10,8 +10,8 @@
 
     {
       "partyID": null,
-      "testResult": "George Washington",
-      "testError": null
+      "expectedResult": "George Washington",
+      "expectedError": null
     }
   ],
 
@@ -26,8 +26,8 @@
 
     {
       "partyID": 8888,
-      "testResult": null,
-      "testError": "an Error"
+      "expectedResult": null,
+      "expectedError": "an Error"
     }
   ]
 ]

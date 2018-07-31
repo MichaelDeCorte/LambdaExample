@@ -56,6 +56,9 @@ module "party" {
 }
 
 
+
+############################################################
+# deploy the party service on the api gateway
 module "apiDeploy" {
     # source = "../Terraform/apiGateway/deployment"
     source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/deployment"
@@ -68,12 +71,15 @@ module "apiDeploy" {
     stage_name 		= "${var.stage_name}"
 }
 
+############################################################
 module "login" {
     source = "login"
 
     globals = "${local.globals}"
 
     amazonClient = "${local.globals["thirdSourceAmazonClient"]}"
+    domain = "thirdsource"
+    callback_url = "https://www.google.com"
 }
 
 #####

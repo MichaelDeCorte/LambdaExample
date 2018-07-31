@@ -9,8 +9,8 @@ const uri = require('./party.uat.uri.js').uri;
 function testFunc(input, output, done) {
     expect.assertions(4);
 
-    let getTestData = input.getTestData;
     let putTestData = input.putTestData;
+    let scanTestData = input.scanTestData;
     let expectedResult = output.expectedResult;
 
     logger.trace('uri: ' + uri);
@@ -26,8 +26,6 @@ function testFunc(input, output, done) {
                 (response) => {
                     let statusCode = response.status;
                     let partyID = JSON.parse(response.text).partyID;
-                    getTestData.partyID =  partyID;
-                    expectedResult.partyID = Number(partyID);
 
                     expect(statusCode).toEqual(200);
                     expect(parseInt(partyID, 10)).toBeGreaterThan(0);
@@ -35,11 +33,11 @@ function testFunc(input, output, done) {
             );
     }
 
-    // get that same party
-    function getParty() {
+    function scanParty() {
+        let element = null;
         return requestTest.agent(uri)
             .post('/')
-            .send(getTestData)
+            .send(scanTestData)
             .then(
                 (response) => {
                     logger.debug('response: ' + JSON.stringify(response, null, 4));
@@ -48,14 +46,21 @@ function testFunc(input, output, done) {
                     let body = JSON.parse(response.text);
 
                     expect(statusCode).toEqual(200);
-                    expect(body).toEqual(expectedResult);
+
+                    // only look at the first element for test purposes
+                    if (body.length > 0) {
+                        element = body[0];
+                        element.partyID = null;
+                    }
+                    
+                    expect(element).toEqual(expectedResult);
                     done();
                 }
             );
     }
 
     putParty()
-        .then(getParty)
+        .then(scanParty)
         .catch(
             (error) => {
                 logger.debug('error: ' + JSON.stringify(error, null, 4));

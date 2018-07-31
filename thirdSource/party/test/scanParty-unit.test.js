@@ -3,17 +3,13 @@
 const AWS = require('aws-sdk-mock'); 
 const each = require('jest-each');
 const logger = require('common').logger;
-// const lambdaMethod = require('methodRouter').methodRouter;
 const lambdaMethod = require('../src/party').handler;
 
+//  methodMapper
+// 
 let partyMap = {
-    'getParty': {
-        'method': 'getParty',
-        'eventValidate': 'partyValidate'
-    },
-    'putParty': {
-        'method': 'putParty',
-        'eventSchema': 'eventSchema',
+    'scanParty': {
+        'method': 'scanParty',
     }
 };
 
@@ -38,7 +34,7 @@ function testFunc(input, output, done) {
     expect.assertions(1);
 
     AWS.mock('DynamoDB.DocumentClient',
-             'get',
+             'scan',
              (params, dynamoClientCallback) => {
                  logger.trace('mockClient: ' + JSON.stringify(params, null, 4));
                  dynamoClientCallback(mockError, mockResponse);
@@ -85,4 +81,4 @@ function testFunc(input, output, done) {
 // eslint-disable-next-line 
 const testSuite = require(__filename.replace(/.[^.]+$/, '.json'));
 
-each(testSuite).test('getParty unit tests / stubbed AWS calls', testFunc);
+each(testSuite).test('scanParty unit tests / stubbed AWS calls', testFunc);

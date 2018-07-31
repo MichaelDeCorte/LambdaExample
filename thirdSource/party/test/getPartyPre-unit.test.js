@@ -9,26 +9,26 @@ function testFunc(input, output, done) {
     let event = input.event;
     let context = input.context;
     let callback = input.callback;
-    let testResult = output.testResult;
-    let testError = output.testError;
+    let expectedResult = output.expectedResult;
+    let expectedError = output.expectedError;
 
     logger.trace('event: '
                  + JSON.stringify(event, null, 4));
-    logger.trace('testResult: ' +
-                 JSON.stringify(testResult, null, 4));
-    logger.trace('testError: ' +
-                 JSON.stringify(testError, null, 4));
+    logger.trace('expectedResult: ' +
+                 JSON.stringify(expectedResult, null, 4));
+    logger.trace('expectedError: ' +
+                 JSON.stringify(expectedError, null, 4));
 
     expect.assertions(1);
 
     try {
         ({ event, context, callback } = validator(event, context, callback));
-        expect(event).toEqual(testResult);
+        expect(event).toEqual(expectedResult);
         done();
     } catch (error) {
         try {
             let e = error.toString().replace(/(^Error: [^ :]+)[^]*$/m, '$1');
-            expect(e.toString()).toEqual(testError);
+            expect(e.toString()).toEqual(expectedError);
             done();
         } catch (e) {
             done.fail(e);

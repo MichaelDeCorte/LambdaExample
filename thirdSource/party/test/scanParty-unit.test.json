@@ -1,0 +1,97 @@
+[
+  [
+    {
+      "comment": "pass with one result",
+      "testData": {
+        "command": "scanParty",
+        "FilterExpression": "lastName = :lastName",
+        "ExpressionAttributeValues": {
+          ":lastName": "Washington"
+        }
+      },
+      "mockResponse": {
+        "ConsumedCapacity": {
+          "CapacityUnits": 1,
+          "TableName": "Party"
+        },
+        "Items": { 
+          "partyID": "1829281149",
+          "firstName": "George",
+          "lastName": "Washington"
+        }
+      },
+      "mockError": null
+    },
+
+    {
+      "expectedResult": {
+        "partyID": "1829281149",
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "expectedError": null
+    }
+  ],
+  [
+    {
+      "comment": "missing FilterExpression in testData",
+      "testData": {
+        "command": "scanParty",
+        "ExpressionAttributeValues": {
+          ":lastName": "Washington"
+        }
+      },
+      "mockResponse": {
+        "ConsumedCapacity": {
+          "CapacityUnits": 1,
+          "TableName": "Party"
+        },
+        "Item": { 
+          "partyID": "1829281149",
+          "firstName": "George",
+          "lastName": "Washington"
+        }
+      },
+      "mockError": "Error: DataValidationError"
+    },
+
+    {
+      "expectedResult": {
+        "partyID": "1829281149",
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "expectedError": "Error: DataValidationError"
+    }
+  ],
+  [
+    {
+      "comment": "missing ExpressionAttributeValue in testData",
+      "testData": {
+        "command": "scanParty",
+        "FilterExpression": "lastName = :lastName"
+      },
+      "mockResponse": {
+        "ConsumedCapacity": {
+          "CapacityUnits": 1,
+          "TableName": "Party"
+        },
+        "Item": { 
+          "partyID": "1829281149",
+          "firstName": "George",
+          "lastName": "Washington"
+        }
+      },
+      "mockError": "Error: DataValidationError"
+    },
+
+    {
+      "expectedResult": {
+        "partyID": "1829281149",
+        "firstName": "George",
+        "lastName": "Washington"
+      },
+      "expectedError": "Error: DataValidationError"
+    }
+  ]
+]

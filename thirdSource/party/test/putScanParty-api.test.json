@@ -1,14 +1,18 @@
 [
   [
     {
+      "comment": "pass test case for >= 1 elements", 
       "putTestData": {
         "command": "putParty",
         "firstName": "George",
         "lastName": "Washington"
       },
-      "getTestData": {
-        "command": "getParty",
-        "partyID": null
+      "scanTestData": {
+        "command": "scanParty",
+        "FilterExpression": "lastName = :lastName",
+        "ExpressionAttributeValues": {
+          ":lastName": "Washington"
+        }
       }
     },
 

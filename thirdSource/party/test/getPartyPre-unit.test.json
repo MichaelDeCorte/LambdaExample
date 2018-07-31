@@ -9,10 +9,10 @@
     },
 
     {
-      "testResult": {
+      "expectedResult": {
         "partyID": 1829281149
       },
-      "testError": null
+      "expectedError": null
     }
   ],
 
@@ -26,8 +26,8 @@
     },
 
     {
-      "testResult": null,
-      "testError": "Error: DataValidationError"
+      "expectedResult": null,
+      "expectedError": "Error: DataValidationError"
     }
   ]
 ]

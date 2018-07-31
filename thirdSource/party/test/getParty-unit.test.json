@@ -5,7 +5,7 @@
         "command": "getParty",
         "partyID": "1829281149"
       },
-      "dynamoResponse": {
+      "mockResponse": {
         "ConsumedCapacity": {
           "CapacityUnits": 1,
           "TableName": "Party"
@@ -16,16 +16,16 @@
           "lastName": "Washington"
         }
       },
-      "dynamoError": null
+      "mockError": null
     },
 
     {
-      "testResult": {
+      "expectedResult": {
         "partyID": "1829281149",
         "firstName": "George",
         "lastName": "Washington"
       },
-      "testError": null
+      "expectedError": null
     }
   ],
 
@@ -35,18 +35,18 @@
         "command": "getParty",
         "partyID": "1829281149"
       },
-      "dynamoResponse": {
+      "mockResponse": {
         "ConsumedCapacity": {
           "CapacityUnits": 1,
           "TableName": "Party"
         }
       },
-      "dynamoError": null
+      "mockError": null
     },
 
     {
-      "testResult": null,
-      "testError": null
+      "expectedResult": null,
+      "expectedError": null
     }
   ],
 
@@ -56,18 +56,18 @@
         "command": "getParty",
         "partyID": "aaaa"
       },
-      "dynamoResponse": {
+      "mockResponse": {
         "ConsumedCapacity": {
           "CapacityUnits": 1,
           "TableName": "Party"
         }
       },
-      "dynamoError": null
+      "mockError": null
     },
 
     {
-      "testResult": null,
-      "testError": "Error: DataValidationError"
+      "expectedResult": null,
+      "expectedError": "Error: DataValidationError"
     }
   ],
 
@@ -77,18 +77,18 @@
         "command": "getParty",
         "partyID": "aaaa"
       },
-      "dynamoResponse": {
+      "mockResponse": {
         "ConsumedCapacity": {
           "CapacityUnits": 1,
           "TableName": "Party"
         }
       },
-      "dynamoError": "Error: AccessDeniedException"
+      "mockError": "Error: AccessDeniedException"
     },
 
     {
-      "testResult": null,
-      "testError": "Error: AccessDeniedException"
+      "expectedResult": null,
+      "expectedError": "Error: AccessDeniedException"
     }
   ]
 

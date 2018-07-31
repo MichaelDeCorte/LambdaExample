@@ -9,19 +9,27 @@ SRC= \
 	src/party.js					\
 	src/getParty.js					\
 	src/putParty.js					\
-	src/putPartyPre.js
+	src/putPartyPre.js				\
+	src/scanParty.js				\
+	src/scanPartyPre.js
 
 UNITTESTSRC= \
 	test/getParty-unit.test.js		\
 	test/getParty-unit.test.json	\
 	test/putParty-unit.test.js		\
-	test/putParty-unit.test.json
+	test/putParty-unit.test.json	\
+	test/putScan-unit.test.js		\
+	test/putScan-unit.test.json
 
 INTTESTSRC= \
 	test/putGetParty-api.test.js 	\
 	test/putGetParty-api.test.json	\
 	test/putGetParty-uri.test.js 	\
-	test/putGetParty-uri.test.json 
+	test/putGetParty-uri.test.json 	\
+	test/putScan-api.test.js		\
+	test/putScan-api.test.json		\
+	test/putScan-uri.test.js		\
+	test/putScan-uri.test.json		
 
 TFSOURCE=\
 	party.tf
