@@ -26,8 +26,8 @@
     "putParty": {
       "method": "putParty.js"
     },
-    "t": {
-      "method": "t.js"
+    "scanParty": {
+      "method": "scanParty.js"
     }
   },
   "devDependencies": {},

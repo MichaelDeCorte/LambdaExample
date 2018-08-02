@@ -99,7 +99,7 @@ function testFunc(input, output, done) {
                 let element = null;
 
                 // only look at the first element for test purposes
-                if (body.length > 0) {
+                if (body != null && body.length > 0) {
                     element = body[0];
                     element.partyID = null;
                 }

@@ -151,6 +151,7 @@ function methodRouter(event, context, callback, map) {
                 map.post.unshift(lambdaPost);
             }
 
+            // call the global prefilters
             map.pre.forEach(
                 (func) => {
                     ({ event, context, callback } 
@@ -160,6 +161,7 @@ function methodRouter(event, context, callback, map) {
             
             map = initMap(event.command, map);
 
+            // call the function specific prefilters
             map[event.command].pre.forEach(
                 (func) => {
                     ({ event, context, callback } 
@@ -167,6 +169,7 @@ function methodRouter(event, context, callback, map) {
                 }
             );
             
+            // call the function
             map[event.command].method(event,
                                       context,
                                       (error, result) => {
@@ -194,6 +197,10 @@ function methodRouter(event, context, callback, map) {
                     }
                 );
                 
+                // enable CORS
+                // https://serverless.com/blog/cors-api-gateway-survival-guide/
+                result.headers['Access-Control-Allow-Origin'] = '*';
+                result.headers['Access-Control-Allow-Credentials'] = '*';
                 callback(error, result);
             })
         .catch(

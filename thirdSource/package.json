@@ -15,6 +15,7 @@
   "homepage": "https://github.com/MichaelDeCorte/LambdaExample#readme",
   "dependencies": {},
   "devDependencies": {
+    "@angular/cli": "^6.0.8",
     "aws-sdk": "^2.241.1",
     "aws-sdk-mock": "^1.7.0",
     "bundle-deps": "^1.0.0",
@@ -27,7 +28,8 @@
     "jest-each": "^0.3.1",
     "jsonlint": "^1.6.3",
     "madge": "^3.0.1",
-    "npm": "^5.10.0",
+    "ng": "0.0.0-rc6",
+    "npm": "^6.2.0",
     "supertest": "^3.1.0"
   },
   "bundledDependencies": [],
@@ -41,9 +43,9 @@
     "jsonlint": "jsonlint"
   },
   "logger": {
-    "default": "false",
+    "default": "trace",
     "[common]src/guid.js": "trace",
-    "[party]": "error"
+    "[party]": "trace"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
