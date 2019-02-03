@@ -1,18 +1,17 @@
 {
   "name": "methodRouter",
   "version": "0.0.1",
-  "description": "For test",
-  "license": "Apache-2.0",
   "main": "src/methodRouter.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
+  "lockfileVersion": 1,
+  "requires": true,
+  "dependencies": {
+    "common": "file:../common"
   },
   "devDependencies": {
-    "common": "file:../common",
-    "joi": "^13.3.0",
-    "promise": "^8.0.1"
+    "joi": "^13.7.0",
+    "promise": "^8.0.2"
   },
-  "dependencies": {},
-  "bundledDependencies": []
+  "bundledDependencies": [
+    "common"
+  ]
 }

@@ -1,7 +1,7 @@
 const each = require('jest-each');
 const Joi = require('joi');
-const validator = require('../src/validator');
 const logger = require('common').logger;
+const validator = require('../src/validator');
 
 const alphaSpaceRE = /^[A-Za-z ]*$/;
 const schema = Joi.object().keys(

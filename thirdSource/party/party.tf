@@ -1,29 +1,19 @@
 ############################################################
 # Inialization
 
-variable "globals" {
-    type = "map"
-}
+# module "party_api" {
+#     source = "../../Terraform/lambda/api"
+#     # source = "git@github.com:MichaelDeCorte/TerraForm.git//lambda/api"
 
-variable "api_id" {
-    type = "string"
-}
-
-variable "resource_id" {
-    type = "string"
-}
-
-variable "stage_name" {
-    type = "string"
-}
-
-variable "s3_bucket" {
-    type = "string"
-}
-
-variable "version" {
-    default = "0.0.1"
-}
+#     globals = "${var.globals}"
+    
+#     api_id 				= "${var.api_id}"
+#     resource_id     	= "${var.resource_id}"
+#     function_name		= "party"
+#     handler			    = "src/party.handler"
+#     authorizer_id 		= "${var.authorizer_id}"
+#     filename		    = "${path.module}/party-${var.version}.zip"    
+# }
 
 #####
 module "partyResource" {
@@ -57,14 +47,15 @@ module "party" {
 #####
 # attach the lambda function to an api method
 module "partyMethod" {
-    # source = "../../Terraform/apiGateway/method"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/method"
+    source = "../../../Terraform/apiGateway/method"
+    # source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/method"
 
     globals = "${var.globals}"
 
     api_id 			= "${var.api_id}"
     resource_id     = "${module.partyResource.resource_id}"
-    function_uri	= "${module.party.invoke_arn}"    
+    function_uri	= "${module.party.invoke_arn}"
+    authorizer_id 	= "${var.authorizer_id}"
 }
 
 #####

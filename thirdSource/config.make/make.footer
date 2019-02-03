@@ -1,0 +1,336 @@
+.EXPORT_ALL_VARIABLES:
+
+LOG_LEVEL ?= false
+
+NPM=/Users/mdecorte/Documents/Development/Lambda/thirdSource/node_modules/.bin
+
+# force cli to load ~/.aws/config
+# https://github.com/aws/aws-sdk-js/issues/1921
+AWS_SDK_LOAD_CONFIG=1 
+
+# JESTFLAGS=--passWithNoTests --no-color --coverage --bail --verbose
+JESTFLAGS=--no-color --coverage --bail --verbose
+############################################################
+#
+.PHONY: $(SUBPACKAGES)
+.PHONY: .do_not_run
+
+############################################################
+#
+.PHONY: all
+
+all: unit package environment install integration
+
+############################################################
+#
+.PHONY: init
+.PHONY: .init
+.PHONY: .clean.init
+.PHONY: .veryclean.init
+
+init:
+ifdef SUBPACKAGES
+	$(call recursiveMake,init)
+endif
+
+.init:
+ifdef PACKAGE
+	$(printHeader)
+	@if [ ! -f .npmignore -a -f ../.npmignore ] ; then ln -s ../.npmignore .; fi
+	@if [ ! -f .gitignore -a -f ../.gitignore ] ; then ln -s ../.gitignore .; fi
+endif
+
+.clean.init:
+
+.veryclean.init:
+	rm -rf node_modules
+
+############################################################
+# Unit Testing
+.PHONY: unit
+.PHONY: unit.test
+.PHONY: lint
+.PHONY: lint.test
+.PHONY: .clean.lint
+.PHONY: .veryclean.lint
+
+
+##########
+unit: lint
+
+lint:
+ifdef SUBPACKAGES
+	$(call recursiveMake,lint)
+endif
+
+lint: .unit.lint
+
+.unit.lint: 
+.unit.lint: $(SRC)
+.unit.lint: 
+ifdef PACKAGE
+	$(printHeader)
+	$(NPM)/eslint src/*.js 
+	touch .unit.lint
+endif
+
+##########
+unit: lint.test
+
+lint: .unit.test.lint
+
+.unit.test.lint: 
+.unit.test.lint: $(UNITTESTSRC) 
+.unit.test.lint: $(INTTESTSRC) 
+.unit.test.lint: 
+ifdef PACKAGE
+	$(printHeader)
+	$(NPM)/eslint test/*.js
+	touch .unit.test.lint
+endif
+
+
+##########
+
+unit: unit.test
+
+unit.test: .unit.test
+.unit.test: $(SRC)
+.unit.test: $(UNITTESTSRC) 
+.unit.test: .unit.lint
+
+unit.test: 
+ifdef SUBPACKAGES
+	$(call recursiveMake,unit.test)
+endif
+
+.unit.test: 
+ifdef PACKAGE
+	$(call jestCommand,unit)
+	touch .unit.test
+endif
+
+sonar:
+	echo ==== sonarqube && sonar-scanner -Dproject.settings=$$HOME/.sonar/sonar-project.properties  $$(cat sonar.properties) 
+
+.clean.unit:
+	rm -f .unit.lint
+	rm -f .unit.test
+
+.veryclean.unit:
+
+############################################################
+# Package
+.PHONY: package
+.PHONY: .package.recurse
+.PHONY: .clean.package
+.PHONY: .veryclean.package
+
+
+$(PACKAGE): .unit.lint
+$(PACKAGE): .unit.test
+$(PACKAGE): $(SRC)
+
+ifdef SUBPACKAGES
+DOTPACKAGEFILES = $(shell find . -name .package.file -print)
+TFPACKAGEFILES = $(shell find . -name '*.tf' -print | fgrep -v .terraform)
+else
+DOTPACKAGEFILES = 
+TFPACKAGEFILES = 
+endif
+
+package: $(PACKAGE)
+package:
+ifdef SUBPACKAGES
+	$(call recursiveMake,package)
+endif
+
+$(PACKAGE): 
+	$(printHeader)
+	$(call jsToZip, $(PACKAGE))    
+
+.clean.package:
+	rm -f $(PACKAGE)
+	rm -f .package.file
+	rm -f $(basename $(PACKAGE)).tgz
+
+.veryclean.package:
+
+define jsToZip 
+	$(NPM)/bundle-deps
+	npm pack
+	@ZIPFILE=$(strip $(1));\
+	TGZFILE=$(basename $(1)).tgz; \
+	SDIR=`pwd`;\
+	TDIR=/tmp/$$$$.npmpackage;\
+	mkdir $$TDIR; \
+	cd $$TDIR;	\
+	tar xf $$SDIR/$$TGZFILE;	\
+	cd package; 	\
+	if [ -d node_modules ] ; \
+	then \
+		find node_modules -name '*.md' -exec rm {} \; ;\
+	fi;\
+	zip --recurse-path --quiet ../$$ZIPFILE .;	\
+	cd $$SDIR; \
+	mv $$TDIR/$$ZIPFILE . ;\
+	rm -rf $$TDIR;
+	touch .package.file
+endef
+############################################################
+# npm
+
+.clean.npm:
+
+.clean.npm:
+
+############################################################
+# Environment
+.PHONY: environment
+.PHONY: terraform
+.PHONY: .clean.environment
+.PHONY: .veryclean.environment
+
+environment: .unit.lint
+environment: .unit.test
+environment: package
+environment: $(DOTPACKAGEFILES)
+environment: $(TFSOURCE)
+
+terraform: package
+terraform: .environment.terraform
+terraform: $(TFSOURCE)
+terraform: $(TFPACKAGEFILES)
+.environment.terraform:
+	$(printHeader)
+	terraform apply -auto-approve
+	touch .environment.terraform
+
+
+.clean.environment:
+	rm -f .environment.terraform
+
+veryclean.terraform:
+	terraform destroy    
+
+#############################################################
+# Install
+.PHONY: install
+.PHONY: .clean.install
+.PHONY: .veryclean.install
+
+install: environment
+
+.clean.install:
+
+############################################################
+# Integration Tests
+.PHONY: integration
+.PHONY: integration.api
+.PHONY: integration.uri
+.PHONY: .clean.integration
+
+integration: 	integration.api
+integration.api: .integration.api
+
+integration.api:
+ifdef SUBPACKAGES
+	$(call recursiveMake,integration.api)
+endif
+
+.integration.api: $(SRC)
+.integration.api: $(INTTESTSRC) 
+.integration.api: .unit.lint
+.integration.api: .unit.test
+.integration.api: $(PACKAGE)
+.integration.api:
+ifdef PACKAGE
+	$(printHeader)
+	$(call jestCommand,api)
+	touch .integration.api
+endif
+
+
+##########
+integration: 	integration.uri
+integration: 	.integration.uri
+
+integration.uri:
+ifdef SUBPACKAGES
+	$(call recursiveMake,integration.uri)
+endif
+
+.integration.uri: $(SRC)
+.integration.uri: $(INTTESTSRC)
+.integration.uri: .unit.lint
+.integration.uri: .unit.test
+.integration.uri: $(PACKAGE)
+.integration.uri: .integration.api
+.integration.uri:
+ifdef PACKAGE
+	$(printHeader)
+	$(call jestCommand,uri)
+	touch .integration.uri
+endif
+
+.clean.integration:
+	rm -f .integration.api
+	rm -f .integration.uri
+
+.veryclean.integration:
+
+############################################################
+.PHONY: test
+
+test: 			unit .integration.api .integration.uri
+
+##############################
+.PHONY: clean
+.PHONY: veryclean
+
+clean: .clean.unit
+clean: .clean.package
+clean: .clean.environment 
+clean: .clean.install
+clean: .clean.integration
+clean: .clean.general
+clean:
+	$(printHeader)
+	$(call recursiveMake,clean)
+
+veryclean: clean
+veryclean: .veryclean.environment
+veryclean: .veryclean.unit
+veryclean: .veryclean.package
+veryclean: .veryclean.install
+veryclean: .veryclean.integration
+veryclean:
+	$(printHeader)
+	$(call recursiveMake,veryclean)
+
+.clean.general:
+	rm -f *~ */*~
+
+
+############################################################
+define recursiveMake
+	@ set -e ; \
+	for d in $(SUBPACKAGES)    ;\
+	do \
+		echo ===== make -C $$d $(1);\
+		$(MAKE) -C $$d $(1) ;\
+	done
+endef
+
+############################################################
+define jestCommand
+    @if ( cd test ; ls | grep -n "$(1)");  	\
+    then                                			\
+		$(NPM)/jest "$(1)" $(JESTFLAGS);  			\
+    fi
+endef
+
+############################################################
+define printerHeader
+	@echo ========== $$(basename $$(pwd))  $@ ==========
+endef    

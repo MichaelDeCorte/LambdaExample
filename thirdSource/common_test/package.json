@@ -1,0 +1,17 @@
+{
+  "name": "common_test",
+  "version": "0.0.1",
+  "description": "support jest testing of uri and api",
+  "license": "Apache-2.0",
+  "main": "src/index.js",
+  "dependencies": {
+    "common": "file:../common",
+    "joi": "^14.3.1",
+    "promise": "^8.0.2"
+  },
+  "bundledDependencies": [
+    "common",
+    "joi",
+    "promise"
+  ]
+}

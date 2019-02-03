@@ -2,6 +2,8 @@
 const each = require('jest-each');
 const logger = require('common').logger;
 const requestTest = require('supertest');
+const authenticateTestUser = require('common_test').authenticateTestUser;
+const getAuthorizationToken = require('common_test').getAuthorizationToken;
 const uri = require('./party.uat.uri.js').uri;
 
 // Initialize AWS credentials
@@ -12,7 +14,7 @@ function testFunc(input, output, done) {
     let putTestData = input.putTestData;
     let scanTestData = input.scanTestData;
     let expectedResult = output.expectedResult;
-
+    
     logger.trace('uri: ' + uri);
     logger.trace('input: ' + JSON.stringify(input, null, 4));
     logger.trace('expectedResult: ' + JSON.stringify(expectedResult, null, 4));
@@ -22,6 +24,7 @@ function testFunc(input, output, done) {
         return requestTest.agent(uri)
             .post('/')
             .send(putTestData)
+            .set('Authorization', getAuthorizationToken())
             .then(
                 (response) => {
                     let statusCode = response.status;
@@ -38,9 +41,10 @@ function testFunc(input, output, done) {
         return requestTest.agent(uri)
             .post('/')
             .send(scanTestData)
+            .set('Authorization', getAuthorizationToken())
             .then(
                 (response) => {
-                    logger.debug('response: ' + JSON.stringify(response, null, 4));
+                    logger.trace('response: ' + JSON.stringify(response, null, 4));
                     logger.trace('expectedResult: ' + JSON.stringify(expectedResult, null, 4));
                     let statusCode = response.status;
                     let body = JSON.parse(response.text);
@@ -59,7 +63,8 @@ function testFunc(input, output, done) {
             );
     }
 
-    putParty()
+    authenticateTestUser() 
+        .then(putParty)
         .then(scanParty)
         .catch(
             (error) => {

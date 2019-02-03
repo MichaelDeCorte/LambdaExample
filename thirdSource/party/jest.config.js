@@ -2,7 +2,8 @@
 // which is used in methodRouter
 module.exports= {
     "moduleDirectories": [
+        "node_modules",
         "../../../src",
         "../../src",
-    ].concat(module.paths)
+    ]
 };                         

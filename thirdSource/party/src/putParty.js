@@ -51,8 +51,8 @@ function handler(event, context, lambdaCallback) {
                         if (error) {
                             logger.error('Dynamo error');
                             logger.warn('getItem:'
-                                        + error +
-                                        JSON.stringify(data, null, 4));
+                                        + error 
+                                        + JSON.stringify(data, null, 4));
                             reject(error);
                         } else {
                             resolve(result);

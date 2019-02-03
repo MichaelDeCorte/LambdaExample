@@ -2,6 +2,8 @@
 const each = require('jest-each');
 const logger = require('common').logger;
 const requestTest = require('supertest');
+const authenticateTestUser = require('common_test').authenticateTestUser;
+const getAuthorizationToken = require('common_test').getAuthorizationToken;
 const uri = require('./party.uat.uri.js').uri;
 
 // Initialize AWS credentials
@@ -21,9 +23,12 @@ function testFunc(input, output, done) {
     function putParty() {
         return requestTest.agent(uri)
             .post('/')
+            .set('Authorization', getAuthorizationToken())
             .send(putTestData)
             .then(
                 (response) => {
+                    logger.trace('request:\n'  + response.req._header);
+                    logger.trace('response:\n' + JSON.stringify(response, null, 4));
                     let statusCode = response.status;
                     let partyID = JSON.parse(response.text).partyID;
                     getTestData.partyID =  partyID;
@@ -40,10 +45,11 @@ function testFunc(input, output, done) {
         return requestTest.agent(uri)
             .post('/')
             .send(getTestData)
+            .set('Authorization', getAuthorizationToken())
             .then(
                 (response) => {
-                    logger.debug('response: ' + JSON.stringify(response, null, 4));
-                    logger.trace('expectedResult: ' + JSON.stringify(expectedResult, null, 4));
+                    // logger.debug('response: ' + JSON.stringify(response, null, 4));
+                    // logger.trace('expectedResult: ' + JSON.stringify(expectedResult, null, 4));
                     let statusCode = response.status;
                     let body = JSON.parse(response.text);
 
@@ -54,11 +60,12 @@ function testFunc(input, output, done) {
             );
     }
 
-    putParty()
+    authenticateTestUser() 
+        .then(putParty)
         .then(getParty)
         .catch(
             (error) => {
-                logger.debug('error: ' + JSON.stringify(error, null, 4));
+                // logger.debug('error: ' + JSON.stringify(error, null, 4));
                 done.fail(error);
             }
         );

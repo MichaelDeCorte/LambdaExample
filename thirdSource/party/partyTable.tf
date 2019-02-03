@@ -1,24 +1,30 @@
 # partyTable.tf
     
-# variable "globals" {
-#     type = "map"
-#}
+module "party_table" {   
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//dynamo"
+    # source 					= "../../../Terraform/dynamo"
+    globals 					= "${var.globals}"
+    tags 						= "${var.tags}"
+    billing_mode				= "PAY_PER_REQUEST"
 
-resource "aws_dynamodb_table" "partyTable" {
     name           = "party"
-    read_capacity  = 5
-    write_capacity = 5
-    hash_key       = "partyID"
+    hash_key       = "partyID"		# Primary partition key	
 
-    attribute {
-        name = "partyID"
-        type = "N"
-    }
+    attributes = [
+        {
+            name = "partyID"
+            type = "N"
+        },
+    ]
 
-    tags	= "${var.globals["tags"]}"
+    # global_secondary_indexes  = [
+        # {
+        #     name               = ""
+        #     hash_key           = ""		# Primary partition key	
+        #     range_key          = ""		# Primary sort key	
+        #     projection_type    = "ALL"			# "ALL" "INCLUDE" "KEYS_ONLY'
+        # },
+    # ]
 
-    server_side_encryption {
-        enabled = "true"
-    }
+    server_side_encryption = "true"
 }
-

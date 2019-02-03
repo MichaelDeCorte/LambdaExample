@@ -14,10 +14,10 @@ function testFunc(input, output, done) {
 
     logger.trace('event: '
                  + JSON.stringify(event, null, 4));
-    logger.trace('expectedResult: ' +
-                 JSON.stringify(expectedResult, null, 4));
-    logger.trace('expectedError: ' +
-                 JSON.stringify(expectedError, null, 4));
+    logger.trace('expectedResult: '
+                + JSON.stringify(expectedResult, null, 4));
+    logger.trace('expectedError: '
+                + JSON.stringify(expectedError, null, 4));
 
     expect.assertions(1);
 

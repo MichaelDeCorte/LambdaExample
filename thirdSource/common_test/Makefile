@@ -1,43 +1,37 @@
 PACKAGEROOT=/Users/mdecorte/Documents/Development/Lambda/thirdSource
 include $(PACKAGEROOT)/config.make/make.header
 
-# LOG_LEVEL=error
 #############################################################
+
+# LOG_LEVEL=trace
+
 SRC= \
-	src/index.js					\
-	src/logger.js					\
-	src/validator.js				\
-	src/packageConfig.js			\
-	src/guid.js						
+	src/authenticateTestUser.js
+
 
 UNITTESTSRC= \
-	test/guid-unit.test.js	\
-	test/packageConfig-module.unit.test.js	\
-	test/packageConfig-moduleLoad.unit.test.js	\
-	test/packageConfig-package.unit.test.js	\
-	test/packageConfig-packageLoad.unit.test.js	
+	test/authenticateTestUser.unit.test.js
 
 INTTESTSRC= 
 
 TFSOURCE=
 
-PACKAGE=common-0.0.1.zip
+PACKAGE=common_test-0.0.1.zip
 
 SUBPACKAGES=
-
 
 ############################################################
 
 all: 
 
+all: node_modules/common
+
 init: npm
 
 npm:
 	npm install
-	npm install log-driver  
-	npm install --save-dev joi
-	npm install --save-dev promise # --save-dev because it's install with other packages
-	npm link
+	npm install promise
+	npm install joi
 
 unit: 
 
@@ -54,6 +48,11 @@ test:
 clean: 
 
 veryclean: 
+
+node_modules/common: ../common
+	npm install ../common
+
+$(PACKAGE): node_modules/common
 
 
 ############################################################

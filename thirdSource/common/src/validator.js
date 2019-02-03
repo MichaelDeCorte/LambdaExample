@@ -1,6 +1,6 @@
 /* eslint import/no-unresolved: off */
-const logger = require('./logger.js').logger;
 const Joi = require('joi');
+const logger = require('./logger.js').logger;
 
 const joiOptions = {
     'abortEarly': false,

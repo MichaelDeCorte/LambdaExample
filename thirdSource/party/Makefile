@@ -1,5 +1,5 @@
 PACKAGEROOT=/Users/mdecorte/Documents/Development/Lambda/thirdSource
-include $(PACKAGEROOT)/config/make.header
+include $(PACKAGEROOT)/config.make/make.header
 
 #############################################################
 
@@ -40,48 +40,49 @@ SUBPACKAGES=
 
 ############################################################
 
-all: unit package
 
-init: .init
-init:
+all: node_modules/common
+all: node_modules/methodRouter
+all: node_modules/common_test
+
+init: npm.init
+
+npm.init:
+	npm install
 	npm install promise
 	npm install string-hash
 	npm install joi
 
-.unit: node_modules/common
-.unit: node_modules/methodRouter
 
-npm.unit: node_modules/methodRouter
-unit: .unit
+unit:
 
-package: .package
+environment: 
 
-environment: .do_no_run
-
-install: .do_no_run
+install: 
 
 integration: 
 
 test: 
 
-clean: .clean
+clean:
 
-veryclean: .veryclean
+veryclean: 
 
-node_modules/common: ../common/common-0.0.1.tgz
-	npm install -f ../common/common-0.0.1.tgz
+node_modules/common: ../common
+	npm install ../common
 
-node_modules/methodRouter: ../methodRouter/methodRouter-0.0.1.tgz
-	npm install -f ../methodRouter/methodRouter-0.0.1.tgz
+node_modules/methodRouter: ../methodRouter
+	npm install ../methodRouter
+
+node_modules/common_test: ../common_test
+	npm install ../common_test
 
 $(PACKAGE): node_modules/common
 $(PACKAGE): node_modules/methodRouter
-
-$(PACKAGE): $(SRC)
-	$(call jsToZip, $(PACKAGE))
+$(PACKAGE): node_modules/common_test
 
 
 ############################################################
-include $(PACKAGEROOT)/config/make.footer
+include $(PACKAGEROOT)/config.make/make.footer
 
 

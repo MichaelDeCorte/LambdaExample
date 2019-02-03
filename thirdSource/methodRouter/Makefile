@@ -1,5 +1,5 @@
 PACKAGEROOT=/Users/mdecorte/Documents/Development/Lambda/thirdSource
-include $(PACKAGEROOT)/config/make.header
+include $(PACKAGEROOT)/config.make/make.header
 
 # LOG_LEVEL=error
 #############################################################
@@ -20,44 +20,39 @@ SUBPACKAGES=
 
 ############################################################
 
-all: unit package integration test
+all: 
 
-init: .init
+all: node_modules/common
+
+init: npm
+
+npm:
+	npm install
 	npm install --save-dev joi
 	npm install --save-dev promise # --save-dev because it's install with other packages
 	npm install --save ../common
 	npm link
 
-.unit: node_modules/common
-unit: .unit
+unit:
 
-package: .package
+package:
 
-environment: .do_no_run
+environment: 
 
-install: .do_no_run
+install: 
 
 integration: 
 
-test: .test
+test: 
 
-clean: .clean
+clean: 
 
-veryclean: .veryclean
+veryclean: 
 
 node_modules/common:
 	npm install --save-dev ../common
 
-# node_modules/common: ../common/common-0.0.1.tgz
-# 	npm install -f ../common/common-0.0.1.tgz
-
-# $(PACKAGE): node_modules/common
-
-$(PACKAGE): $(SRC)
-	$(call jsToZip, $(PACKAGE))
-
-
 ############################################################
-include $(PACKAGEROOT)/config/make.footer
+include $(PACKAGEROOT)/config.make/make.footer
 
 

@@ -77,8 +77,8 @@ function testFunc(input, output, done) {
                               (error, result) => {
                                   if (error) {
                                       logger.warn('lambda.invoke:'
-                                                   + error +
-                                                   JSON.stringify(scanPartyRequest, null, 4));
+                                                   + error
+                                                   + JSON.stringify(scanPartyRequest, null, 4));
                                       reject(error);
                                   } else {
                                       resolve(result);
@@ -133,4 +133,3 @@ function testFunc(input, output, done) {
 const testSuite = require(__filename.replace(/.[^.]+$/, '.json'));
 
 each(testSuite).test('putScanParty aws API integration tests', testFunc);
-

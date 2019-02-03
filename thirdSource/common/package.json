@@ -9,14 +9,26 @@
     "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
   },
   "devDependencies": {
-    "common": "file:.",
-    "joi": "^13.2.0",
+    "eslint": "^5.12.1",
+    "eslint-plugin-import": "^2.15.0",
+    "joi": "^13.7.0",
     "npm": "^6.0.0",
-    "promise": "^8.0.1"
+    "promise": "^8.0.2"
   },
   "dependencies": {
     "log-driver": "^1.2.7"
   },
+  "bugs": {
+    "url": "https://github.com/MichaelDeCorte/LambdaExample/issues"
+  },
+  "homepage": "https://github.com/MichaelDeCorte/LambdaExample#readme",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
   "bundledDependencies": [
     "log-driver"
   ]

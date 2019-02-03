@@ -36,32 +36,33 @@ then
     aws iam get-user
 fi
 
-if [ ! which node ]
-then
-    NODE=node-v8.10.0-darwin-x64
+echo ========== install node
+NODE_VERSION=v8.10.0
+# if ! which node || ! (node --version | grep "$NODE_VERSION" )
+# then
+    NODE=node-"$NODE_VERSION"-darwin-x64
     echo ========== install node
-    curl -L https://nodejs.org/download/release/v8.10.0/"$NODE".tar.gz > "$NODE".tar.gz
+    curl -L https://nodejs.org/download/release/"$NODE_VERSION"/"$NODE".tar.gz > "$NODE".tar.gz
     tar -xf "$NODE".tar.gz
     rm "$NODE".tar.gz
-    mv "$NODE" "$HOME"/bin
-    ln -fs  "$HOME"/bin/"$NODE"/bin/node /usr/local/bin/node
-fi
-
-# echo ========== install brew
-# if ! which brew
-# then
-#     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    mv -v "$NODE" "$HOME"/bin
+#    sudo ln -fs  "$HOME"/bin/"$NODE"/bin/node /usr/local/bin/node
+#    sudo ln -fs  "$HOME"/bin/"$NODE"/bin/npm /usr/local/bin/npm
+#    sudo ln -fs  "$HOME"/bin/"$NODE"/bin/npx /usr/local/bin/npx
 # fi
 
-
-if ! which node
+echo ========== install brew
+if ! which brew
 then
-   brew install node
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
-echo ========== upgrade node
-brew upgrade node
 
+echo ========== install jq
+if ! which jq
+then
+    brew install jq
+fi    
 
 echo ========== install git-crypt
 if ! which git-crypt
@@ -74,13 +75,21 @@ then
     git-crypt keygen $HOME/.ssh/git-crypt.key
 fi
 
-if [ ! -f $HOME/.ssh/git-crypt.key ]
+if [ ! -f $HOME/.ssh/mdecorte-git-crypt.key ]
 then
     git-crypt keygen $HOME/.ssh/mdecorte-git-crypt.key
 fi
-echo RUN
+
+echo '******************************'
+echo RUN the below commands
 echo cd REPO
 echo git-crypt unlock ~/.ssh/mdecorte-git-crypt.key 
 echo emacs .gitattributes
 echo add
 echo "secrets.tf filter=git-crypt diff=git-crypt"
+
+
+echo 'create s3 bucket thirdsource-terraform in us-east-1'
+echo
+echo Activate cost explorer
+echo https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/grantaccess.html

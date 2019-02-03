@@ -7,6 +7,7 @@ Todo
 - authentication
     cognito https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html
     api https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html
+- packer?
 - refactor to classes
 - typescript??
 - route 53    
@@ -41,6 +42,7 @@ Todo
     https://www.npmjs.com/package/dynamodb   waiting for promise support
 
 Done
+- refactor dynamo for more generic approach
 - AWS stubbing
 - terraform deploy
 - jest
