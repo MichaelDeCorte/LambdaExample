@@ -128,7 +128,7 @@ module "environmentTemplate" {
 
     globals = "${local.globals}"
 
-    input = "common_test/templates/environment.json"
+    input = "common_test/templates/environment.json.template"
     output = "common_test/src/environment.json"
     variables = {
         partyUri = "${module.apiDeploy.deployment_url}${module.party.subPath}"
