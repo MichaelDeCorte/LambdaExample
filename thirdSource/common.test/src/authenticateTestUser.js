@@ -16,14 +16,14 @@ function authenticateTestUser() {
     };
     let userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
     let userData = {
-        'Username': environment.testIdUsername,
+        'Username': environment.Username,
         'Pool': userPool
     };
     let cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
     let authenticationData = {
-        'Username': environment.testIdUsername,
-        'Password': environment.testIdFinalPassword
+        'Username': environment.Username,
+        'Password': environment.FinalPassword
     };
     let authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
 
