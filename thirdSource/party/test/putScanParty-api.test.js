@@ -94,8 +94,8 @@ function testFunc(input, output, done) {
         return new Promise(
             (resolve, reject) => { // eslint-disable-line no-unused-vars
                 let body = JSON.parse(actualResult.Payload).body;
-                logger.trace('body: ' + JSON.stringify(body, null, 4));
-                logger.trace('expectedResult: ' + JSON.stringify(expectedResult, null, 4));
+                logger.debug('body: ' + JSON.stringify(body, null, 4));
+                logger.debug('expectedResult: ' + JSON.stringify(expectedResult, null, 4));
                 let element = null;
 
                 // only look at the first element for test purposes

@@ -2,8 +2,8 @@
 const each = require('jest-each');
 const logger = require('common').logger;
 const requestTest = require('supertest');
-const authenticateTestUser = require('common_test').authenticateTestUser;
-const getAuthorizationToken = require('common_test').getAuthorizationToken;
+const authenticateTestUser = require('common.test').authenticateTestUser;
+const getAuthorizationToken = require('common.test').getAuthorizationToken;
 const uri = require('./party.uat.uri.js').uri;
 
 // Initialize AWS credentials

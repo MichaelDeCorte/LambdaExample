@@ -49,7 +49,7 @@
     "jsonlint": "jsonlint"
   },
   "logger": {
-    "default": "debug"
+    "default": "error"
   },
   "loggerExample": {
     "default": "debug",
