@@ -3,8 +3,8 @@
   "cognitoUserPoolId": "${cognitoUserPoolId}",
   "cognitoClientId": "${cognitoClientId}",
   "loginUrl": "${loginUrl}",
-  "testIdUsername": "testid.${testIdUsername}@decorte.us",
-  "testIdInitialPassword": "${testIdInitialPassword}",
-  "testIdFinalPassword": "${testIdFinalPassword}",
+  "Username": "${Username}",
+  "InitialPassword": "${InitialPassword}",
+  "FinalPassword": "${FinalPassword}",
   "region": "${region}"
 }

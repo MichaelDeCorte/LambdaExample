@@ -75,6 +75,21 @@ module "apiDeploy" {
     stage_name 		= "${var.stage_name}"
 }
 
+#####
+# create a JS file with the URL for the stage
+module "uriTemplate" {
+    # source = "../Terraform/files"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
+
+    globals 		= "${local.globals}"
+
+    input = "party/templates/party.uri.js"
+    output = "party/test/party.${var.stage_name}.uri.js"
+    variables = {
+        uri = "${module.apiDeploy.deployment_url}${module.party.subPath}"
+    }
+}    
+
 ############################################################
 module "login" {
     source = "login"
@@ -85,23 +100,8 @@ module "login" {
     domain = "thirdsource"
     callback_url = "http://localhost:4200/security/authenticate"
     signout_url = "http://localhost:4200/security/login"
-    
 }
 
-#####
-# create a JS file with the URL for the stage
-module "uriTemplate" {
-    # source = "../Terraform/files"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
-
-    globals = "${local.globals}"
-
-    input = "party/templates/party.uri.js"
-    output = "party/test/party.${var.stage_name}.uri.js"
-    variables = {
-        uri = "${module.apiDeploy.deployment_url}${module.party.subPath}"
-    }
-}    
 
 resource  "random_string" "initial_password" {
     length = 16
@@ -128,19 +128,27 @@ module "environmentTemplate" {
 
     globals = "${local.globals}"
 
-    input = "common_test/templates/environment.json.template"
-    output = "common_test/src/environment.json"
+    input = "common.test/templates/environment.json.template"
+    output = "common.test/src/environment.json"
     variables = {
         partyUri = "${module.apiDeploy.deployment_url}${module.party.subPath}"
         cognitoUserPoolId = "${module.login.pool_id}"
         cognitoClientId = "${module.login.client_id}"
         loginUrl = "${module.login.url}"
-        testIdUsername="${random_string.test_id_username.result}"
-        testIdInitialPassword="${random_string.initial_password.result}"
-        testIdFinalPassword="${random_string.final_password.result}"
+        Username="testid.${random_string.test_id_username.result}@decorte.us"
+        InitialPassword="${random_string.initial_password.result}"
+        FinalPassword="${random_string.final_password.result}"
         region="${local.region["region"]}"
     }
 }    
+
+module "testUser" {
+    source = "login/users"
+
+    dependsOn = "${module.environmentTemplate.dependencyId}:${module.login.dependencyId}"
+    globals = "${local.globals}"
+    environmentFile = "${module.environmentTemplate.output}"
+}
 
 ##############################
 output "region" {
