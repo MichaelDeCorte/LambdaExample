@@ -196,11 +196,13 @@ environment: .unit.test
 environment: package
 environment: $(DOTPACKAGEFILES)
 environment: $(TFSOURCE)
+environment: terraform
 
-terraform: package
 terraform: .environment.terraform
-terraform: $(TFSOURCE)
-terraform: $(TFPACKAGEFILES)
+
+.environment.terraform: $(TFSOURCE)
+.environment.terraform: $(TFPACKAGEFILES)
+.environment.terraform: package
 .environment.terraform:
 	$(printHeader)
 	terraform apply -auto-approve
