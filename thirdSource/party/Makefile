@@ -43,7 +43,7 @@ SUBPACKAGES=
 
 all: node_modules/common
 all: node_modules/methodRouter
-all: node_modules/common_test
+all: node_modules/common.test
 
 init: npm.init
 
@@ -74,12 +74,12 @@ node_modules/common: ../common
 node_modules/methodRouter: ../methodRouter
 	npm install ../methodRouter
 
-node_modules/common_test: ../common_test
-	npm install ../common_test
+node_modules/common.test: ../common.test
+	npm install ../common.test
 
 $(PACKAGE): node_modules/common
 $(PACKAGE): node_modules/methodRouter
-$(PACKAGE): node_modules/common_test
+$(PACKAGE): node_modules/common.test
 
 
 ############################################################

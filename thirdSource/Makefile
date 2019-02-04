@@ -24,7 +24,7 @@ PACKAGE=
 
 SUBPACKAGES=\
 	common 				\
-	common_test			\
+	common.test			\
 	methodRouter		\
 	party	
 

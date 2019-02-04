@@ -1,0 +1,10 @@
+{
+  "partyUri": "${partyUri}",
+  "cognitoUserPoolId": "${cognitoUserPoolId}",
+  "cognitoClientId": "${cognitoClientId}",
+  "loginUrl": "${loginUrl}",
+  "testIdUsername": "testid.${testIdUsername}@decorte.us",
+  "testIdInitialPassword": "${testIdInitialPassword}",
+  "testIdFinalPassword": "${testIdFinalPassword}",
+  "region": "${region}"
+}
