@@ -59,8 +59,8 @@ module "cloudtrail_policy" {
 }
 
 module "cloudtrail_trail" {
-    # source 		= "../../../Terraform/cloudtrail"
-    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//cloudtrail"
+    source 		= "../../../Terraform/cloudtrail"
+    # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//cloudtrail"
 
     globals 	= "${module.globals.globals}"
 
