@@ -4,7 +4,8 @@ global.fetch = require('node-fetch');
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 // const AWS = require('aws-sdk'); 
 const Promise = require('promise');
-const environment = require('./environment.json');
+
+const environment = require(process.cwd() + '/../common.test/src/environment.json'); // eslint-disable-line import/no-dynamic-require
 
 let authorizationToken = null;
 

@@ -16,7 +16,7 @@ INTTESTSRC=
 
 TFSOURCE=
 
-PACKAGE=common_test-0.0.1.zip
+PACKAGE=common.test-0.0.1.zip
 
 SUBPACKAGES=
 
@@ -29,9 +29,10 @@ all: node_modules/common
 init: npm
 
 npm:
-	npm install
-	npm install promise
-	npm install joi
+	npm install --save-dev
+	npm install promise 
+	npm install joi 
+
 
 unit: 
 
@@ -49,8 +50,8 @@ clean:
 
 veryclean: 
 
-node_modules/common: ../common
-	npm install ../common
+node_modules/common: ../common/common-0.0.1.tgz
+	npm install ../common/common-0.0.1.tgz
 
 $(PACKAGE): node_modules/common
 

@@ -28,9 +28,8 @@ init: npm
 
 npm:
 	npm install
-	npm install --save-dev joi
-	npm install --save-dev promise # --save-dev because it's install with other packages
-	npm install --save ../common
+	npm install joi
+	npm install promise
 	npm link
 
 unit:
@@ -49,8 +48,8 @@ clean:
 
 veryclean: 
 
-node_modules/common:
-	npm install --save-dev ../common
+node_modules/common: ../common/common-0.0.1.tgz
+	npm install ../common/common-0.0.1.tgz
 
 ############################################################
 include $(PACKAGEROOT)/config.make/make.footer

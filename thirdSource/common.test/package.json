@@ -5,13 +5,13 @@
   "license": "Apache-2.0",
   "main": "src/index.js",
   "dependencies": {
-    "common": "file:../common",
+    "common": "file:../common/common-0.0.1.tgz"
+  },
+  "devDependencies": {
     "joi": "^14.3.1",
     "promise": "^8.0.2"
   },
   "bundledDependencies": [
-    "common",
-    "joi",
-    "promise"
+    "common"
   ]
 }

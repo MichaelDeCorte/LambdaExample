@@ -33,10 +33,10 @@ all:
 init: npm
 
 npm:
-	npm install
-	npm install log-driver  
-	npm install --save-dev joi
-	npm install --save-dev promise # --save-dev because it's install with other packages
+	npm install --save-dev
+	npm install joi 
+	npm install promise 
+	npm install log-driver 
 	npm link
 
 unit: 

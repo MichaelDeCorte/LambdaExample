@@ -48,7 +48,7 @@ all: node_modules/common.test
 init: npm.init
 
 npm.init:
-	npm install
+	npm install --save-dev
 	npm install promise
 	npm install string-hash
 	npm install joi
@@ -68,14 +68,17 @@ clean:
 
 veryclean: 
 
-node_modules/common: ../common
-	npm install ../common
+node_modules/common: ../common/common-0.0.1.tgz
+	npm install ../common/common-0.0.1.tgz
 
-node_modules/methodRouter: ../methodRouter
-	npm install ../methodRouter
+node_modules/methodRouter: ../methodRouter/methodRouter-0.0.1.tgz
+	npm install ../methodRouter/methodRouter-0.0.1.tgz
 
-node_modules/common.test: ../common.test
-	npm install ../common.test
+node_modules/common.test: ../common.test/common.test-0.0.1.tgz
+	npm install ../common.test/common.test-0.0.1.tgz
+
+# node_modules/common.test: ../common.test
+# 	npm install  ../common.test
 
 $(PACKAGE): node_modules/common
 $(PACKAGE): node_modules/methodRouter

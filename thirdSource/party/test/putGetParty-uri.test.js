@@ -21,6 +21,7 @@ function testFunc(input, output, done) {
 
     // insert a party object
     function putParty() {
+        logger.error('point2');
         return requestTest.agent(uri)
             .post('/')
             .set('Authorization', getAuthorizationToken())
@@ -42,6 +43,7 @@ function testFunc(input, output, done) {
 
     // get that same party
     function getParty() {
+        logger.error('point3');
         return requestTest.agent(uri)
             .post('/')
             .send(getTestData)
@@ -60,6 +62,7 @@ function testFunc(input, output, done) {
             );
     }
 
+    logger.error('point1');
     authenticateTestUser() 
         .then(putParty)
         .then(getParty)
@@ -69,6 +72,7 @@ function testFunc(input, output, done) {
                 done.fail(error);
             }
         );
+    logger.error('point4');    
 }
 
 // eslint-disable-next-line 

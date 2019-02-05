@@ -36,7 +36,7 @@ all:
 init: npm.init terraform.init
 
 npm.init:
-	npm install
+	npm install --save-dev
 	npm install --save-dev npm
 	npm install --save-dev  --save-exact jest@21.1.0
 	npm install --save-dev jest-each

@@ -5,7 +5,7 @@
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
-    "common": "file:../common"
+    "common": "file:../common/common-0.0.1.tgz"
   },
   "devDependencies": {
     "joi": "^13.7.0",

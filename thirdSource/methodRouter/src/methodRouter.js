@@ -201,6 +201,7 @@ function methodRouter(event, context, callback, map) {
                 // https://serverless.com/blog/cors-api-gateway-survival-guide/
                 result.headers['Access-Control-Allow-Origin'] = '*';
                 result.headers['Access-Control-Allow-Credentials'] = '*';
+                logger.trace('return');
                 callback(error, result);
             })
         .catch(
@@ -214,6 +215,10 @@ function methodRouter(event, context, callback, map) {
                     }
                 );
                 
+                logger.error('error: ' + JSON.stringify(error, null, 4));
+                logger.error('result: ' + JSON.stringify(result, null, 4));
+                result.headers['Access-Control-Allow-Origin'] = '*';
+                result.headers['Access-Control-Allow-Credentials'] = '*';
                 callback(error, result);
             });
 }

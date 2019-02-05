@@ -196,7 +196,7 @@ environment: .unit.test
 environment: package
 environment: $(DOTPACKAGEFILES)
 environment: $(TFSOURCE)
-environment: terraform
+# environment: terraform  # only belongs in top level Makefile
 
 terraform: .environment.terraform
 
@@ -257,7 +257,8 @@ endif
 integration: 	integration.uri
 integration: 	.integration.uri
 
-integration.uri:
+integration.uri: .integration.uri
+integration.uri: 
 ifdef SUBPACKAGES
 	$(call recursiveMake,integration.uri)
 endif
@@ -268,6 +269,7 @@ endif
 .integration.uri: .unit.test
 .integration.uri: $(PACKAGE)
 .integration.uri: .integration.api
+.integration.uri: 
 .integration.uri:
 ifdef PACKAGE
 	$(printHeader)
