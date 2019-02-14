@@ -18,9 +18,8 @@
     "promise": "^8.0.2"
   },
   "devDependencies": {
-    "@angular/cli": "^6.0.8",
     "amazon-cognito-identity-js": "^3.0.7",
-    "aws-sdk": "^2.395.0",
+    "aws-sdk": "^2.399.0",
     "aws-sdk-mock": "^1.7.0",
     "bundle-deps": "^1.0.0",
     "download-size": "^1.3.2",

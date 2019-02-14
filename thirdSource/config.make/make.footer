@@ -291,6 +291,7 @@ test: 			unit .integration.api .integration.uri
 ##############################
 .PHONY: clean
 .PHONY: veryclean
+.PHONY: clean.local
 
 clean: .clean.unit
 clean: .clean.package
