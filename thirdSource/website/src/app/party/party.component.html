@@ -1,0 +1,14 @@
+
+<div *ngIf="party">
+  <h2>{{party.name}} Details</h2>
+  <div><span><label>id:</label> </span>{{party.partyID}}</div>
+  <div>
+    <label>first name:
+      <input [(ngModel)]="party.firstName" placeholder="firstName">
+    </label><br/>
+    <label>last name:
+      <input [(ngModel)]="party.lastName" placeholder="lastName">
+    </label>
+  </div>
+  <button (click)="goBack()">go back</button>
+</div>

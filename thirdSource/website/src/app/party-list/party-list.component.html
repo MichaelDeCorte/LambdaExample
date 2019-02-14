@@ -1,0 +1,9 @@
+<h2>Party List</h2>
+<ul class="partyList">
+  <li *ngFor="let party of partyList">
+      <a routerLink="/detail/{{party.partyID}}">
+        <span class="badge">{{party.partyID}}</span> {{party.lastName}}, {{party.firstName}}
+      </a>
+  </li>
+</ul>
+
