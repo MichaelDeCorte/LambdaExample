@@ -16,23 +16,19 @@ INTTESTSRC=
 
 TFSOURCE=
 
-PACKAGE=common.test-0.0.1.zip
-
 SUBPACKAGES=
 
 ############################################################
 
 all: 
 
-all: node_modules/common
-
-init: npm
+init: npm 
+init: package
 
 npm:
 	npm install --save-dev
-	npm install promise 
-	npm install joi 
-
+	npm install --prefix .. promise 
+	npm install --prefix .. joi
 
 unit: 
 
@@ -49,12 +45,6 @@ test:
 clean: 
 
 veryclean: 
-
-node_modules/common: ../common/common-0.0.1.tgz
-	npm install ../common/common-0.0.1.tgz
-
-$(PACKAGE): node_modules/common
-
 
 ############################################################
 include $(PACKAGEROOT)/config.make/make.footer

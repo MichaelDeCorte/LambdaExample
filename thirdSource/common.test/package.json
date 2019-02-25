@@ -4,14 +4,11 @@
   "description": "support jest testing of uri and api",
   "license": "Apache-2.0",
   "main": "src/index.js",
-  "dependencies": {
-    "common": "file:../common/common-0.0.1.tgz"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
   },
-  "devDependencies": {
-    "joi": "^14.3.1",
-    "promise": "^8.0.2"
-  },
-  "bundledDependencies": [
-    "common"
-  ]
+  "dependencies": {},
+  "devDependencies": {},
+  "bundledDependencies": []
 }

@@ -45,13 +45,18 @@ all: node_modules/common
 all: node_modules/methodRouter
 all: node_modules/common.test
 
+init: node_modules/common
+init: node_modules/methodRouter
+init: node_modules/common.test
+
 init: npm.init
 
 npm.init:
 	npm install --save-dev
-	npm install promise
+	npm install  promise
 	npm install string-hash
-	npm install joi
+	npm install  joi
+	npm install --save-dev supertest
 
 
 unit:
@@ -68,17 +73,14 @@ clean:
 
 veryclean: 
 
-node_modules/common: ../common/common-0.0.1.tgz
-	npm install ../common/common-0.0.1.tgz
+node_modules/common:
+	npm install ../common
 
-node_modules/methodRouter: ../methodRouter/methodRouter-0.0.1.tgz
-	npm install ../methodRouter/methodRouter-0.0.1.tgz
+node_modules/methodRouter: 
+	npm install ../methodRouter
 
-node_modules/common.test: ../common.test/common.test-0.0.1.tgz
-	npm install ../common.test/common.test-0.0.1.tgz
-
-# node_modules/common.test: ../common.test
-# 	npm install  ../common.test
+node_modules/common.test: 
+	npm install ../common.test
 
 $(PACKAGE): node_modules/common
 $(PACKAGE): node_modules/methodRouter

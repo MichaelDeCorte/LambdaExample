@@ -2,6 +2,8 @@ PACKAGEROOT=/Users/mdecorte/Documents/Development/Lambda/thirdSource
 
 include $(PACKAGEROOT)/config.make/make.header
 
+export PATH := node_modules/.bin:$(PATH)
+
 SRC=
 
 UNITTESTSRC= 
@@ -23,7 +25,7 @@ HASHFILE=.package.file
 init: 
 init:
 	npm install --save-dev
-	npm install --save-dev @angular/cli
+	npm install --prefix .. --save-dev @angular/cli
 
 # 	npm install typescript@">=3.1.1 <3.3.0" 
 # 	npm install --save-dev @angular/cli

@@ -13,8 +13,6 @@ INTTESTSRC=
 
 TFSOURCE=
 
-PACKAGE=methodRouter-0.0.1.zip
-
 SUBPACKAGES=
 
 
@@ -22,15 +20,12 @@ SUBPACKAGES=
 
 all: 
 
-all: node_modules/common
-
 init: npm
 
 npm:
 	npm install
-	npm install joi
-	npm install promise
-	npm link
+	npm install --prefix .. joi
+	npm install --prefix .. promise
 
 unit:
 
@@ -47,9 +42,6 @@ test:
 clean: 
 
 veryclean: 
-
-node_modules/common: ../common/common-0.0.1.tgz
-	npm install ../common/common-0.0.1.tgz
 
 ############################################################
 include $(PACKAGEROOT)/config.make/make.footer

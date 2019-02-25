@@ -21,8 +21,6 @@ INTTESTSRC=
 
 TFSOURCE=
 
-PACKAGE=common-0.0.1.zip
-
 SUBPACKAGES=
 
 
@@ -30,14 +28,14 @@ SUBPACKAGES=
 
 all: 
 
-init: npm
+init: npm.init
+init: package
 
-npm:
+npm.init:
 	npm install --save-dev
-	npm install joi 
-	npm install promise 
-	npm install log-driver 
-	npm link
+	npm install --prefix .. joi 
+	npm install --prefix .. promise 
+	npm install --prefix .. log-driver 
 
 unit: 
 
@@ -54,7 +52,6 @@ test:
 clean: 
 
 veryclean: 
-
 
 ############################################################
 include $(PACKAGEROOT)/config.make/make.footer

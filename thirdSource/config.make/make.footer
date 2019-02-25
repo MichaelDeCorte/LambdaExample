@@ -24,26 +24,21 @@ all: unit package environment install integration
 ############################################################
 #
 .PHONY: init
-.PHONY: .init
-.PHONY: .clean.init
 .PHONY: .veryclean.init
 
 init:
 ifdef SUBPACKAGES
 	$(call recursiveMake,init)
 endif
-
-.init:
-ifdef PACKAGE
+ifdef SRC
 	$(printHeader)
 	@if [ ! -f .npmignore -a -f ../.npmignore ] ; then ln -s ../.npmignore .; fi
 	@if [ ! -f .gitignore -a -f ../.gitignore ] ; then ln -s ../.gitignore .; fi
 endif
 
-.clean.init:
 
 .veryclean.init:
-	rm -rf node_modules
+	rm -rf node_modules/*
 
 ############################################################
 # Unit Testing
@@ -68,7 +63,7 @@ lint: .unit.lint
 .unit.lint: 
 .unit.lint: $(SRC)
 .unit.lint: 
-ifdef PACKAGE
+ifdef SRC
 	$(printHeader)
 	$(NPM)/eslint src/*.js 
 	touch .unit.lint
@@ -83,7 +78,7 @@ lint: .unit.test.lint
 .unit.test.lint: $(UNITTESTSRC) 
 .unit.test.lint: $(INTTESTSRC) 
 .unit.test.lint: 
-ifdef PACKAGE
+ifdef UNITTESTSRC
 	$(printHeader)
 	$(NPM)/eslint test/*.js
 	touch .unit.test.lint
@@ -105,7 +100,7 @@ ifdef SUBPACKAGES
 endif
 
 .unit.test: 
-ifdef PACKAGE
+ifdef UNITTESTSRC
 	$(call jestCommand,unit)
 	touch .unit.test
 endif
@@ -246,7 +241,7 @@ endif
 .integration.api: .unit.test
 .integration.api: $(PACKAGE)
 .integration.api:
-ifdef PACKAGE
+ifdef INTTESTSRC
 	$(printHeader)
 	$(call jestCommand,api)
 	touch .integration.api
@@ -271,7 +266,7 @@ endif
 .integration.uri: .integration.api
 .integration.uri: 
 .integration.uri:
-ifdef PACKAGE
+ifdef INTTESTSRC
 	$(printHeader)
 	$(call jestCommand,uri)
 	touch .integration.uri
@@ -305,6 +300,7 @@ clean:
 
 veryclean: clean
 veryclean: .veryclean.environment
+veryclean: .veryclean.init
 veryclean: .veryclean.unit
 veryclean: .veryclean.package
 veryclean: .veryclean.install
@@ -331,7 +327,7 @@ endef
 define jestCommand
     @if ( cd test ; ls | grep -n "$(1)");  	\
     then                                			\
-		$(NPM)/jest "$(1)" $(JESTFLAGS);  			\
+		LOG_LEVEL=false $(NPM)/jest "$(1)" $(JESTFLAGS);  			\
     fi
 endef
 

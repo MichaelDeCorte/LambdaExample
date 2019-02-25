@@ -7,6 +7,8 @@ Todo
 - authentication
     cognito https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html
     api https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html
+- session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
+- move to gitlab
 - packer?
 - refactor to classes
 - typescript??
@@ -25,7 +27,6 @@ Todo
 - version service
 - load testing
 - memory testing
-- production / test / ....      
 - source code security scanning (unclear if there are good open source packages to do this)
 - local lambda?
     https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
@@ -37,11 +38,17 @@ Todo
     - AWS Step Functions
     - AWS Simple Workflow
     - https://read.acloud.guru/some-lessons-learned-about-lambda-orchestration-1a8b72a33fd2
-- AWS code build, local testing, https://aws.amazon.com/about-aws/whats-new/2018/05/aws-codebuild-now-supports-local-testing-and-debugging    
+- AWS code build, local testing, https://aws.amazon.com/about-aws/whats-new/2018/05/aws-codebuild-now-supports-local-testing-and-debugging
+- node local packaging
+    - http://nicksellen.co.uk/2015/04/17/how-to-manage-private-npm-modules.html
+    - https://docs.npmjs.com/cli/link.html
+    
+  
 - db 
     https://www.npmjs.com/package/dynamodb   waiting for promise support
 
 Done
+- terraform production / test / ....      
 - refactor dynamo for more generic approach
 - AWS stubbing
 - terraform deploy

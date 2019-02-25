@@ -3,15 +3,14 @@
   "version": "0.0.1",
   "main": "src/methodRouter.js",
   "lockfileVersion": 1,
+  "description": "Lambda Service Router",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
+  },
   "requires": true,
-  "dependencies": {
-    "common": "file:../common/common-0.0.1.tgz"
-  },
-  "devDependencies": {
-    "joi": "^13.7.0",
-    "promise": "^8.0.2"
-  },
-  "bundledDependencies": [
-    "common"
-  ]
+  "dependencies": {},
+  "devDependencies": {},
+  "bundledDependencies": []
 }

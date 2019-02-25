@@ -26,7 +26,8 @@ SUBPACKAGES=\
 	common 				\
 	common.test			\
 	methodRouter		\
-	party	
+	party				\
+	website
 
 
 
@@ -38,12 +39,13 @@ init: npm.init terraform.init
 npm.init:
 	npm install --save-dev
 	npm install --save-dev npm
+	npm install --save-dev @angular/cli
 	npm install --save-dev  --save-exact jest@21.1.0
 	npm install --save-dev jest-each
 	npm install --save-dev eslint@latest
 	npm install --save-dev eslint-plugin-jest@latest
 	npm install --save-dev eslint-config-airbnb-base@latest
-	npm install --save-dev  eslint-plugin-import@latest 
+	npm install --save-dev eslint-plugin-import@latest 
 	npm install --save-dev aws-sdk
 	npm install --save-dev aws-sdk-mock
 	npm install --save-dev amazon-cognito-identity-js
@@ -51,6 +53,7 @@ npm.init:
 	npm install --save-dev supertest
 	npm install --save-dev jsonlint
 	npm install --save-dev bundle-deps
+	npm install $(SUBPACKAGES)
 
 
 terraform.init:

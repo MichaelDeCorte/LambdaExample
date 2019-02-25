@@ -24,12 +24,15 @@
     }
   },
   "dependencies": {
-    "common": "file:../common/common-0.0.1.tgz",
-    "common.test": "file:../common.test/common.test-0.0.1.tgz",
+    "common": "file:../common",
+    "common.test": "file:../common.test",
     "joi": "^14.3.1",
-    "methodRouter": "file:../methodRouter/methodRouter-0.0.1.tgz",
+    "methodRouter": "file:../methodRouter",
     "promise": "^8.0.2",
     "string-hash": "^1.1.3"
+  },
+  "devDependencies": {
+    "supertest": "^3.4.2"
   },
   "bundledDependencies": [
     "common",
