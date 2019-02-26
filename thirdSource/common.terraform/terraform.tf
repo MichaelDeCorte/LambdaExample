@@ -152,3 +152,11 @@ output "codebucket_id" {
 output "cloudtrail_id" {
     value = "${module.cloudtrail_trail.id}"
 }
+
+output "zone_id" {
+    value 		= "${module.dns.zone_id}"
+}
+
+output "acm_certificate_arn" {
+    value 		= "${module.certificate.acm_certificate_arn}"
+}
