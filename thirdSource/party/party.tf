@@ -1,4 +1,12 @@
 ############################################################
+# input variables
+
+locals {
+    envVariables			= "${var.globals["envVariables"]}"
+}
+
+
+############################################################
 # Inialization
 
 # module "party_api" {
@@ -39,16 +47,14 @@ module "party" {
     s3_bucket           = "${var.s3_bucket}"
     function_name		= "party"
     handler			    = "src/party.handler"
-    variables			= {
-        LOG_LEVEL = "trace"
-    }
+    variables			= "${local.envVariables}"
 }
 
 #####
 # attach the lambda function to an api method
 module "partyMethod" {
-    source = "../../../Terraform/apiGateway/method"
-    # source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/method"
+    # source = "../../../Terraform/apiGateway/method"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/method"
 
     globals = "${var.globals}"
 

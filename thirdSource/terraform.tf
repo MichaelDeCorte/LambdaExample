@@ -4,8 +4,8 @@ module "globals" {
     source = "config.terraform/globals"
 }
 
-module "shared" {
-    source = "config.terraform/shared"
+module "common" {
+    source = "config.terraform/common"
 }
 
 variable "stage_name" {
@@ -16,7 +16,7 @@ locals {
     region = "${module.globals.globals["region"]}"
     awsProfile = "${module.globals.globals["awsProfile"]}"
     globals = "${merge(module.globals.globals, module.globals.secrets)}"
-    shared 				= "${module.shared.shared}"
+    common 				= "${module.common.common}"
 }
 
 provider "aws" {
@@ -34,10 +34,29 @@ terraform {
     }
 }
 
-# install api gateway
+##############################
+module "vpc" {
+    source 		= "./vpc/"
+    globals 	= "${local.globals}"
+    tags		= "${map("Module", "Common")}"
+
+    common 		= "${local.common}"
+    name 		= "thirdSource ${local.region["env"]}"
+}
+
+
+
+module "application_logs" {
+    source		= "./cloudwatch"
+    globals 	= "${local.globals}"
+    tags		= "${map("Module", "Common")}"
+
+    name 		= "/aws/aes/domains/${local.region["env"]}-thirdSource/application-logs"
+}
+
 module "apiGateway" {
-    source = "../../Terraform/apiGateway/api"
-    # source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/api"
+    # source = "../../Terraform/apiGateway/api"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/api"
 
     globals = "${local.globals}"
 
@@ -56,7 +75,7 @@ module "party" {
     api_id 			    = "${module.apiGateway.api_id}"
     resource_id     	= "${module.apiGateway.root_resource_id}"
     stage_name 			= "${var.stage_name}"
-    s3_bucket           = "${local.shared["codebucket_id"]}"
+    s3_bucket           = "${local.common["codebucket_id"]}"
 }
 
 
@@ -149,6 +168,19 @@ module "testUser" {
     globals = "${local.globals}"
     environmentFile = "${module.environmentTemplate.output}"
 }
+
+# module "website" {
+#     source 		= "./website/"
+#     globals 	= "${local.globals}"
+#     tags		= "${map("Module", "Website")}"
+
+#     # name 		= "${local.region["env"]}.${local.dns["domain"]}"
+#     name 		= "${local.region["env"]}"
+#     zone_id		= "${local.common["zone_id"]}"
+#     vpc_id 		= "${module.vpc.vpc_id}"
+#     acm_certificate_arn = "${local.common["acm_certificate_arn"]}"
+# }
+
 
 ##############################
 output "region" {

@@ -11,7 +11,7 @@ UNITTESTSRC=
 INTTESTSRC= 
 
 TFSOURCE=\
-	terraform.tf
+	website.tf
 
 PACKAGE=
 
@@ -22,8 +22,9 @@ HASHFILE=.package.file
 
 ############################################################
 
-init: 
-init:
+init: npm.init
+
+npm.init:
 	npm install --save-dev
 	npm install --prefix .. --save-dev @angular/cli
 
@@ -39,22 +40,6 @@ init:
 # 	npm install --save-dev @angular/forms
 # 	npm install --save-dev @angular/platform-browser-dynamic
 # #	npm install --save-dev @angular/platform-browser-dynamic/testing
-
-
-	# npm install --save-dev
-	# npm install typescript@2
-	# npm install --save-dev @angular/cli@1.5
-	# npm install --save-dev @angular/compiler
-	# npm install --save-dev @angular/compiler-cli
-	# npm install --save-dev @angular-devkit/build-angular
-	# npm install --save-dev @angular/core
-	# npm install --save-dev @angular/common
-	# npm install --save-dev @angular/router
-	# npm install --save-dev @angular/platform-browser
-	# npm install --save-dev @angular/forms
-	# npm install --save-dev @angular/platform-browser-dynamic
-	# npm install --save-dev @angular/platform-browser-dynamic/testing
-
 
 
 unit: 

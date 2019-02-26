@@ -6,7 +6,7 @@ locals {
     aliases = {
         "default" = [ 
         ],
-        "shared" = [ 
+        "common" = [ 
         ],
         "dev" = [ 
         ],
@@ -21,15 +21,46 @@ output "globals" {
     
     value = {
 
+        region = {
+            
+            env    = "${local.env}"
+            
+            region = "${lookup(map(
+									"default", 		"default is an invalid workspace", 
+									"common",		"us-east-1",
+									"dev", 			"us-east-1"
+						), local.env)}"
+
+
+            availability_zone = "${lookup(map(
+									"default", 		"default is an invalid workspace", 
+									"common",		"us-east-1b",
+									"dev", 			"us-east-1b"
+                              ), local.env)}"
+
+			vpc_cidr = "${lookup(map(
+									"default", 		"default is an invalid workspace", 
+									"common", 		"192.168.0.0/16",
+									"dev", 			"192.170.0.0/16"
+						), local.env)}"
+
+            public_a_cidr = "${lookup(map(
+									"default", 		"default is an invalid workspace", 
+									"common", 		"192.168.1.0/16",
+									"dev", 			"192.170.1.0/24"
+						), local.env)}"
+
+            private_a_cidr = "${lookup(map(
+									"default", 		"default is an invalid workspace", 
+									"common", 		"192.168.2.0/16",
+									"dev", 			"192.170.2.0/24"
+						), local.env)}"
+
+        },
+
         keys = {
             access_key = ""
             secret_key = ""
-        },
-
-        region = {
-            region = "us-east-1"
-            availability_zone = "us-east-1d"
-            environment = "dev" # "dev", "test", "demo", "prod"
         },
 
         awsProfile = {
@@ -50,50 +81,22 @@ output "globals" {
             LOG_LEVEL = "debug"
         },
 
+        website_aliases = {
+            aliases = "${local.aliases[local.env]}",
+        },
+
+        dns = {
+            domain = "aws.decorte.us"
+        },
+        
+        # dns = {
+        #     zone_id = "Z6V3K0RZG3XJL"
+        #     domain = "opinioneconomy.io"
+        # },
+
         # keypair = {
         #     keyPair    = "KPVirginia" #Virginia (us-east-1)
         # },
-
-        region = {
-            env    = "${local.env}"
-            
-            region = "${lookup(map(
-									"default", 		"default is an invalid workspace", 
-									"shared", 		"us-east-1", 
-									"dev", 			"us-east-1", 
-									"proda", 		"us-west-2",
-						), local.env)}"
-
-
-            availability_zone = "${lookup(map(
-									"default", 		"default is an invalid workspace", 
-									"shared", 		"us-east-1a", 
-									"dev", 			"us-east-1b", 
-									"proda", 		"us-west-2b",
-                              ), local.env)}"
-
-			vpc_cidr = "${lookup(map(
-									"default", 		"default is an invalid workspace", 
-									"shared",		"192.169.0.0/16", 
-									"dev", 			"192.170.0.0/16", 
-									"proda",		"192.171.0.0/16",
-						), local.env)}"
-
-            public_a_cidr = "${lookup(map(
-									"default", 		"default is an invalid workspace", 
-									"shared", 		"192.169.1.0/24", 
-									"dev", 			"192.170.1.0/24", 
-									"proda",		"192.171.1.0/24",
-						), local.env)}"
-
-            private_a_cidr = "${lookup(map(
-									"default", 		"default is an invalid workspace", 
-									"shared", 		"192.169.2.0/24", 
-									"dev", 			"192.170.2.0/24", 
-									"proda", 		"192.171.2.0/24",
-						), local.env)}"
-
-        },
 
 
         ssh_key = {

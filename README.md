@@ -4,6 +4,30 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 # LambdaExample
 
 Todo
+- TF / dependencyId 
+        ############################################################                                                                                # hack for lack of depends_on                                                                                                                
+        variable "dependsOn" {
+            default = ""
+        }
+
+        resource "null_resource" "dependsOn" {
+
+            # triggers = {
+            #     value = "${aws_s3_bucket.website.}"
+            # }
+
+            depends_on = [
+                "aws_s3_bucket.website"
+            ]
+
+        }
+
+        output "dependencyId" {
+            value   = "${var.dependsOn}:${null_resource.dependsOn.id}"
+        }
+
+- api gateway vpc link
+- lambda vpc
 - authentication
     cognito https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html
     api https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html
