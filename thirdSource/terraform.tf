@@ -13,16 +13,17 @@ variable "stage_name" {
 }
 
 locals {
-    region = "${module.globals.globals["region"]}"
-    awsProfile = "${module.globals.globals["awsProfile"]}"
-    globals = "${merge(module.globals.globals, module.globals.secrets)}"
-    common 				= "${module.common.common}"
+    region 		= "${module.globals.globals["region"]}"
+    awsProfile 	= "${module.globals.globals["awsProfile"]}"
+    dns			= "${module.globals.globals["dns"]}"
+    globals 	= "${merge(module.globals.globals, module.globals.secrets)}"
+    common 		= "${module.common.common}"
 }
 
 provider "aws" {
-    region  = "${local.region["region"]}"
+    region  				= "${local.region["region"]}"
     shared_credentials_file = "${local.awsProfile["shared_credentials_file"]}"
-    profile = "${local.awsProfile["profile"]}"
+    profile 				= "${local.awsProfile["profile"]}"
 }
 
 terraform {
@@ -117,8 +118,16 @@ module "login" {
 
     amazonClient = "${local.globals["thirdSourceAmazonClient"]}"
     domain = "thirdsource"
-    callback_url = "http://localhost:4200/security/authenticate"
-    signout_url = "http://localhost:4200/security/login"
+
+    callback_urls = [
+        "http://localhost:4200/security/authenticate",
+        "${module.website.website_url}/security/authenticate"
+    ]
+
+    logout_urls = [
+        "http://localhost:4200/home",
+        "${module.website.website_url}/home"
+    ]
 }
 
 
@@ -169,17 +178,20 @@ module "testUser" {
     environmentFile = "${module.environmentTemplate.output}"
 }
 
-# module "website" {
-#     source 		= "./website/"
-#     globals 	= "${local.globals}"
-#     tags		= "${map("Module", "Website")}"
+module "website" {
+    source 		= "./website/"
+    globals 	= "${local.globals}"
+    tags		= "${map("Module", "Website")}"
 
-#     # name 		= "${local.region["env"]}.${local.dns["domain"]}"
-#     name 		= "${local.region["env"]}"
-#     zone_id		= "${local.common["zone_id"]}"
-#     vpc_id 		= "${module.vpc.vpc_id}"
-#     acm_certificate_arn = "${local.common["acm_certificate_arn"]}"
-# }
+    name 		= "${local.region["env"]}.${local.dns["domain"]}"
+    zone_id		= "${local.common["zone_id"]}"
+    vpc_id 		= "${module.vpc.vpc_id}"
+    acm_certificate_arn = "${local.common["acm_certificate_arn"]}"
+
+    allowed_origins		= [
+        "${module.apiDeploy.deployment_url}"
+    ]
+}
 
 
 ##############################
@@ -187,14 +199,23 @@ output "region" {
     value = "${local.region}"
 }
 
-output "url" {
+output "api_url" {
     value = "${module.apiDeploy.deployment_url}${module.party.subPath}"
 }
+
 
 output "login_url" {
     value = "${module.login.url}"
 }
 
+output "website_url" {
+    value = "${module.website.website_url}"
+}
+
 output "client_id" {
     value = "${module.login.client_id}"
+}
+
+output "regex" {
+    value =    "${replace(module.apiDeploy.deployment_url, "/^(.*:\\/\\/[^/]*).*$/","$1")}"
 }

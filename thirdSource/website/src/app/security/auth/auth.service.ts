@@ -40,16 +40,16 @@ export class AuthService {
         if ((token === null) || (token === undefined)) {
             authorizationHeaders = null;
         } else {
-            authorizationHeaders = new HttpHeaders({
-                'Content-Type':  'application/json',
-                'Authorization': token.id_token
-            });
+            authorizationHeaders = new HttpHeaders()
+                .set('Content-Type', 'application/json')
+                .set('Authorization', token.id_token);
         }
         authorizationToken = token;
     }
 
     // oauth2 headers??
     getAuthorizationToken(): AuthorizationToken {
+        console.log('auth.service.getToken authorizationToken: ' + authorizationToken);
         return authorizationToken;
     }    
 

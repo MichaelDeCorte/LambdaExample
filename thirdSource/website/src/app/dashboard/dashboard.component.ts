@@ -16,11 +16,12 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log('dashboard.ngoninit');
         this.getPartyList(); 
     }
 
     getPartyList(): void {
-        console.log('dashboard.ngoninit: ' + this.partyService);
+        console.log('CogitoService.constructor');
         this.partyService.getPartyList()
             .subscribe(partyList => this.partyList = partyList.slice(1, 5));
     }

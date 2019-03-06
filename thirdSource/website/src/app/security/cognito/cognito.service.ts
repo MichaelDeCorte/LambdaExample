@@ -3,14 +3,12 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AuthorizationToken, AuthService } from '../auth/auth.service';
 
-var uri: string = 'https://thirdsource.auth.us-east-1.amazoncognito.com/';
+var cognitoUri: string = 'https://thirdsource.auth.us-east-1.amazoncognito.com/';
 var clientId: string = '72hos29ntil5e8ludtvkrh0uus';
-// var loginRedirectUri: string = 'https://localhost:4200/security/authenticate';
-var loginRedirectUri: string = 'http://localhost:4200/security/authenticate';
-var loginRedirectUriEncoded: string = encodeURIComponent(loginRedirectUri);
 
-var logoutRedirectUri: string = 'http://localhost:4200/security/login';
-// var logoutRedirectUri: string = 'https://localhost:4200/home';
+var loginRedirectUri: string = location.origin + '/security/authenticate';
+var loginRedirectUriEncoded: string = encodeURIComponent(loginRedirectUri);
+var logoutRedirectUri: string = location.origin + '/home';
 var logoutRedirectUriEncoded: string = encodeURIComponent(logoutRedirectUri);
 
 
@@ -22,51 +20,50 @@ export class CognitoService {
 
     constructor(private http: HttpClient,
                 private authService: AuthService) {
-        console.log('CogitoService.constructor');
+        console.log('location.origin: ' + location.origin);
     }
 
     static getAuthenticateUrl(): string {
-        return uri +
-            '/login?response_type=code' +
+
+        return cognitoUri +
+            '/login?' +
+            'response_type=code' +
             '&client_id=' + clientId +
             '&redirect_uri=' + loginRedirectUriEncoded;
+
     }
 
     getToken(code: string): Observable<AuthorizationToken> {
-        let url = uri + 'oauth2/token';
+        try {
+            let url = cognitoUri + 'oauth2/token';
 
 
-        let body = new HttpParams()
-            .set('grant_type', 'authorization_code')
-            .set('client_id', clientId)
-            .set('redirect_uri', loginRedirectUri)
-            .set('code', code);
+            let body = new HttpParams()
+                .set('grant_type', 'authorization_code')
+                .set('client_id', clientId)
+                .set('redirect_uri', loginRedirectUri)
+                .set('code', code);
 
-        const httpOptions = {
-            headers: new HttpHeaders({
-                'Content-Type':  'application/x-www-form-urlencoded'
-            })
-        };
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type':  'application/x-www-form-urlencoded'
+                })
+            };
 
-        return this.http.post<AuthorizationToken>(url, body, httpOptions);
+            return this.http.post<AuthorizationToken>(url, body, httpOptions);
+        } catch (error) {
+            console.log('logout error: ' + error);
+        }
     }
 
-    logout() {
-        let url = uri + 'logout?';
+    static getLogoutUrl(): string {
 
-        
-        let headers = this.authService.getAuthorizationHeaders();
+        return cognitoUri +
+            'logout?' +
+            'response_type=code' +
+            '&client_id=' + clientId +
+            '&logout_uri=' + logoutRedirectUriEncoded;
 
-        console.log('headers: ' + JSON.stringify(headers));
-
-        let httpOptions = {
-//            headers: headers,
-            params: new HttpParams()
-                .set('logout_uri', logoutRedirectUri)
-                .set('client_id', clientId)
-        };
-
-        return this.http.get(url, httpOptions);
     }
 }
 

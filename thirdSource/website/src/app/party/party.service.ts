@@ -35,7 +35,6 @@ export class PartyService {
             headers: this.authService.getAuthorizationHeaders()
         };
 
-        console.log('httpOptions.headers: ' + httpOptions.headers);
         if ((httpOptions.headers === null) || (httpOptions.headers === undefined)) {
             console.log('not authenticated');
             return EMPTY;

@@ -24,13 +24,18 @@ variable "acm_certificate_arn" {
     type = "string"
 }
 
+variable "allowed_origins" {
+    default = [ "*" ]
+}
+
 ############################################################
 
+
 locals {
-    sourceDir = "dist/website/"
-    toDir = "s3://${module.website_s3.id}"
-#    dns 	= "${var.globals["dns"]}"
-    website_aliases = "${var.globals["website_aliases"]}"
+    sourceDir 			= "${path.module}/dist/website/"
+    toDir 				= "s3://${module.website_s3.id}"
+    dns 				= "${var.globals["dns"]}"
+    website_aliases 	= "${var.globals["website_aliases"]}"
 }
 
 ##########
@@ -44,6 +49,8 @@ module "website_s3" {
     bucket = "${var.name}"
     force_destroy = true
     index_document = "index.html"
+
+    allowed_origins = "${var.allowed_origins}"
 }    
 
 module "website_copy" {
@@ -54,10 +61,13 @@ module "website_copy" {
 
     from = "${local.sourceDir}"
     to = "${local.toDir}"
+
+    cwd = "${path.module}"
 }
 
 module "website_cloudfront" {
     source = "git@github.com:MichaelDeCorte/TerraForm.git//cloudfront"
+    # source = "../../../Terraform/cloudfront"
 
     globals = "${var.globals}"
 
@@ -67,17 +77,17 @@ module "website_cloudfront" {
     
     
     acm_certificate_arn = "${var.acm_certificate_arn}"
-    default_ttl = "360"
+    default_ttl = "30" # 30 seconds, mrd
 }
 
 
-# resource "aws_route53_record" "dns" {
-#     zone_id = "${var.zone_id}"
-#     name    = "${var.name}"
-#     type    = "CNAME"
-#     ttl     = "300"
-#     records = [ "${module.website_cloudfront.domain_name}" ]
-# }
+resource "aws_route53_record" "dns" {
+    zone_id = "${var.zone_id}"
+    name    = "${var.name}"
+    type    = "CNAME"
+    ttl     = "300"
+    records = [ "${module.website_cloudfront.domain_name}" ]
+}
 
 data "aws_vpc_endpoint_service" "s3" {
     service = "s3"
@@ -89,12 +99,15 @@ resource "aws_vpc_endpoint" "s3" {
 }
 
 ##############################
-output "aws_url" {
-    value = "${module.website_s3.website_endpoint}"
+output "s3_url" {
+    value = "http://${module.website_s3.website_endpoint}"
 }
 
-output "url" {
-    value = "${var.name}"
+output "website_url" {
+    value = "https://${aws_route53_record.dns.fqdn}"
 }
 
+output "hashfile" {
+    value = "${module.website_copy.hashfile}"
+}
 

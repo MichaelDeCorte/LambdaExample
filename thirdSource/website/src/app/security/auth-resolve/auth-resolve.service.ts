@@ -41,7 +41,6 @@ export class AuthResolveService implements Resolve <AuthorizationToken> {
                             this.authService.setAuthorizationToken(token);
                             observer.next(token);
                             observer.complete();
-                            console.log('AuthResolve.5.2.getToken.token: ' + token);
                         }
                     );
             }

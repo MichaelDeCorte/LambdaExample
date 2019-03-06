@@ -4,6 +4,7 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 # LambdaExample
 
 Todo
+- disallow s3 website access
 - TF / dependencyId 
         ############################################################                                                                                # hack for lack of depends_on                                                                                                                
         variable "dependsOn" {

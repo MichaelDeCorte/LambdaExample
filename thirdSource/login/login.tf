@@ -11,12 +11,12 @@ variable "tags" {
 }
 
 # website that requires authenciation and autorization
-variable "callback_url" {
-    type = "string"
+variable "callback_urls" {
+    type = "list"
 }
 
-variable "signout_url" {
-    default= ""
+variable "logout_urls" {
+    default= []
 }
 
 # 1) the name of the pool
@@ -140,11 +140,11 @@ resource "aws_cognito_user_pool_client" "client" {
     supported_identity_providers = ["COGNITO", "LoginWithAmazon"]
 
     callback_urls = [
-        "${var.callback_url}"
+        "${var.callback_urls}"
     ]
 
     logout_urls = [
-        "${var.signout_url}"
+        "${var.logout_urls}"
     ]
 
     # define how AWS sends the application the authorization token.
@@ -191,7 +191,7 @@ resource "aws_cognito_user_pool_domain" "domain" {
 
 # # the resource url
 output "url" {
-    value = "https://${var.domain}.auth.${local.region["region"]}.amazoncognito.com/login?response_type=code&client_id=${aws_cognito_user_pool_client.client.id}&redirect_uri=${urlencode(var.callback_url)}"
+    value = "https://${var.domain}.auth.${local.region["region"]}.amazoncognito.com/login?response_type=code&client_id=${aws_cognito_user_pool_client.client.id}&redirect_uri=${urlencode(var.callback_urls[0])}"
 }
 
 output "client_id" {

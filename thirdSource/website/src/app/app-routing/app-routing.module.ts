@@ -6,6 +6,8 @@ import { HomeComponent }  from '../home/home.component';
 import { PartyListComponent }  from '../party-list/party-list.component';
 import { DashboardComponent }   from '../dashboard/dashboard.component';
 import { PartyComponent }  from '../party/party.component';
+import { LoginComponent }  from '../security/login/login.component';
+
 import { AuthGuardService } from '../security/security.module';
 
 const routes: Routes = [
@@ -20,18 +22,23 @@ const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent,
-//        canActivate: [AuthGuardService]       
+        canActivate: [AuthGuardService]       
     },
     {
         path: 'partyList',
         component: PartyListComponent,
-//        canActivate: [AuthGuardService] 
+        canActivate: [AuthGuardService] 
     },
     {
-        path:
-        'detail/:partyID',
+        path: 'detail/:partyID',
         component: PartyComponent,
-//        canActivate: [AuthGuardService] 
+        canActivate: [AuthGuardService] 
+    },
+    {
+        path: 'logout',
+        component: LoginComponent,
+        pathMatch: 'full'
+        
     },
     {
         path: '',

@@ -27,13 +27,9 @@ export class LoginComponent implements OnInit {
     }
 
     logout() {
-        this.cognitoService.logout().subscribe(
-            () => {
-//                this.authService.setAuthorizationCode(undefined);
-//                this.authService.setAuthorizationToken(undefined);
-                this.route.navigateByUrl('/home');
-            }
-        );
+        this.authService.setAuthorizationCode(undefined);
+        this.authService.setAuthorizationToken(undefined);
+        window.location.href = CognitoService.getLogoutUrl();
     }
 
     loggedIn(): boolean {
