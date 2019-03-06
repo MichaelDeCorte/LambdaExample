@@ -29,7 +29,8 @@ SUBPACKAGES=\
 	party				\
 	website
 
-
+override WORKSPACE := $(shell terraform workspace show)
+export WORKSPACE
 
 ############################################################
 all: 

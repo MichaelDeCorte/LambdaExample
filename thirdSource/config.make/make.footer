@@ -128,7 +128,7 @@ $(PACKAGE): $(SRC)
 
 ifdef SUBPACKAGES
 DOTPACKAGEFILES = $(shell find . -name .package.file -print)
-TFPACKAGEFILES = $(shell find . -name '*.tf' -print | fgrep -v .terraform)
+TFPACKAGEFILES = $(shell find . -name '*.tf' -print | fgrep -v .terraform | fgrep -v '\#')
 else
 DOTPACKAGEFILES = 
 TFPACKAGEFILES = 
