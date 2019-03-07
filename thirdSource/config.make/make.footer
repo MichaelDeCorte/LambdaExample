@@ -135,9 +135,12 @@ sonar:
 $(PACKAGE): .unit.lint
 $(PACKAGE): .unit.test
 $(PACKAGE): $(SRC)
-$(PACKAGE): $(addsuffix '/src/*',$(addprefix node_modules/,$(NODE_MODULES)))
+$(PACKAGE): $(addsuffix /src/*,$(addprefix node_modules/,$(NODE_MODULES)))
 
-    
+foo:
+	echo foo $(addsuffix /src/*,$(addprefix node_modules/,$(NODE_MODULES)))
+
+
 ifdef SUBPACKAGES
 DOTPACKAGEFILES = $(shell find . -name .package.file -print)
 TFPACKAGEFILES = $(shell find . -name '*.tf' -print | fgrep -v .terraform | fgrep -v '\#')
