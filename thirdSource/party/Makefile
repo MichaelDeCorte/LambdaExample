@@ -38,16 +38,15 @@ PACKAGE=party-0.0.1.zip
 
 SUBPACKAGES=
 
+NODE_MODULES = \
+	common 							\
+	methodRouter					\
+	common.test						\
+	environment
+
+foo: node_modules/test.gmake
+
 ############################################################
-
-
-all: node_modules/common
-all: node_modules/methodRouter
-all: node_modules/common.test
-
-init: node_modules/common
-init: node_modules/methodRouter
-init: node_modules/common.test
 
 init: npm.init
 
@@ -67,25 +66,11 @@ install:
 
 integration: 
 
-test: 
+test:
 
 clean:
 
 veryclean: 
-
-node_modules/common:
-	npm install ../common
-
-node_modules/methodRouter: 
-	npm install ../methodRouter
-
-node_modules/common.test: 
-	npm install ../common.test
-
-$(PACKAGE): node_modules/common
-$(PACKAGE): node_modules/methodRouter
-$(PACKAGE): node_modules/common.test
-
 
 ############################################################
 include $(PACKAGEROOT)/config.make/make.footer
