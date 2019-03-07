@@ -21,7 +21,7 @@ JESTFLAGS=--no-color --coverage --bail --verbose
 
 all: unit node package environment install integration
 
-   
+
 ############################################################
 #
 .PHONY: init
@@ -45,6 +45,7 @@ init: node
 
 ############################################################
 #
+.PHONY: node
 node: $(addprefix node_modules/,$(NODE_MODULES))
 
 node_modules/%: ../%
@@ -135,11 +136,10 @@ sonar:
 $(PACKAGE): .unit.lint
 $(PACKAGE): .unit.test
 $(PACKAGE): $(SRC)
-$(PACKAGE): $(addsuffix /src/*,$(addprefix node_modules/,$(NODE_MODULES)))
+$(PACKAGE): $(wildcard $(addsuffix /src/*,$(addprefix node_modules/,$(NODE_MODULES))))
 
 foo:
-	echo foo $(addsuffix /src/*,$(addprefix node_modules/,$(NODE_MODULES)))
-
+	echo $(wildcard $(addsuffix /src/*,$(addprefix node_modules/,$(NODE_MODULES))))
 
 ifdef SUBPACKAGES
 DOTPACKAGEFILES = $(shell find . -name .package.file -print)
