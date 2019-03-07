@@ -1,2 +1,6 @@
+override ENVIRONMENT := $(shell terraform workspace show)
+export ENVIRONMENT
+
+
 all:
 

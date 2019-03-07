@@ -142,12 +142,12 @@ endif
 
 $(PACKAGE): 
 	$(printHeader)
-	$(call jsToZip, $(PACKAGE))    
+	$(call jsToZip, $(PACKAGE))
 
 .clean.package:
-	rm -f $(PACKAGE)
+	rm -f "$(PACKAGE)"
 	rm -f .package.file
-	rm -f $(basename $(PACKAGE)).tgz
+	if [ ! -z "$(PACKAGE)" ] ; then rm -f "$(basename $(PACKAGE)).tgz"; fi
 
 .veryclean.package:
 
