@@ -21,6 +21,7 @@ console.log('security.module');
     declarations: [
     ]
 })
+
 export class SecurityModule {
 
     constructor (@Optional() @SkipSelf() parentModule: SecurityModule) {

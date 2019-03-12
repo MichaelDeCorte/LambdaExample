@@ -2,5 +2,6 @@
 
 module.exports = {
     'getAuthorizationToken': require('./authenticateTestUser').getAuthorizationToken,
-    'authenticateTestUser': require('./authenticateTestUser').authenticateTestUser,
+    'authenticateTestUser': require('./authenticateTestUser.js').authenticateTestUser,
+    'testUser': require('./testUser')
 };

@@ -4,7 +4,10 @@ const logger = require('common').logger;
 const requestTest = require('supertest');
 const authenticateTestUser = require('common.test').authenticateTestUser;
 const getAuthorizationToken = require('common.test').getAuthorizationToken;
-const uri = require('./party.uat.uri.js').uri;
+const environment = require('environment').environment();
+
+const uri = environment.partyUri;
+
 
 // Initialize AWS credentials
 

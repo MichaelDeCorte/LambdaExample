@@ -1,5 +1,5 @@
 const logger = require('common').logger;
-const authenticateTestUser = require('../src/authenticateTestUser.js').authenticateTestUser;
+const authenticateTestUser = require('common.test').authenticateTestUser;
 
 function testFunc(done) {
     return authenticateTestUser()

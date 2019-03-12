@@ -5,26 +5,27 @@ const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 // const AWS = require('aws-sdk'); 
 const Promise = require('promise');
 
-const environment = require(process.cwd() + '/../common.test/src/environment.json'); // eslint-disable-line import/no-dynamic-require
+const environment = require('environment').environment;
+const testUser = require('./testUser');
 
 let authorizationToken = null;
 
 function authenticateTestUser() {
-    // let CognitoUserPool = AmazonCognitoIdentity.CognitoUserPool;
     let poolData = {
-        'UserPoolId': environment.cognitoUserPoolId,
-        'ClientId': environment.cognitoClientId,
+        'UserPoolId': environment().cognitoUserPoolId,
+        'ClientId': environment().cognitoClientId,
     };
     let userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
     let userData = {
-        'Username': environment.Username,
+        'Username': testUser().Username,
         'Pool': userPool
     };
     let cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
+
     let authenticationData = {
-        'Username': environment.Username,
-        'Password': environment.FinalPassword
+        'Username': testUser().Username,
+        'Password': testUser().FinalPassword
     };
     let authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails(authenticationData);
 

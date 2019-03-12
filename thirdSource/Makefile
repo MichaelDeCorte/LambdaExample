@@ -23,14 +23,13 @@ TFSOURCE=\
 PACKAGE=
 
 SUBPACKAGES=\
+	environment			\
 	common 				\
 	common.test			\
 	methodRouter		\
 	party				\
 	website
 
-override WORKSPACE := $(shell terraform workspace show)
-export WORKSPACE
 
 ############################################################
 all: 
@@ -38,11 +37,11 @@ all:
 init: npm.init terraform.init
 
 npm.init:
-	npm install --save-dev
+	npm install 
 	npm install --save-dev npm
 	npm install --save-dev @angular/cli
-	npm install --save-dev  --save-exact jest@21.1.0
-	npm install --save-dev jest-each
+	npm install --save-dev --save-exact jest@21.1.0
+	npm install --save-dev --save -exact jest-each@0.3.1
 	npm install --save-dev eslint@latest
 	npm install --save-dev eslint-plugin-jest@latest
 	npm install --save-dev eslint-config-airbnb-base@latest
@@ -54,7 +53,14 @@ npm.init:
 	npm install --save-dev supertest
 	npm install --save-dev jsonlint
 	npm install --save-dev bundle-deps
-	npm install $(SUBPACKAGES)
+	npm install --save-dev supertest
+	npm install --save-dev log-driver
+	npm install --save-dev joi
+	npm install --save-dev promise
+	npm install environment
+	npm install common
+	npm install common.test
+	npm install methodRouter
 
 
 terraform.init:

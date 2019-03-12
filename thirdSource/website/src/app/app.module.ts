@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { SecurityModule } from './security/security.module';
 import { UiModule as SecurityUiModule} from './security/ui.module';
+import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './app.component';
 import { PartyComponent } from './party/party.component';
@@ -24,6 +25,7 @@ import { HomeComponent } from './home/home.component';
 
         AppRoutingModule,
         SecurityUiModule,
+        SharedModule,
     ],
     declarations: [
         AppComponent,

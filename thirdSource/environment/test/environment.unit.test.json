@@ -1,0 +1,34 @@
+[
+  [
+    {
+      "data": "dev"
+    },
+
+    {
+      "testResult": "us-east-1",
+      "testError": null
+    }
+  ],
+
+  [
+    {
+      "data": null
+    },
+
+    {
+      "testResult": "us-east-1",
+      "testError": null
+    }
+  ],
+
+  [
+    {
+      "data": "invalid"
+    },
+
+    {
+      "testResult": null,
+      "testError": "Error: Cannot find module './environment.invalid.json' from 'environment.js'"
+    }
+  ]
+]

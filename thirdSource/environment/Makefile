@@ -6,13 +6,11 @@ include $(PACKAGEROOT)/config.make/make.header
 # LOG_LEVEL=trace
 
 SRC= \
-	src/authenticateTestUser.js 			\
-	src/testUser.js
+	src/environment.js
 
 
 UNITTESTSRC= \
-	test/authenticateTestUser.unit.test.js	\
-	test/testUser.unit.test.js
+	test/environment.unit.test.js
 
 INTTESTSRC= 
 
@@ -20,16 +18,15 @@ TFSOURCE=
 
 SUBPACKAGES=
 
+
 ############################################################
 
 all: 
 
 init: npm 
-init: package
-
 
 npm:
-	npm install 
+	npm install
 
 unit: 
 

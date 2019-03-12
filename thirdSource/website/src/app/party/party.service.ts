@@ -1,8 +1,10 @@
-import { uri } from '../../../../party/test/party.uat.uri.js';
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, EMPTY, of } from 'rxjs';
+
+// import { uri } from '../../../../party/test/party.dev.uri.js'; // mrd
+
+import { EnvironmentService } from '../shared/shared.module';
 
 import { Party } from './party';
 
@@ -14,12 +16,17 @@ import { AuthService } from '../security/security.module';
 
 export class PartyService {
 
-    private partyUrl = uri;  // URL to web api
+    private config;
 
     constructor(private http: HttpClient,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private environmentService: EnvironmentService
+               ) {
+
+        this.config  = this.environmentService.getConfig();
         console.log('PartyService.constructor');
     }
+
 
     getPartyList(): Observable<Party[]> {
 
@@ -40,7 +47,7 @@ export class PartyService {
             return EMPTY;
         }
         else {
-             return this.http.post<Party[]>(this.partyUrl, body, httpOptions);
+             return this.http.post<Party[]>(this.config.partyUri, body, httpOptions);
         }
     }
 
@@ -59,7 +66,7 @@ export class PartyService {
             console.log('not authenticated');
             return EMPTY;
         } else {
-            return this.http.post<Party>(this.partyUrl, body, httpOptions);
+            return this.http.post<Party>(this.config.partyUri, body, httpOptions);
        }
     }
 }

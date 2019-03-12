@@ -32,10 +32,7 @@ init: npm.init
 init: package
 
 npm.init:
-	npm install --save-dev
-	npm install --prefix .. joi 
-	npm install --prefix .. promise 
-	npm install --prefix .. log-driver 
+	npm install
 
 unit: 
 

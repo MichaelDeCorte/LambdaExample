@@ -3,14 +3,7 @@
 
 set -e
 
-ENV=$1
-
-if [ -z "$ENV" ]
-then
-    ENV=$THIRDSOURCEROOT/common.test/src/environment.json
-fi
-
-eval $(cat $ENV | jq -r 'to_entries | .[] | .key + "=\"" + .value + "\""')
+eval $(cat $* | jq -r 'to_entries | .[] | .key + "=\"" + .value + "\""')
 
 
 # https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminCreateUser.html

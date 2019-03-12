@@ -44,19 +44,15 @@ NODE_MODULES = \
 	common.test						\
 	environment
 
-foo: node_modules/test.gmake
-
 ############################################################
 
 init: npm.init
 
 npm.init:
-	npm install --save-dev
-	npm install  promise
+	npm install
+	npm install promise
 	npm install string-hash
-	npm install  joi
-	npm install --save-dev supertest
-
+	npm install joi
 
 unit:
 

@@ -1,0 +1,34 @@
+[
+  [
+    {
+      "data": "dev"
+    },
+
+    {
+      "testResult": "testid",
+      "testError": null
+    }
+  ],
+
+  [
+    {
+      "data": null
+    },
+
+    {
+      "testResult": "testid",
+      "testError": null
+    }
+  ],
+
+  [
+    {
+      "data": "undefined"
+    },
+
+    {
+      "testResult": null,
+      "testError": "Error: Cannot find module './testUser.undefined.json' from 'testUser.js'"
+    }
+  ]
+]

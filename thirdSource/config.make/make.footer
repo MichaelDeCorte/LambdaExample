@@ -160,7 +160,7 @@ $(PACKAGE):
 	$(call jsToZip, $(PACKAGE))
 
 .clean.package:
-	rm -f "$(PACKAGE)"
+	if [ ! -z "$(PACKAGE)" ] ; then rm -f "$(PACKAGE)"; fi
 	rm -f .package.file
 	if [ ! -z "$(PACKAGE)" ] ; then rm -f "$(basename $(PACKAGE)).tgz"; fi
 

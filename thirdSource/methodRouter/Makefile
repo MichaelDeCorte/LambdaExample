@@ -24,8 +24,6 @@ init: npm
 
 npm:
 	npm install
-	npm install --prefix .. joi
-	npm install --prefix .. promise
 
 unit:
 

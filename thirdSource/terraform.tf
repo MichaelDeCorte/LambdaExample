@@ -8,16 +8,13 @@ module "common" {
     source = "config.terraform/common"
 }
 
-variable "stage_name" {
-    default = "uat"
-}
-
 locals {
     region 		= "${module.globals.globals["region"]}"
     awsProfile 	= "${module.globals.globals["awsProfile"]}"
     dns			= "${module.globals.globals["dns"]}"
     globals 	= "${merge(module.globals.globals, module.globals.secrets)}"
     common 		= "${module.common.common}"
+    stage_name  = "${local.region["env"]}"
 }
 
 provider "aws" {
@@ -75,7 +72,7 @@ module "party" {
     authorizer_id 	    = "${module.apiGateway.authorizer_id}"
     api_id 			    = "${module.apiGateway.api_id}"
     resource_id     	= "${module.apiGateway.root_resource_id}"
-    stage_name 			= "${var.stage_name}"
+    stage_name 			= "${local.stage_name}"
     s3_bucket           = "${local.common["codebucket_id"]}"
 }
 
@@ -92,23 +89,8 @@ module "apiDeploy" {
     dependsOn 		= "${module.party.dependencyId}"
 
     api_id			= "${module.apiGateway.api_id}"
-    stage_name 		= "${var.stage_name}"
+    stage_name 		= "${local.stage_name}"
 }
-
-#####
-# create a JS file with the URL for the stage
-module "uriTemplate" {
-    # source = "../Terraform/files"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
-
-    globals 		= "${local.globals}"
-
-    input = "party/templates/party.uri.js"
-    output = "party/test/party.${var.stage_name}.uri.js"
-    variables = {
-        uri = "${module.apiDeploy.deployment_url}${module.party.subPath}"
-    }
-}    
 
 ############################################################
 module "login" {
@@ -150,22 +132,43 @@ resource "random_string" "test_id_username" {
 
 #####
 # create a JS file with the URL for the stage
-module "environmentTemplate" {
-    # source = "../Terraform/files"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
+module "testConfig" {
+    source = "../../Terraform/files"
+    # source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
 
     globals = "${local.globals}"
 
-    input = "common.test/templates/environment.json.template"
-    output = "common.test/src/environment.json"
+    input = "common.test/templates/testUser.json.template"
+
+    output = [
+        "common.test/src/testUser.${local.stage_name}.json"
+    ]
+
+    variables = {
+        Username="testid.${random_string.test_id_username.result}@decorte.us"
+        InitialPassword="${random_string.initial_password.result}"
+        FinalPassword="${random_string.final_password.result}"
+    }
+}    
+
+module "environmentConfig" {
+    source = "../../Terraform/files"
+    # source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
+
+    globals = "${local.globals}"
+
+    input = "environment/templates/environment.json.template"
+
+    output = [
+        "environment/src/environment.${local.stage_name}.json",
+        "website/src/assets/environment.${local.stage_name}.json"
+    ]
+
     variables = {
         partyUri = "${module.apiDeploy.deployment_url}${module.party.subPath}"
         cognitoUserPoolId = "${module.login.pool_id}"
         cognitoClientId = "${module.login.client_id}"
         loginUrl = "${module.login.url}"
-        Username="testid.${random_string.test_id_username.result}@decorte.us"
-        InitialPassword="${random_string.initial_password.result}"
-        FinalPassword="${random_string.final_password.result}"
         region="${local.region["region"]}"
     }
 }    
@@ -173,9 +176,10 @@ module "environmentTemplate" {
 module "testUser" {
     source = "login/users"
 
-    dependsOn = "${module.environmentTemplate.dependencyId}:${module.login.dependencyId}"
+    dependsOn = "${module.environmentConfig.dependencyId}:${module.testConfig.dependencyId}:${module.login.dependencyId}"
     globals = "${local.globals}"
-    environmentFile = "${module.environmentTemplate.output}"
+    testConfig = "${path.module}/${module.testConfig.output[0]}"
+    environmentConfig = "${path.module}/${module.environmentConfig.output[0]}"
 }
 
 module "website" {
@@ -216,6 +220,3 @@ output "client_id" {
     value = "${module.login.client_id}"
 }
 
-output "regex" {
-    value =    "${replace(module.apiDeploy.deployment_url, "/^(.*:\\/\\/[^/]*).*$/","$1")}"
-}

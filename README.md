@@ -1,9 +1,21 @@
-https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=139l5vat7ia75ckr20iuhhjv0f&redirect_uri=https%3A%2F%2Fwww.google.com
+https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=139l5vat7ia75ckr20iuhhjv0f&redirect_uri=https%3A%2F%www.google.com
 
     
 # LambdaExample
 
 Todo
+- multiple angular workspaces, not hard coded.  how?
+- multiple workspaces
+	- angular / https://blog.angularindepth.com/becoming-an-angular-environmentalist-45a48f7c20d8
+    - lambda / https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html
+    - dynamo
+    - cloudwatch
+    - s3 / done
+    - cloudfront / done
+    - route 53 / done
+    - api gateway / done
+    - terraform / done
+
 - disallow s3 website access
 - TF / dependencyId 
         ############################################################                                                                                # hack for lack of depends_on                                                                                                                
@@ -27,17 +39,10 @@ Todo
             value   = "${var.dependsOn}:${null_resource.dependsOn.id}"
         }
 
-- api gateway vpc link
-- lambda vpc
-- authentication
-    cognito https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html
-    api https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html
 - session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
 - move to gitlab
 - packer?
 - refactor to classes
-- typescript??
-- route 53    
 - aws ElastiCache
 - aws config
 - debugger in chrome
@@ -48,6 +53,8 @@ Todo
 - selenium?
 - cucumber?    
 - vpc / https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
+- lambda vpc
+- api gateway vpc link
 - version node libraries
 - version service
 - load testing
@@ -64,15 +71,19 @@ Todo
     - AWS Simple Workflow
     - https://read.acloud.guru/some-lessons-learned-about-lambda-orchestration-1a8b72a33fd2
 - AWS code build, local testing, https://aws.amazon.com/about-aws/whats-new/2018/05/aws-codebuild-now-supports-local-testing-and-debugging
-- node local packaging
-    - http://nicksellen.co.uk/2015/04/17/how-to-manage-private-npm-modules.html
-    - https://docs.npmjs.com/cli/link.html
     
   
 - db 
     https://www.npmjs.com/package/dynamodb   waiting for promise support
 
 Done
+- authentication
+    cognito https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html
+    api https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html
+- node local packaging
+    - http://nicksellen.co.uk/2015/04/17/how-to-manage-private-npm-modules.html
+    - https://docs.npmjs.com/cli/link.html
+- route 53    
 - terraform production / test / ....      
 - refactor dynamo for more generic approach
 - AWS stubbing

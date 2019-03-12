@@ -1,4 +1,4 @@
-override ENVIRONMENT := $(shell terraform workspace show)
+override ENVIRONMENT := $(shell cd $(PACKAGEROOT); terraform workspace show)
 export ENVIRONMENT
 
 

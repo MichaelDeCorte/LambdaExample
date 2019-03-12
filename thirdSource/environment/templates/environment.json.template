@@ -1,0 +1,7 @@
+{
+  "partyUri": "${partyUri}",
+  "cognitoUserPoolId": "${cognitoUserPoolId}",
+  "cognitoClientId": "${cognitoClientId}",
+  "loginUrl": "${loginUrl}",
+  "region": "${region}"
+}

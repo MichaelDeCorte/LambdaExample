@@ -79,6 +79,7 @@ output "globals" {
 
         envVariables = {
             LOG_LEVEL = "debug"
+            ENVIRONMENT = "${local.env}"
         },
 
         website_aliases = {

@@ -26,7 +26,6 @@ init: npm.init
 
 npm.init:
 	npm install 
-	npm install --prefix .. --save-dev @angular/cli
 
 # 	npm install typescript@">=3.1.1 <3.3.0" 
 # 	npm install --save-dev @angular/cli

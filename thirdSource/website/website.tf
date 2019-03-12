@@ -53,6 +53,7 @@ module "website_s3" {
     allowed_origins = "${var.allowed_origins}"
 }    
 
+# https://github.com/terraform-providers/terraform-provider-aws/pull/7639
 module "website_copy" {
     source = "git@github.com:MichaelDeCorte/TerraForm.git//s3/copy_dir"
     # source = "../../../Terraform/s3/copy_dir/"

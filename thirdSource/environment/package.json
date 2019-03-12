@@ -1,0 +1,14 @@
+{
+  "name": "environment",
+  "version": "0.0.1",
+  "description": "environment configuration",
+  "license": "Apache-2.0",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MichaelDeCorte/LambdaExample.git"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "bundledDependencies": []
+}

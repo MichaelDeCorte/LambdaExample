@@ -1,10 +1,5 @@
 {
-  "partyUri": "${partyUri}",
-  "cognitoUserPoolId": "${cognitoUserPoolId}",
-  "cognitoClientId": "${cognitoClientId}",
-  "loginUrl": "${loginUrl}",
   "Username": "${Username}",
   "InitialPassword": "${InitialPassword}",
-  "FinalPassword": "${FinalPassword}",
-  "region": "${region}"
+  "FinalPassword": "${FinalPassword}"
 }

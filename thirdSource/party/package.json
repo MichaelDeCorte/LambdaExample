@@ -26,6 +26,7 @@
   "dependencies": {
     "common": "file:../common",
     "common.test": "file:../common.test",
+    "environment": "file:../environment",
     "joi": "^14.3.1",
     "methodRouter": "file:../methodRouter",
     "promise": "^8.0.2",
@@ -37,6 +38,7 @@
   "bundledDependencies": [
     "common",
     "common.test",
+    "environment",
     "joi",
     "methodRouter",
     "promise",

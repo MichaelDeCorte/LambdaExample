@@ -10,7 +10,11 @@ variable "tags" {
     default = {}
 }
 
-variable "environmentFile" {
+variable "testConfig" {
+    type = "string"
+}
+
+variable "environmentConfig" {
     type = "string"
 }
 
@@ -23,7 +27,7 @@ locals {
 resource "null_resource" "createUser" {
 
     provisioner "local-exec" {
-        command = "sh ${path.module}/createUser.sh ${var.environmentFile}"
+        command = "sh ${path.module}/createUser.sh ${var.environmentConfig} ${var.testConfig}"
     }
 }
 
