@@ -38,7 +38,7 @@ module "partyResource" {
 #####
 # define the lambda function
 module "party" {
-    # source = "../../Terraform/lambda/basic"
+    # source = "../../../Terraform/lambda/basic"
     source = "git@github.com:MichaelDeCorte/TerraForm.git//lambda/basic"
 
     globals = "${var.globals}"
@@ -46,6 +46,7 @@ module "party" {
     filename		    = "${path.module}/party-${var.version}.zip"
     s3_bucket           = "${var.s3_bucket}"
     function_name		= "party"
+    publish				= true # versioning and aliases
     handler			    = "src/party.handler"
     variables			= "${local.envVariables}"
 }
@@ -67,7 +68,7 @@ module "partyMethod" {
 #####
 # permissions for the method
 module "partyPrep" {
-    # source = "../../Terraform/apiGateway/lambdaPrep"
+    # source = "../../../Terraform/apiGateway/lambdaPrep"
     source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/lambdaPrep"
 
     globals = "${var.globals}"
@@ -93,12 +94,19 @@ variable "dependsOn" {
 
 resource "null_resource" "dependsOn" {
 
-    triggers = {
-        value = "${module.partyMethod.dependencyId}"
-    }
+    # triggers = {
+    #     value = "${module.partyMethod.dependencyId}"
+    # }
+
+    depends_on = [
+        "module.partyResource",
+        "module.party",
+        "module.partyMethod",
+        "module.partyPrep"
+    ]
 }
 
 output "dependencyId" {
     # value = "${module.partyResource.subPath}"
-    value 	= "${var.dependsOn}:${null_resource.dependsOn.id}"
+    value 	= "${var.dependsOn}:${module.partyMethod.dependencyId}:${module.partyPrep.dependencyId}:party/${null_resource.dependsOn.id}"
 }

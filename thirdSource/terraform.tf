@@ -81,10 +81,10 @@ module "party" {
 ############################################################
 # deploy the party service on the api gateway
 module "apiDeploy" {
-    # source = "../Terraform/apiGateway/deployment"
+    # source = "../../Terraform/apiGateway/deployment"
     source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/deployment"
 
-    globals = "${local.globals}"
+    globals 		= "${local.globals}"
 
     dependsOn 		= "${module.party.dependencyId}"
 

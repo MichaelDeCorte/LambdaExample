@@ -6,16 +6,16 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 Todo
 - multiple angular workspaces, not hard coded.  how?
 - multiple workspaces
-	- angular / https://blog.angularindepth.com/becoming-an-angular-environmentalist-45a48f7c20d8
-    - lambda / https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html
     - dynamo
     - cloudwatch
+	- angular / done
+    - lambda / done
     - s3 / done
     - cloudfront / done
     - route 53 / done
     - api gateway / done
     - terraform / done
-
+- TF lambda module / multiple services, simplify usage
 - disallow s3 website access
 - TF / dependencyId 
         ############################################################                                                                                # hack for lack of depends_on                                                                                                                
