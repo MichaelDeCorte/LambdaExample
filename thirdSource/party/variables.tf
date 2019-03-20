@@ -6,7 +6,7 @@ variable "api_id" {
     type = "string"
 }
 
-variable "resource_id" {
+variable "parent_id" {
     type = "string"
 }
 
@@ -24,6 +24,10 @@ variable "version" {
 
 variable "authorizer_id" {
     default = ""
+}
+
+variable "api_execution_arn" {
+    type = "string"
 }
 
 variable "tags" {

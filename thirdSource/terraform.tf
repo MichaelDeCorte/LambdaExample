@@ -71,7 +71,8 @@ module "party" {
 
     authorizer_id 	    = "${module.apiGateway.authorizer_id}"
     api_id 			    = "${module.apiGateway.api_id}"
-    resource_id     	= "${module.apiGateway.root_resource_id}"
+    api_execution_arn   = "${module.apiGateway.execution_arn}"
+    parent_id     		= "${module.apiGateway.root_resource_id}"
     stage_name 			= "${local.stage_name}"
     s3_bucket           = "${local.common["codebucket_id"]}"
 }
@@ -84,13 +85,28 @@ module "apiDeploy" {
     # source = "../../Terraform/apiGateway/deployment"
     source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/deployment"
 
+    dependsOn 		= "${module.party.dependencyId}"
     globals 		= "${local.globals}"
 
-    dependsOn 		= "${module.party.dependencyId}"
-
     api_id			= "${module.apiGateway.api_id}"
-    stage_name 		= "${local.stage_name}"
+    stage_name 		= "${local.stage_name}-stage"
 }
+
+#####
+# permissions for the method
+module "partyPrep" {
+    # source = "../../Terraform/apiGateway/lambdaPrep"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/lambdaPrep"
+
+    globals = "${local.globals}"
+
+    function_name		= "${module.party.function_arn}"
+    qualifier			= "${module.party.qualifier}"
+
+    source_arn 			= "${module.apiDeploy.execution_arn}"
+}
+
+
 
 ############################################################
 module "login" {
@@ -133,8 +149,8 @@ resource "random_string" "test_id_username" {
 #####
 # create a JS file with the URL for the stage
 module "testConfig" {
-    source = "../../Terraform/files"
-    # source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
+    # source = "../../Terraform/files"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
 
     globals = "${local.globals}"
 
@@ -152,8 +168,8 @@ module "testConfig" {
 }    
 
 module "environmentConfig" {
-    source = "../../Terraform/files"
-    # source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
+    # source = "../../Terraform/files"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
 
     globals = "${local.globals}"
 
@@ -165,7 +181,7 @@ module "environmentConfig" {
     ]
 
     variables = {
-        partyUri = "${module.apiDeploy.deployment_url}${module.party.subPath}"
+        partyUri = "${module.apiDeploy.invoke_url}${module.party.subPath}"
         cognitoUserPoolId = "${module.login.pool_id}"
         cognitoClientId = "${module.login.client_id}"
         loginUrl = "${module.login.url}"
@@ -193,7 +209,7 @@ module "website" {
     acm_certificate_arn = "${local.common["acm_certificate_arn"]}"
 
     allowed_origins		= [
-        "${module.apiDeploy.deployment_url}"
+        "${module.apiDeploy.invoke_url}"
     ]
 }
 
@@ -204,7 +220,7 @@ output "region" {
 }
 
 output "api_url" {
-    value = "${module.apiDeploy.deployment_url}${module.party.subPath}"
+    value = "${module.apiDeploy.invoke_url}${module.party.subPath}"
 }
 
 

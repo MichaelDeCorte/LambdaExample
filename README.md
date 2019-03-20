@@ -15,6 +15,17 @@ Todo
     - route 53 / done
     - api gateway / done
     - terraform / done
+- api stages, and lambda versioning
+
+    Stages are linked at method level to the lambda functions and
+    structure.  So all of the stages will have the same api with at
+    most different versions of the api.  This makes it difficult to
+    add new functions, or introduce breaking changes. Stages are best
+    reserved for green / yellow deployments.
+    
+    For different env, create a new api.
+
+- api key
 - TF lambda module / multiple services, simplify usage
 - disallow s3 website access
 - TF / dependencyId 

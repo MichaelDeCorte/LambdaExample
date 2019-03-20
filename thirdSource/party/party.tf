@@ -24,20 +24,8 @@ locals {
 # }
 
 #####
-module "partyResource" {
-    # source = "../../Terraform/apiGateway/resource"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/resource"
-
-    globals = "${var.globals}"
-
-    api_id 			= "${var.api_id}"
-    resource_id     = "${var.resource_id}"
-    path_part		= "party"
-}
-
-#####
 # define the lambda function
-module "party" {
+module "partyLambda" {
     # source = "../../../Terraform/lambda/basic"
     source = "git@github.com:MichaelDeCorte/TerraForm.git//lambda/basic"
 
@@ -52,6 +40,18 @@ module "party" {
 }
 
 #####
+module "partyResource" {
+    # source = "../../../Terraform/apiGateway/resource"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/resource"
+
+    globals 		= "${var.globals}"
+
+    api_id 			= "${var.api_id}"
+    parent_id     	= "${var.parent_id}"
+    path_part		= "party"
+}
+
+#####
 # attach the lambda function to an api method
 module "partyMethod" {
     # source = "../../../Terraform/apiGateway/method"
@@ -60,20 +60,9 @@ module "partyMethod" {
     globals = "${var.globals}"
 
     api_id 			= "${var.api_id}"
-    resource_id     = "${module.partyResource.resource_id}"
-    function_uri	= "${module.party.invoke_arn}"
+    resource_id     = "${module.partyResource.id}"
+    function_uri	= "${module.partyLambda.invoke_arn}"
     authorizer_id 	= "${var.authorizer_id}"
-}
-
-#####
-# permissions for the method
-module "partyPrep" {
-    # source = "../../../Terraform/apiGateway/lambdaPrep"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/lambdaPrep"
-
-    globals = "${var.globals}"
-
-    function_name	= "${module.party.function_name}"    
 }
 
 
@@ -85,6 +74,14 @@ output "subPath" {
     value = "${module.partyResource.subPath}"
 }
 
+output "qualifier" {
+    value = "${module.partyLambda.qualifier}"
+}
+
+output "function_arn" {
+    value = "${module.partyLambda.arn}"
+}
+
 
 ############################################################
 # hack for lack of depends_on
@@ -94,19 +91,13 @@ variable "dependsOn" {
 
 resource "null_resource" "dependsOn" {
 
-    # triggers = {
-    #     value = "${module.partyMethod.dependencyId}"
-    # }
-
     depends_on = [
         "module.partyResource",
-        "module.party",
-        "module.partyMethod",
-        "module.partyPrep"
+        "module.partyLambda",
+        "module.partyMethod"
     ]
 }
 
 output "dependencyId" {
-    # value = "${module.partyResource.subPath}"
-    value 	= "${var.dependsOn}:${module.partyMethod.dependencyId}:${module.partyPrep.dependencyId}:party/${null_resource.dependsOn.id}"
+     value 	= "${var.dependsOn}:${module.partyMethod.dependencyId}:party/${null_resource.dependsOn.id}"
 }
