@@ -25,6 +25,9 @@ Todo
     
     For different env, create a new api.
 
+- api gateway, stages shoudl use stage variables
+    https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6    
+
 - api key
 - TF lambda module / multiple services, simplify usage
 - disallow s3 website access
