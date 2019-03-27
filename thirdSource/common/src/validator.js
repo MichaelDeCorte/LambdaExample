@@ -8,7 +8,6 @@ const joiOptions = {
 };
 
 function validator(data, dataSchema) {
-    logger.trace('data:' + data);
     logger.trace('data:' + JSON.stringify(data, null, 4));
 
     if (!data || !dataSchema) {

@@ -1,14 +1,7 @@
 const each = require('jest-each');
-const Joi = require('joi');
 const logger = require('common').logger;
-const validator = require('common').validator;
+const dynamoEnvironment = require('common').dynamoEnvironment;
 
-const alphaSpaceRE = /^[A-Za-z ]*$/;
-const schema = Joi.object().keys(
-    {
-        'lastName': Joi.string().regex(alphaSpaceRE).min(1).max(30).trim().truncate().required(),
-        'firstName': Joi.string().regex(alphaSpaceRE).min(1).max(30).trim().truncate().required(),
-    });
 
 function testFunc(input, output, done) {
     expect.assertions(1);
@@ -23,7 +16,7 @@ function testFunc(input, output, done) {
     
     try {
         try {
-            data = validator(data, schema);
+            data = dynamoEnvironment(data);
             expect(data).toEqual(testResult);
             done();
         } catch (error) {
@@ -41,4 +34,4 @@ function testFunc(input, output, done) {
 // eslint-disable-next-line 
 const testSuite = require(__filename.replace(/.[^.]+$/, '.json'));
 
-each(testSuite).test('validator unit tests', testFunc);
+each(testSuite).test('dynamoEnvironment unit tests', testFunc);

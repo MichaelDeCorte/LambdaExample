@@ -4,6 +4,7 @@ const hash = require('string-hash');
 const logger = require('common').logger;
 const Promise = require('promise');
 const guid = require('common').generateGUID;
+const dynamoEnvironment = require('common').dynamoEnvironment;
 
 function handler(event, context, lambdaCallback) {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
@@ -75,6 +76,7 @@ function handler(event, context, lambdaCallback) {
     };
 
     prepPutPartyRequest(event)
+        .then(dynamoEnvironment)
         .then(putParty)
         .then(
             (result) => {

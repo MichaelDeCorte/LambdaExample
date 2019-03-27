@@ -6,7 +6,7 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 Todo
 - multiple angular workspaces, not hard coded.  how?
 - multiple workspaces
-    - dynamo
+    - dynamo / done
     - cloudwatch
 	- angular / done
     - lambda / done
@@ -26,8 +26,11 @@ Todo
     For different env, create a new api.
 
 - api gateway, stages shoudl use stage variables
-    https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6    
+    https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6
+    https://docs.amazonaws.cn/en_us/apigateway/latest/developerguide/aws-api-gateway-stage-variables-reference.html
+    
 
+- app mesh
 - api key
 - TF lambda module / multiple services, simplify usage
 - disallow s3 website access

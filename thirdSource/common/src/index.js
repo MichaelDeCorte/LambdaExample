@@ -5,4 +5,5 @@ module.exports = {
     'generateGUID': require('./guid'),
     'validator': require('./validator'),
     'packageConfig': require('./packageConfig'),
+    'dynamoEnvironment': require('./dynamoEnvironment'),
 };

@@ -1,11 +1,17 @@
 # partyTable.tf
     
+locals {
+    region = "${var.globals["region"]}"
+}
+
 module "party_table" {   
     source = "git@github.com:MichaelDeCorte/TerraForm.git//dynamo"
     # source 					= "../../../Terraform/dynamo"
+
     globals 					= "${var.globals}"
     tags 						= "${var.tags}"
     billing_mode				= "PAY_PER_REQUEST"
+    table_name_prefix			= "${local.region["env"]}_"
 
     name           = "party"
     hash_key       = "partyID"		# Primary partition key	

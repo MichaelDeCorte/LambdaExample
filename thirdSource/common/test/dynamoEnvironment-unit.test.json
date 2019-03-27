@@ -1,0 +1,18 @@
+[
+  [
+    {
+      "data": {
+        "TableName": "George",
+        "otherData": "Washington"
+      }
+    },
+
+    {
+      "testResult": {
+        "TableName": "dev_George",
+        "otherData": "Washington"
+      },
+      "testError": null
+    }
+  ]
+]

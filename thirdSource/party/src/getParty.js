@@ -2,18 +2,24 @@
 const AWS = require('aws-sdk'); 
 const logger = require('common').logger;
 const Promise = require('promise');
+const dynamoEnvironment = require('common').dynamoEnvironment;
 
 function handler(event, context, lambdaCallback) {
     logger.debug('event: ' + JSON.stringify(event, null, 4));
 
     // create AWS service functions in handler to allow mocking
-    const dynamodb = new AWS.DynamoDB({ 'apiVersion': '2012-08-10' });  
+    const dynamodb = new AWS.DynamoDB(
+        {
+            'apiVersion': '2012-08-10'
+        }
+    );  
 
     const dynamoClient = new AWS.DynamoDB.DocumentClient(
         {
             'service': dynamodb,
             'convertEmptyValues': true
         });
+
 
     // prepare a dynamo getData request object
     function prepGetPartyRequest(data) {
@@ -65,6 +71,7 @@ function handler(event, context, lambdaCallback) {
     };
 
     prepGetPartyRequest(event)
+        .then(dynamoEnvironment)
         .then(getParty)
         .then(
             (result) => {
