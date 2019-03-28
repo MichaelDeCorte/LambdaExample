@@ -88,7 +88,7 @@ module "apiDeploy" {
     # source = "../../Terraform/apiGateway/deployment"
     source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/deployment"
 
-    dependsOn 		= "${module.party.dependencyId}"
+    depends 		= "${module.party.depends}"
     globals 		= "${local.globals}"
 
     api_id			= "${module.apiGateway.api_id}"
@@ -195,9 +195,9 @@ module "environmentConfig" {
 module "testUser" {
     source = "login/users"
 
-    dependsOn = "${module.environmentConfig.dependencyId}:${module.testConfig.dependencyId}:${module.login.dependencyId}"
-    globals = "${local.globals}"
-    testConfig = "${path.module}/${module.testConfig.output[0]}"
+    depends 		= "${module.environmentConfig.depends}:${module.testConfig.depends}:${module.login.depends}"
+    globals 		= "${local.globals}"
+    testConfig 		= "${path.module}/${module.testConfig.output[0]}"
     environmentConfig = "${path.module}/${module.environmentConfig.output[0]}"
 }
 

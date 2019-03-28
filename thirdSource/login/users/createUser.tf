@@ -33,19 +33,18 @@ resource "null_resource" "createUser" {
 
 ############################################################
 # hack for lack of depends_on
-variable "dependsOn" {
+variable "depends" {
     default = ""
 }
 
 resource "null_resource" "dependsOutput" {
-
     triggers = {
         value = "${null_resource.createUser.id}"
     }
 }
 
-output "dependencyId" {
+output "depends" {
     # value = "${module.partyResource.subPath}"
-    value 	= "${var.dependsOn}:${null_resource.dependsOutput.id}"
+    value 	= "${var.depends}:${null_resource.dependsOutput.id}"
 }
 

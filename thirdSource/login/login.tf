@@ -1,6 +1,5 @@
 ############################################################
 #
-
 variable "globals" {
     type = "map"
 }
@@ -204,19 +203,12 @@ output "pool_id" {
 
 ############################################################
 # hack for lack of depends_on
-variable "dependsOn" {
+variable "depends" {
     default = ""
 }
 
-resource "null_resource" "dependsOutput" {
-
-    triggers = {
-        value = "${aws_cognito_user_pool.pool.id}"
-    }
-}
-
-output "dependencyId" {
+output "depends" {
     # value = "${module.partyResource.subPath}"
-    value 	= "${var.dependsOn}:${null_resource.dependsOutput.id}"
+    value 	= "${var.depends}:cognito/${aws_cognito_user_pool.pool.id}"
 }
 

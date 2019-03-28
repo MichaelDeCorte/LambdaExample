@@ -85,11 +85,11 @@ output "function_arn" {
 
 ############################################################
 # hack for lack of depends_on
-variable "dependsOn" {
+variable "depends" {
     default = ""
 }
 
-resource "null_resource" "dependsOn" {
+resource "null_resource" "depends" {
 
     depends_on = [
         "module.partyResource",
@@ -98,6 +98,6 @@ resource "null_resource" "dependsOn" {
     ]
 }
 
-output "dependencyId" {
-     value 	= "${var.dependsOn}:${module.partyMethod.dependencyId}:party/${null_resource.dependsOn.id}"
+output "depends" {
+     value 	= "${var.depends}:${module.partyMethod.depends}:party/${null_resource.depends.id}"
 }

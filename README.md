@@ -5,47 +5,10 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 
 ==============================
 TODO
-- multiple angular workspaces, not hard coded.  how?
-- api stages, and lambda versioning
-    Stages are linked at method level to the lambda functions and
-    structure.  So all of the stages will have the same api with at
-    most different versions of the api.  This makes it difficult to
-    add new functions, or introduce breaking changes. Stages are best
-    reserved for green / yellow deployments.
-    
-    For different env, create a new api.
-
-- api gateway, stages shoudl use stage variables
-    https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6
-    https://docs.amazonaws.cn/en_us/apigateway/latest/developerguide/aws-api-gateway-stage-variables-reference.html
-    
-
 - app mesh
 - api key
 - TF lambda module / multiple services, simplify usage
 - disallow s3 website access
-- TF / dependencyId 
-        ############################################################                                                                                # hack for lack of depends_on                                                                                                                
-        variable "dependsOn" {
-            default = ""
-        }
-
-        resource "null_resource" "dependsOn" {
-
-            # triggers = {
-            #     value = "${aws_s3_bucket.website.}"
-            # }
-
-            depends_on = [
-                "aws_s3_bucket.website"
-            ]
-
-        }
-
-        output "dependencyId" {
-            value   = "${var.dependsOn}:${null_resource.dependsOn.id}"
-        }
-
 - session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
 - move to gitlab
 - packer?
@@ -78,6 +41,21 @@ TODO
     - AWS Simple Workflow
     - https://read.acloud.guru/some-lessons-learned-about-lambda-orchestration-1a8b72a33fd2
 - AWS code build, local testing, https://aws.amazon.com/about-aws/whats-new/2018/05/aws-codebuild-now-supports-local-testing-and-debugging
+- multiple angular workspaces, not hard coded.  how?
+- api stages, and lambda versioning
+    Stages are linked at method level to the lambda functions and
+    structure.  So all of the stages will have the same api with at
+    most different versions of the api.  This makes it difficult to
+    add new functions, or introduce breaking changes. Stages are best
+    reserved for green / yellow deployments.
+    
+    For different env, create a new api.
+
+- api gateway, stages shoudl use stage variables
+    https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6
+    https://docs.amazonaws.cn/en_us/apigateway/latest/developerguide/aws-api-gateway-stage-variables-reference.html
+    
+
     
   
 - db 
@@ -131,6 +109,7 @@ DONE
     https://www.npmjs.com/package/dynamodb-data-types
     https://www.npmjs.com/package/dynamodb-marshaler
 - upgrade to node 8.10 # terraform init -upgrade
+
 - AWS Lambda best practices
     https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
             Waiting on below to move aws declaration outside of method
@@ -139,6 +118,27 @@ DONE
     https://github.com/hapijs/joi/blob/v13.2.0/API.md#objectwithoutkey-peers
 - lock local node to 8.10
 - AOP / no.  Requires ES7 or Babel
+- TF / dependencyId 
+        ############################################################
+        # hack for lack of depends_on                                                                                                                
+        variable "depends" {
+            default = ""
+        }
+
+        resource "null_resource" "depends" {
+
+            # triggers = {
+            #     value = "${aws_s3_bucket.website.}"
+            # }
+
+            depends_on = [
+                "aws_s3_bucket.website"
+            ]
+        }
+
+        output "depends" {
+            value   = "${var.depends}:s3/${null_resource.depends.id}"
+        }
 
 
 Blog
