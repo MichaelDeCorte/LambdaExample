@@ -3,20 +3,10 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
     
 # LambdaExample
 
-Todo
+==============================
+TODO
 - multiple angular workspaces, not hard coded.  how?
-- multiple workspaces
-    - dynamo / done
-    - cloudwatch
-	- angular / done
-    - lambda / done
-    - s3 / done
-    - cloudfront / done
-    - route 53 / done
-    - api gateway / done
-    - terraform / done
 - api stages, and lambda versioning
-
     Stages are linked at method level to the lambda functions and
     structure.  So all of the stages will have the same api with at
     most different versions of the api.  This makes it difficult to
@@ -93,7 +83,18 @@ Todo
 - db 
     https://www.npmjs.com/package/dynamodb   waiting for promise support
 
-Done
+==============================
+DONE
+- multiple workspaces
+    - dynamo / done
+    - cloudwatch / done
+	- angular / done
+    - lambda / done
+    - s3 / done
+    - cloudfront / done
+    - route 53 / done
+    - api gateway / done
+    - terraform / done
 - authentication
     cognito https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html
     api https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html

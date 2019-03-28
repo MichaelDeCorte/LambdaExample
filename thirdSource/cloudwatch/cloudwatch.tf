@@ -20,7 +20,7 @@ locals {
 
 ##############################
 resource "aws_cloudwatch_log_group" "logs" {
-    name				= "${var.name}"
+    name					= "${var.name}"
 
     tags 					= "${merge(	var.tags, 
 										map("Service", "logs.log-group"),

@@ -43,14 +43,17 @@ module "vpc" {
 }
 
 
-
 module "application_logs" {
-    source		= "./cloudwatch"
+    # source = "../../Terraform/cloudwatch/logGroup"
+    source = "git@github.com:MichaelDeCorte/Terraform.git//cloudwatch/logGroup"
+
     globals 	= "${local.globals}"
+
     tags		= "${map("Module", "Common")}"
 
-    name 		= "/aws/aes/domains/${local.region["env"]}-thirdSource/application-logs"
+    name 		= "aes/domains/${local.region["env"]}_thirdSource/application-logs"
 }
+
 
 module "apiGateway" {
     # source = "../../Terraform/apiGateway/api"

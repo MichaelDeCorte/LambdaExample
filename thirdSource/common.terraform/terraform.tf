@@ -44,6 +44,7 @@ module "terraform" {
     versioning 	= true
 }
 
+
 module "cloudtrail_bucket" {
     # source 		= "../../../Terraform/s3/s3"
     source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
@@ -56,8 +57,10 @@ module "cloudtrail_bucket" {
 }
 
 module "cloudtrail_policy" {
-    source 		= "../../../Terraform/cloudtrail/policy"
-
+    # source 		= "../../../Terraform/cloudtrail/policy"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//cloudtrail/policy"
+    
+    dependsOn	= "${module.cloudtrail_bucket.dependencyId}"
     globals 	= "${module.globals.globals}"
 
     name 		= "${local.cloudtrail}-policy"
@@ -65,13 +68,14 @@ module "cloudtrail_policy" {
 }
 
 module "cloudtrail_trail" {
-    source 		= "../../../Terraform/cloudtrail"
-    # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//cloudtrail"
+    # source 		= "../../../Terraform/cloudtrail"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//cloudtrail"
 
+    dependsOn	= "${module.cloudtrail_bucket.dependencyId}:${module.cloudtrail_policy.dependencyId}"
     globals 	= "${module.globals.globals}"
 
     name 		= "${local.cloudtrail}"
-    bucket 		= "thirdsource-cloudtrail"
+    bucket 		= "${module.cloudtrail_bucket.name}"
 }
 
 
