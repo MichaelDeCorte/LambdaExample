@@ -6,11 +6,8 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 ==============================
 TODO
 - app mesh
-- api key
 - TF lambda module / multiple services, simplify usage
-- disallow s3 website access
 - session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
-- move to gitlab
 - packer?
 - refactor to classes
 - aws ElastiCache
@@ -54,7 +51,7 @@ TODO
 - api gateway, stages shoudl use stage variables
     https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6
     https://docs.amazonaws.cn/en_us/apigateway/latest/developerguide/aws-api-gateway-stage-variables-reference.html
-    
+- api key
 
     
   
@@ -63,6 +60,7 @@ TODO
 
 ==============================
 DONE
+- disallow s3 website access
 - multiple workspaces
     - dynamo / done
     - cloudwatch / done

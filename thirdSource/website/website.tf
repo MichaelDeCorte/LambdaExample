@@ -73,6 +73,9 @@ module "website_cloudfront" {
     globals = "${var.globals}"
 
     domain_name = "${module.website_s3.bucket_regional_domain_name}"
+    s3_id = "${module.website_s3.id}"
+    s3_arn = "${module.website_s3.arn}"
+    
     origin_id 	= "${var.name}"
     aliases 	= [ "${var.name}", "${local.website_aliases["aliases"]}" ]
     
