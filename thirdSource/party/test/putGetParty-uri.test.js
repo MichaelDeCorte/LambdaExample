@@ -6,7 +6,7 @@ const authenticateTestUser = require('common.test').authenticateTestUser;
 const getAuthorizationToken = require('common.test').getAuthorizationToken;
 const environment = require('environment').environment();
 
-const uri = environment.apiInvokeUrl + environment.apiEndPoints.party.endpoint;
+const uri = environment.apiEndPoints.party.endpoint;
 
 // Initialize AWS credentials
 function testFunc(input, output, done) {
