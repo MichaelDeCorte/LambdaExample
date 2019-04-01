@@ -71,7 +71,7 @@ module "apiGateway" {
 # create the resource and methods
 
 module "lambda_role" {
-    # source = "../role"                                                                                                                     
+    # source = "../role"
     source = "git@github.com:MichaelDeCorte/Terraform.git//lambda/role"
 
     globals = "${local.globals}"

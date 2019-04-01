@@ -11,8 +11,8 @@ locals {
 #####
 # define the lambda function
 module "party_lambda" {
-    source = "../../../Terraform/lambda/api"
-    # source = "git@github.com:MichaelDeCorte/TerraForm.git//lambda/api"
+    # source = "../../../Terraform/lambda/api"
+    source = "git@github.com:MichaelDeCorte/TerraForm.git//lambda/api"
 
     globals = "${var.globals}"
 
