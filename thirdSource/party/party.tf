@@ -7,79 +7,54 @@ locals {
 
 
 ############################################################
-# Inialization
-
-# module "party_api" {
-#     source = "../../Terraform/lambda/api"
-#     # source = "git@github.com:MichaelDeCorte/TerraForm.git//lambda/api"
-
-#     globals = "${var.globals}"
-    
-#     api_id 				= "${var.api_id}"
-#     resource_id     	= "${var.resource_id}"
-#     function_name		= "party"
-#     handler			    = "src/party.handler"
-#     authorizer_id 		= "${var.authorizer_id}"
-#     filename		    = "${path.module}/party-${var.version}.zip"    
-# }
 
 #####
 # define the lambda function
-module "partyLambda" {
-    # source = "../../../Terraform/lambda/basic"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//lambda/basic"
+module "party_lambda" {
+    source = "../../../Terraform/lambda/api"
+    # source = "git@github.com:MichaelDeCorte/TerraForm.git//lambda/api"
 
     globals = "${var.globals}"
 
-    filename		    = "${path.module}/party-${var.version}.zip"
-    s3_bucket           = "${var.s3_bucket}"
-    function_name		= "party"
     publish				= true # versioning and aliases
-    handler			    = "src/party.handler"
+    s3_bucket           = "${var.s3_bucket}"
+
     variables			= "${local.envVariables}"
-}
-
-#####
-module "partyResource" {
-    # source = "../../../Terraform/apiGateway/resource"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/resource"
-
-    globals 		= "${var.globals}"
-
-    api_id 			= "${var.api_id}"
-    parent_id     	= "${var.parent_id}"
-    path_part		= "party"
-}
-
-#####
-# attach the lambda function to an api method
-module "partyMethod" {
-    # source = "../../../Terraform/apiGateway/method"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/method"
-
-    globals = "${var.globals}"
-
-    api_id 			= "${var.api_id}"
-    resource_id     = "${module.partyResource.id}"
-    function_uri	= "${module.partyLambda.invoke_arn}"
-    authorizer_id 	= "${var.authorizer_id}"
+    api_id 				= "${var.api_id}"
+    api_execution_arn	= "${var.api_execution_arn}"
+    api_parent_id     	= "${var.api_parent_id}"
+    api_authorizer_id 	= "${var.api_authorizer_id}"
+    role_arn			= "${var.role_arn}"
+    
+    functions 			= [
+        {
+            name				= "party"
+            handler			    = "src/party.handler"
+            filename		    = "${path.module}/party-${var.version}.zip"
+        },
+        {
+            name				= "party2"
+            handler			    = "src/party.handler"
+            filename		    = "${path.module}/party-${var.version}.zip"
+        }
+    ]
+    
 }
 
 
 ############################################################
 # the api gateway url
 
-# the resource url
-output "subPath" {
-    value = "${module.partyResource.subPath}"
-}
-
 output "qualifier" {
-    value = "${module.partyLambda.qualifier}"
+    value = [ "${module.party_lambda.qualifier}" ]
 }
 
 output "function_arn" {
-    value = "${module.partyLambda.arn}"
+    value = [ "${module.party_lambda.arn}" ]
+}
+
+output "api_endpoints" {
+    value = "${module.party_lambda.api_endpoints}"
 }
 
 
@@ -89,15 +64,6 @@ variable "depends" {
     default = ""
 }
 
-resource "null_resource" "depends" {
-
-    depends_on = [
-        "module.partyResource",
-        "module.partyLambda",
-        "module.partyMethod"
-    ]
-}
-
 output "depends" {
-     value 	= "${var.depends}:${module.partyMethod.depends}:party/${null_resource.depends.id}"
+     value 	= "${var.depends}:${module.party_lambda.depends}"
 }

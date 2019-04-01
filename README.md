@@ -5,6 +5,7 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 
 ==============================
 TODO
+- website.tf and cloudfront.tf are both apply a policy
 - app mesh
 - TF lambda module / multiple services, simplify usage
 - session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
@@ -180,19 +181,33 @@ ISSUES
 - debugging is hard....errors not helpful.  errors frequently don't have the file with the error
 - provisioniner can't be separated from resource
 - execution from anyplace except project root is really bad
-
-- no variable for project root
 - module source doesn't support variables  :  "${path.root}/variables/chef"
-
-- input variables can't be interpolated.   # see default tag for a pattern to support this
-
 - no support for looping or conditionals
 - no support for depends_on between modules        
 - taint syntax is just wrong...
     https://github.com/hashicorp/terraform/issues/11570
 - can't taint template_files
     https://github.com/terraform-providers/terraform-provider-template/issues/2    
+- can't use count for modules
+- count can't be computed.
+    https://github.com/hashicorp/terraform/issues/12570
+- conditionals to allow switching between two different parameters
+	- https://github.com/hashicorp/terraform/issues/14037
+- array of maps / map of arrays, unstable
+- input variables can't be interpolated.   # see default tag for a pattern to support this
+- accessing elements isn't consistent. sometimes splat, lookup, element
+- conditionals can't be used with lists
+    https://github.com/hashicorp/terraform/issues/18259
+- the output of a * splat resource that has 0 elements isn't treated as an empty list.  
+    https://github.com/hashicorp/terraform/issues/16681
+- lifecycles have to be hard coded
+    https://github.com/hashicorp/terraform/issues/3116
+- assigning values to a block is inconsistent
+    https://github.com/hashicorp/terraform/issues/16582
 
+            
+
+    
 ------------------------------------------------------------
 Best practice
 - tag all TF created resources with Terraform:true

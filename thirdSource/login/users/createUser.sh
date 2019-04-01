@@ -1,10 +1,18 @@
 #!/bin/sh
 #
 
-set -e
 
 eval $(cat $* | jq -r 'to_entries | .[] | .key + "=\"" + .value + "\""')
 
+
+echo ============================== admin-delete-user
+aws cognito-idp admin-delete-user --cli-input-json \
+"{
+    \"UserPoolId\": \"$cognitoUserPoolId\", 
+    \"Username\": \"$Username\"
+}" > /dev/null 2>&1
+
+set -e
 
 # https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminCreateUser.html
 echo ============================== admin-create-user

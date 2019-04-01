@@ -170,20 +170,6 @@ resource "aws_cognito_user_pool_domain" "domain" {
     user_pool_id = "${aws_cognito_user_pool.pool.id}"
 }
 
-# resource "aws_cognito_identity_pool" "main" {
-#     identity_pool_name               = "identityPool"
-#    allow_unauthenticated_identities = false
-#
-#    cognito_identity_providers {
-#        client_id = "${aws_cognito_user_pool_client.client.id}"
-#        provider_name = "cognito-idp.us-east-1.amazonaws.com/${aws_cognito_user_pool.pool.id}"
-#    }
-#  supported_login_providers {
-#    "graph.facebook.com"  = "12345678"
-#    "accounts.google.com" = "123456789012.apps.googleusercontent.com"
-#  }
-# }
-
 
 # ############################################################
 # # the login url

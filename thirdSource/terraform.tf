@@ -65,18 +65,29 @@ module "apiGateway" {
     pool_id             = "${module.login.pool_id}"
 }
 
+
+
 ############################################################
 # create the resource and methods
+
+module "lambda_role" {
+    # source = "../role"                                                                                                                     
+    source = "git@github.com:MichaelDeCorte/Terraform.git//lambda/role"
+
+    globals = "${local.globals}"
+}
+
 module "party" {
     source = "party"
 
     globals = "${local.globals}"
 
-    authorizer_id 	    = "${module.apiGateway.authorizer_id}"
+    api_authorizer_id	= "${module.apiGateway.authorizer_id}"
     api_id 			    = "${module.apiGateway.api_id}"
     api_execution_arn   = "${module.apiGateway.execution_arn}"
-    parent_id     		= "${module.apiGateway.root_resource_id}"
-    stage_name 			= "${local.stage_name}"
+    api_parent_id  		= "${module.apiGateway.root_resource_id}"
+    role_arn			= "${module.lambda_role.arn}"
+
     s3_bucket           = "${local.common["codebucket_id"]}"
 }
 
@@ -84,7 +95,7 @@ module "party" {
 
 ############################################################
 # deploy the party service on the api gateway
-module "apiDeploy" {
+module "api_deploy" {
     # source = "../../Terraform/apiGateway/deployment"
     source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/deployment"
 
@@ -94,21 +105,6 @@ module "apiDeploy" {
     api_id			= "${module.apiGateway.api_id}"
     stage_name 		= "${local.stage_name}-stage"
 }
-
-#####
-# permissions for the method
-module "partyPrep" {
-    # source = "../../Terraform/apiGateway/lambdaPrep"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//apiGateway/lambdaPrep"
-
-    globals = "${local.globals}"
-
-    function_name		= "${module.party.function_arn}"
-    qualifier			= "${module.party.qualifier}"
-
-    source_arn 			= "${module.apiDeploy.execution_arn}"
-}
-
 
 
 ############################################################
@@ -184,7 +180,8 @@ module "environmentConfig" {
     ]
 
     variables = {
-        partyUri = "${module.apiDeploy.invoke_url}${module.party.subPath}"
+        apiEndPoints = "${jsonencode(module.party.api_endpoints)}"
+        apiInvokeUrl = "${jsonencode(module.api_deploy.invoke_url)}"
         cognitoUserPoolId = "${module.login.pool_id}"
         cognitoClientId = "${module.login.client_id}"
         loginUrl = "${module.login.url}"
@@ -212,7 +209,7 @@ module "website" {
     acm_certificate_arn = "${local.common["acm_certificate_arn"]}"
 
     allowed_origins		= [
-        "${module.apiDeploy.invoke_url}"
+        "${module.api_deploy.invoke_url}"
     ]
 }
 
@@ -222,13 +219,8 @@ output "region" {
     value = "${local.region}"
 }
 
-output "api_url" {
-    value = "${module.apiDeploy.invoke_url}${module.party.subPath}"
-}
-
-
 output "login_url" {
-    value = "${module.login.url}"
+     value = "${module.login.url}"
 }
 
 output "website_url" {
@@ -239,3 +231,10 @@ output "client_id" {
     value = "${module.login.client_id}"
 }
 
+output "api_endpoints" {
+    value =  "${module.party.api_endpoints}"
+}
+
+output "api_invoke_url" {
+    value =  "${module.api_deploy.invoke_url}"
+}
