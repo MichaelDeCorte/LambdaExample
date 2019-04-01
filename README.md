@@ -7,7 +7,6 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 TODO
 - website.tf and cloudfront.tf are both apply a policy
 - app mesh
-- TF lambda module / multiple services, simplify usage
 - session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
 - packer?
 - refactor to classes
@@ -61,6 +60,7 @@ TODO
 
 ==============================
 DONE
+- TF lambda module / multiple services, simplify usage
 - disallow s3 website access
 - multiple workspaces
     - dynamo / done
