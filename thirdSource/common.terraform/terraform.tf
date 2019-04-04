@@ -60,7 +60,7 @@ module "cloudtrail_policy" {
     # source 		= "../../../Terraform/cloudtrail/policy"
     source 		= "git@github.com:MichaelDeCorte/TerraForm.git//cloudtrail/policy"
     
-    dependsOn	= "${module.cloudtrail_bucket.dependencyId}"
+    depends		= "${module.cloudtrail_bucket.depends}"
     globals 	= "${module.globals.globals}"
 
     name 		= "${local.cloudtrail}-policy"
@@ -71,7 +71,7 @@ module "cloudtrail_trail" {
     # source 		= "../../../Terraform/cloudtrail"
     source 		= "git@github.com:MichaelDeCorte/TerraForm.git//cloudtrail"
 
-    dependsOn	= "${module.cloudtrail_bucket.dependencyId}:${module.cloudtrail_policy.dependencyId}"
+    depends		= "${module.cloudtrail_bucket.depends}:${module.cloudtrail_policy.depends}"
     globals 	= "${module.globals.globals}"
 
     name 		= "${local.cloudtrail}"
