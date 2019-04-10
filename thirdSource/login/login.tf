@@ -175,8 +175,12 @@ resource "aws_cognito_user_pool_domain" "domain" {
 # # the login url
 
 # # the resource url
-output "url" {
+output "login_url" {
     value = "https://${var.domain}.auth.${local.region["region"]}.amazoncognito.com/login?response_type=code&client_id=${aws_cognito_user_pool_client.client.id}&redirect_uri=${urlencode(var.callback_urls[0])}"
+}
+
+output "cognito_url" {
+    value = "https://${var.domain}.auth.${local.region["region"]}.amazoncognito.com"
 }
 
 output "client_id" {

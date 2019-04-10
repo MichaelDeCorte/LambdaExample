@@ -18,6 +18,7 @@ variable "zone_id" {
 
 variable "vpc_id" {
     type = "string"
+    default = ""
 }
 
 variable "acm_certificate_arn" {
@@ -33,25 +34,10 @@ variable "allowed_origins" {
 
 locals {
     sourceDir 			= "${path.module}/dist/website/"
-    toDir 				= "s3://${module.website_s3.id}"
+    toDir 				= "s3://${module.website_cloudfront.s3_id}"
     dns 				= "${var.globals["dns"]}"
     website_aliases 	= "${var.globals["website_aliases"]}"
 }
-
-##########
-# static website
-module "website_s3" {
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//s3/website"
-    # source = "../../../Terraform/s3/website/"
-
-    globals = "${var.globals}"
-
-    bucket = "${var.name}"
-    force_destroy = true
-    index_document = "index.html"
-
-    allowed_origins = "${var.allowed_origins}"
-}    
 
 # https://github.com/terraform-providers/terraform-provider-aws/pull/7639
 module "website_copy" {
@@ -72,10 +58,12 @@ module "website_cloudfront" {
 
     globals = "${var.globals}"
 
-    domain_name = "${module.website_s3.bucket_regional_domain_name}"
-    s3_id = "${module.website_s3.id}"
-    s3_arn = "${module.website_s3.arn}"
-    
+    bucket = "${var.name}"
+    force_destroy = true
+    index_document = "index.html"
+
+    allowed_origins = "${var.allowed_origins}"
+
     origin_id 	= "${var.name}"
     aliases 	= [ "${var.name}", "${local.website_aliases["aliases"]}" ]
     
@@ -98,13 +86,15 @@ data "aws_vpc_endpoint_service" "s3" {
 }
 
 resource "aws_vpc_endpoint" "s3" {
+    count = "${var.vpc_id == "" ? 0 : 1}"
+
     vpc_id       = "${var.vpc_id}"
     service_name = "${data.aws_vpc_endpoint_service.s3.service_name}"
 }
 
 ##############################
 output "s3_url" {
-    value = "http://${module.website_s3.website_endpoint}"
+    value = "http://${module.website_cloudfront.website_endpoint}"
 }
 
 output "website_url" {

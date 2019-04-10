@@ -32,15 +32,15 @@ terraform {
     }
 }
 
-##############################
-module "vpc" {
-    source 		= "./vpc/"
-    globals 	= "${local.globals}"
-    tags		= "${map("Module", "Common")}"
+# ##############################
+# module "vpc" {
+#     source 		= "./vpc/"
+#     globals 	= "${local.globals}"
+#     tags		= "${map("Module", "Common")}"
 
-    common 		= "${local.common}"
-    name 		= "thirdSource ${local.region["env"]}"
-}
+#     common 		= "${local.common}"
+#     name 		= "thirdSource ${local.region["env"]}"
+# }
 
 
 module "application_logs" {
@@ -168,9 +168,10 @@ module "testConfig" {
 
 module "environmentConfig" {
     # source = "../../Terraform/files"
-    source = "git@github.com:MichaelDeCorte/TerraForm.git//files"
+    source 			= "git@github.com:MichaelDeCorte/TerraForm.git//files"
 
-    globals = "${local.globals}"
+    depends 		= "${module.party.depends}:${module.login.depends}"
+    globals 		= "${local.globals}"
 
     input = "environment/templates/environment.json.template"
 
@@ -184,7 +185,8 @@ module "environmentConfig" {
         apiInvokeUrl = "${jsonencode(module.api_deploy.invoke_url)}"
         cognitoUserPoolId = "${module.login.pool_id}"
         cognitoClientId = "${module.login.client_id}"
-        loginUrl = "${module.login.url}"
+        cognitoUrl = "${module.login.cognito_url}"
+        loginUrl = "${module.login.login_url}"
         region="${local.region["region"]}"
     }
 }    
@@ -205,7 +207,7 @@ module "website" {
 
     name 		= "${local.region["env"]}.${local.dns["domain"]}"
     zone_id		= "${local.common["zone_id"]}"
-    vpc_id 		= "${module.vpc.vpc_id}"
+    # vpc_id 		= "${module.vpc.vpc_id}"
     acm_certificate_arn = "${local.common["acm_certificate_arn"]}"
 
     allowed_origins		= [
@@ -220,7 +222,7 @@ output "region" {
 }
 
 output "login_url" {
-     value = "${module.login.url}"
+     value = "${module.login.login_url}"
 }
 
 output "website_url" {

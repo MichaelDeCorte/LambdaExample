@@ -1,8 +1,7 @@
 #!/bin/sh
 #
 
-
-eval $(cat $* | jq -r 'to_entries | .[] | .key + "=\"" + .value + "\""')
+eval $(cat $* | jq -r 'to_entries | .[] | .key + "=\"" + ( .value  | tostring )+ "\""')
 
 
 echo ============================== admin-delete-user

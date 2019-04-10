@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AuthorizationToken, AuthService } from '../auth/auth.service';
+import { EnvironmentService } from '../../shared/shared.module';
 
-var cognitoUri: string = 'https://thirdsource.auth.us-east-1.amazoncognito.com/';
-var clientId: string = '72hos29ntil5e8ludtvkrh0uus';
+var clientId; 
 
 var loginRedirectUri: string = location.origin + '/security/authenticate';
 var loginRedirectUriEncoded: string = encodeURIComponent(loginRedirectUri);
@@ -18,14 +18,20 @@ var logoutRedirectUriEncoded: string = encodeURIComponent(logoutRedirectUri);
 
 export class CognitoService {
 
+    private config;
+
     constructor(private http: HttpClient,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private environmentService: EnvironmentService
+               ) {
         console.log('location.origin: ' + location.origin);
+        this.config  = this.environmentService.getConfig();
+        clientId = this.config.cognitoClientId;
     }
 
-    static getAuthenticateUrl(): string {
+    getAuthenticateUrl(): string {
 
-        return cognitoUri +
+        return this.config.cognitoUrl +
             '/login?' +
             'response_type=code' +
             '&client_id=' + clientId +
@@ -35,7 +41,7 @@ export class CognitoService {
 
     getToken(code: string): Observable<AuthorizationToken> {
         try {
-            let url = cognitoUri + 'oauth2/token';
+            let url = this.config.cognitoUrl + '/oauth2/token';
 
 
             let body = new HttpParams()
@@ -56,10 +62,10 @@ export class CognitoService {
         }
     }
 
-    static getLogoutUrl(): string {
+    getLogoutUrl(): string {
 
-        return cognitoUri +
-            'logout?' +
+        return this.config.cognitoUrl +
+            '/logout?' +
             'response_type=code' +
             '&client_id=' + clientId +
             '&logout_uri=' + logoutRedirectUriEncoded;

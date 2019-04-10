@@ -23,13 +23,13 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
-        window.location.href = CognitoService.getAuthenticateUrl();
+        window.location.href = this.cognitoService.getAuthenticateUrl();
     }
 
     logout() {
         this.authService.setAuthorizationCode(undefined);
         this.authService.setAuthorizationToken(undefined);
-        window.location.href = CognitoService.getLogoutUrl();
+        window.location.href = this.cognitoService.getLogoutUrl();
     }
 
     loggedIn(): boolean {

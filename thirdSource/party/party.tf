@@ -31,11 +31,6 @@ module "party_lambda" {
             name				= "party"
             handler			    = "src/party.handler"
             filename		    = "${path.module}/party-${var.version}.zip"
-        },
-        {
-            name				= "party2"
-            handler			    = "src/party.handler"
-            filename		    = "${path.module}/party-${var.version}.zip"
         }
     ]
     
@@ -56,7 +51,6 @@ output "function_arn" {
 output "api_endpoints" {
     value = "${module.party_lambda.api_endpoints}"
 }
-
 
 ############################################################
 # hack for lack of depends_on

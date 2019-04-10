@@ -3,6 +3,7 @@
   "apiInvokeUrl": ${apiInvokeUrl},
   "cognitoUserPoolId": "${cognitoUserPoolId}",
   "cognitoClientId": "${cognitoClientId}",
+  "cognitoUrl": "${cognitoUrl}",
   "loginUrl": "${loginUrl}",
   "region": "${region}"
 }

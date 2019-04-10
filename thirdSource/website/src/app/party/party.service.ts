@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, EMPTY, of } from 'rxjs';
 
-// import { uri } from '../../../../party/test/party.dev.uri.js'; // mrd
-
 import { EnvironmentService } from '../shared/shared.module';
 
 import { Party } from './party';
@@ -17,6 +15,7 @@ import { AuthService } from '../security/security.module';
 export class PartyService {
 
     private config;
+    private apiUrl;
 
     constructor(private http: HttpClient,
                 private authService: AuthService,
@@ -24,7 +23,7 @@ export class PartyService {
                ) {
 
         this.config  = this.environmentService.getConfig();
-        console.log('PartyService.constructor');
+        this.apiUrl = this.config.apiEndPoints.party.endpoint;
     }
 
 
@@ -34,7 +33,7 @@ export class PartyService {
             command: "scanParty",
             FilterExpression: "lastName = :lastName",
             ExpressionAttributeValues: {
-                ":lastName": "Washington"
+                ":lastName": "Washington"   // mrd???
             }
         };
 
@@ -47,7 +46,7 @@ export class PartyService {
             return EMPTY;
         }
         else {
-             return this.http.post<Party[]>(this.config.partyUri, body, httpOptions);
+             return this.http.post<Party[]>(this.apiUrl, body, httpOptions);
         }
     }
 
@@ -66,7 +65,7 @@ export class PartyService {
             console.log('not authenticated');
             return EMPTY;
         } else {
-            return this.http.post<Party>(this.config.partyUri, body, httpOptions);
+            return this.http.post<Party>(this.apiUrl, body, httpOptions);
        }
     }
 }

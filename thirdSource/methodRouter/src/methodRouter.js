@@ -197,7 +197,12 @@ function methodRouter(event, context, callback, map) {
                     }
                 );
                 
-                result.headers['Access-Control-Allow-Origin'] = '*'; // call from any browser
+                // cors, call service from any browser
+                // https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-cors.html
+                // lambda proxy
+                result.headers['Access-Control-Allow-Headers'] = 'Content-Type'; // '*'; 
+                result.headers['Access-Control-Allow-Methods'] = 'OPTIONS,POST,GET'; 
+                result.headers['Access-Control-Allow-Origin'] = '*'; 
                 result.headers['Access-Control-Allow-Credentials'] = '*';
                 logger.trace('return');
                 callback(error, result);

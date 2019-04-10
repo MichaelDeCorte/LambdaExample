@@ -5,18 +5,24 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 
 ==============================
 TODO
-- website.tf and cloudfront.tf are both apply a policy
+- aws config
+    - ssh should be retricted to vpn
+    - s3 buckets should be replicated across regions
+    - s3 buckets should be encypted / done
+    
+- multiple angular workspaces, not hard coded.  how?  Currently "dev" is hardcoded in shared/environment/environment.service.ts
+- micro frontends https://micro-frontends.org/
 - app mesh
 - session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
 - packer?
 - refactor to classes
 - aws ElastiCache
-- aws config
 - debugger in chrome
         https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27
 - git branches
 - cloudwatch alarms http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
-- x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html?shortFooter=true
+- x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
+    
 - selenium?
 - cucumber?    
 - vpc / https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
@@ -29,16 +35,14 @@ TODO
 - source code security scanning (unclear if there are good open source packages to do this)
 - local lambda?
     https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
-- replace make??
-- jenkins codepipeline
 - service discovery
     https://read.acloud.guru/service-discovery-as-a-service-the-missing-serverless-lynchpin-541d001466f4
 - Orchestration
     - AWS Step Functions
     - AWS Simple Workflow
     - https://read.acloud.guru/some-lessons-learned-about-lambda-orchestration-1a8b72a33fd2
+- jenkins codepipeline
 - AWS code build, local testing, https://aws.amazon.com/about-aws/whats-new/2018/05/aws-codebuild-now-supports-local-testing-and-debugging
-- multiple angular workspaces, not hard coded.  how?
 - api stages, and lambda versioning
     Stages are linked at method level to the lambda functions and
     structure.  So all of the stages will have the same api with at
@@ -48,6 +52,7 @@ TODO
     
     For different env, create a new api.
 
+- replace make??
 - api gateway, stages shoudl use stage variables
     https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6
     https://docs.amazonaws.cn/en_us/apigateway/latest/developerguide/aws-api-gateway-stage-variables-reference.html
