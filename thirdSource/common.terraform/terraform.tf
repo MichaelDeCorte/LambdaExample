@@ -56,6 +56,7 @@ module "terraform" {
     bucket 			= "thirdsource-terraform"
     acl    			= "private"
     versioning 		= true
+    force_destroy = true
     logging_bucket	= "${module.s3_logging.name}"
 }
 
@@ -71,6 +72,7 @@ module "cloudtrail_bucket" {
     bucket 		= "${local.cloudtrail}"
     acl    		= "private"
     policy 		= "${module.cloudtrail_policy.policy}"
+    force_destroy = true
     logging_bucket	= "${module.s3_logging.name}"
 } 
 
@@ -117,6 +119,7 @@ module "codebucket" {
 
     bucket 		= "thirdsource-codebucket"
     acl    		= "private"
+    versioning 	= true
     force_destroy = true
     logging_bucket	= "${module.s3_logging.name}"
 }    
