@@ -29,6 +29,10 @@ variable "allowed_origins" {
     default = [ "*" ]
 }
 
+variable "logging_bucket" {
+    default = ""
+}
+
 ############################################################
 
 
@@ -61,7 +65,7 @@ module "website_cloudfront" {
     bucket = "${var.name}"
     force_destroy = true
     index_document = "index.html"
-
+    logging_bucket	= "${var.logging_bucket}"
     allowed_origins = "${var.allowed_origins}"
 
     origin_id 	= "${var.name}"

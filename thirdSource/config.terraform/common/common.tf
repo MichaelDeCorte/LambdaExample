@@ -20,3 +20,7 @@ output "common" {
         acm_certificate_arn			= "${data.terraform_remote_state.common.acm_certificate_arn}"
     }
 }
+
+output "s3_logging" {
+    value = "${data.terraform_remote_state.common.s3_logging}"
+}

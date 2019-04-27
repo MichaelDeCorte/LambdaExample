@@ -15,6 +15,7 @@ locals {
     globals 	= "${merge(module.globals.globals, module.globals.secrets)}"
     common 		= "${module.common.common}"
     stage_name  = "${local.region["env"]}"
+    logging_bucket	= "${module.common.s3_logging[local.region["region"]]}"    
 }
 
 provider "aws" {
@@ -210,6 +211,7 @@ module "website" {
     # vpc_id 		= "${module.vpc.vpc_id}"
     acm_certificate_arn = "${local.common["acm_certificate_arn"]}"
 
+    logging_bucket 	=  "${local.logging_bucket}"
     allowed_origins		= [
         "${module.api_deploy.invoke_url}"
     ]

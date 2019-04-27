@@ -9,6 +9,8 @@ locals {
     awsProfile 	= "${module.globals.globals["awsProfile"]}"
     globals 	= "${merge(module.globals.globals, module.globals.secrets)}"
     cloudtrail 	= "thirdsource-cloudtrail"
+    aws_config 	= "thirdsource-config"
+    s3_logging 	= "thirdsource-s3-logging"
     dns 		= "${module.globals.globals["dns"]}"
     name		= "thirdsource"
 }
@@ -32,29 +34,45 @@ terraform {
     }
 }
 
-##############################
-module "terraform" {
-    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
+##########
+module "s3_logging" {
+    # source 		= "../../../Terraform/s3/logging"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/logging"
 
     globals 	= "${module.globals.globals}"
-
-    bucket 		= "thirdsource-terraform"
     tags		= "${map("Module", "common")}"
-    acl    		= "private"
-    versioning 	= true
+
+    bucket 		= "${local.s3_logging}"
+}
+
+##############################
+module "terraform" {
+    # source 			= "../../../Terraform/s3/s3"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
+
+    globals 		= "${module.globals.globals}"
+    tags			= "${map("Module", "common")}"
+
+    bucket 			= "thirdsource-terraform"
+    acl    			= "private"
+    versioning 		= true
+    logging_bucket	= "${module.s3_logging.name}"
 }
 
 
+##########
 module "cloudtrail_bucket" {
     # source 		= "../../../Terraform/s3/s3"
     source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
 
     globals 	= "${module.globals.globals}"
+    tags		= "${map("Module", "common")}"
 
     bucket 		= "${local.cloudtrail}"
-    tags		= "${map("Module", "common")}"
     acl    		= "private"
-}
+    policy 		= "${module.cloudtrail_policy.policy}"
+    logging_bucket	= "${module.s3_logging.name}"
+} 
 
 module "cloudtrail_policy" {
     # source 		= "../../../Terraform/cloudtrail/policy"
@@ -63,7 +81,6 @@ module "cloudtrail_policy" {
     depends		= "${module.cloudtrail_bucket.depends}"
     globals 	= "${module.globals.globals}"
 
-    name 		= "${local.cloudtrail}-policy"
     bucket_name	= "${module.cloudtrail_bucket.name}"
 }
 
@@ -78,18 +95,30 @@ module "cloudtrail_trail" {
     bucket 		= "${module.cloudtrail_bucket.name}"
 }
 
+##########
+module "aws_config" {
+    source 		= "../../../Terraform/awsConfig"
+    # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//awsConfig"
+
+    globals 	= "${module.globals.globals}"
+
+    name 		= "${local.aws_config}"
+    logging_bucket	= "${module.s3_logging.name}"
+}
 
 ##########
 # s3 to store code
 module "codebucket" {
+    # source 		= "../../../Terraform/s3/s3"
     source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
 
     globals 	= "${local.globals}"
+    tags		= "${map("Module", "common")}"
 
     bucket 		= "thirdsource-codebucket"
-    tags		= "${map("Module", "common")}"
     acl    		= "private"
     force_destroy = true
+    logging_bucket	= "${module.s3_logging.name}"
 }    
 
 
@@ -97,17 +126,17 @@ module "codebucket" {
 # module "vpc" {
 #     source 		= "./vpc/"
 #     globals 	= "${module.globals.globals}"
-#     name 		= "thirdsource-common"
 #     tags		= "${map("Module", "common")}"
+#     name 		= "thirdsource-common"
 # }
 
 # module "bastion" {
 #     source 		= "./bastion/"
 #     globals 	= "${module.globals.globals}"
+#     tags		= "${map("Module", "common")}"
 
 #     name 		= "thirdsource-bastion-common"
 
-#     tags		= "${map("Module", "common")}"
 
 #     vpc_id 		= "${module.vpc.vpc_id}"
 
@@ -118,23 +147,25 @@ module "codebucket" {
 module "dns" {
     source 		= "./dns"
     globals 	= "${module.globals.globals}"
+    tags		= "${map("Module", "common")}"
 
     name 		= "${local.dns["domain"]}"
-    tags		= "${map("Module", "common")}"
 }
 
 module "certificate" {
     source 						= "./certificate"
     globals 					= "${module.globals.globals}"
+    tags						= "${map("Module", "common")}"
+
     zone_id						= "${module.dns.zone_id}"
     name 						= "${local.dns["domain"]}"    
     subject_alternative_names 	= [ "*.${local.dns["domain"]}"    ]
-    tags						= "${map("Module", "common")}"
 }
 
 # module "jenkins" {
 #     source 		= "./jenkins/"
 #     globals 	= "${module.globals.globals}"
+#     tags		= "${map("Module", "common")}"
 
 #     name 		= "Jenkins"
 
@@ -144,7 +175,6 @@ module "certificate" {
 
 #     zone_id 	=  "${module.dns.zone_id}"
 
-#     tags		= "${map("Module", "common")}"
 # }
 
 ##############################
@@ -163,4 +193,10 @@ output "zone_id" {
 
 output "acm_certificate_arn" {
     value 		= "${module.certificate.acm_certificate_arn}"
+}
+
+output "s3_logging" {
+    value 		= {
+        "${local.region["region"]}" = "${module.s3_logging.name}"
+    }
 }
