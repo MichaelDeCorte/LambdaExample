@@ -46,13 +46,13 @@ output "globals" {
 
             public_a_cidr = "${lookup(map(
 									"default", 		"default is an invalid workspace", 
-									"common", 		"192.168.1.0/16",
+									"common", 		"192.168.1.0/24",
 									"dev", 			"192.170.1.0/24"
 						), local.env)}"
 
             private_a_cidr = "${lookup(map(
 									"default", 		"default is an invalid workspace", 
-									"common", 		"192.168.2.0/16",
+									"common", 		"192.168.2.0/24",
 									"dev", 			"192.170.2.0/24"
 						), local.env)}"
 

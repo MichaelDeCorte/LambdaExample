@@ -10,7 +10,7 @@ locals {
     globals 	= "${merge(module.globals.globals, module.globals.secrets)}"
     cloudtrail 	= "thirdsource-cloudtrail"
     aws_config 	= "thirdsource-config"
-    s3_logging 	= "thirdsource-s3-logging"
+    logging 	= "thirdsource-logging"
     dns 		= "${module.globals.globals["dns"]}"
     name		= "thirdsource"
 }
@@ -36,23 +36,25 @@ terraform {
 
 ##########
 module "s3_logging" {
-    # source 		= "../../../Terraform/s3/logging"
-    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/logging"
+    source 		= "../../../Terraform/s3/logging"
+    # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/logging"
 
     globals 	= "${module.globals.globals}"
     tags		= "${map("Module", "common")}"
 
-    bucket 		= "${local.s3_logging}"
+    create		= "true"
+    bucket 		= "${local.logging}"
 }
 
 ##############################
 module "terraform" {
     # source 			= "../../../Terraform/s3/s3"
-    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
+    source 			= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
 
     globals 		= "${module.globals.globals}"
     tags			= "${map("Module", "common")}"
 
+    create			= "true"
     bucket 			= "thirdsource-terraform"
     acl    			= "private"
     versioning 		= true
@@ -69,6 +71,7 @@ module "cloudtrail_bucket" {
     globals 	= "${module.globals.globals}"
     tags		= "${map("Module", "common")}"
 
+    create		= "true"
     bucket 		= "${local.cloudtrail}"
     acl    		= "private"
     policy 		= "${module.cloudtrail_policy.policy}"
@@ -99,12 +102,14 @@ module "cloudtrail_trail" {
 
 ##########
 module "aws_config" {
-    source 		= "../../../Terraform/awsConfig"
+    source 			= "../../../Terraform/awsConfig"
     # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//awsConfig"
 
-    globals 	= "${module.globals.globals}"
+    depends			= "${module.s3_logging.depends}"
 
-    name 		= "${local.aws_config}"
+    globals 		= "${module.globals.globals}"
+
+    name 			= "${local.aws_config}"
     logging_bucket	= "${module.s3_logging.name}"
 }
 
@@ -112,26 +117,36 @@ module "aws_config" {
 # s3 to store code
 module "codebucket" {
     # source 		= "../../../Terraform/s3/s3"
-    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
+    source 			= "git@github.com:MichaelDeCorte/TerraForm.git//s3/s3"
 
-    globals 	= "${local.globals}"
-    tags		= "${map("Module", "common")}"
+    globals 		= "${local.globals}"
+    tags			= "${map("Module", "common")}"
 
-    bucket 		= "thirdsource-codebucket"
-    acl    		= "private"
-    versioning 	= true
-    force_destroy = true
+    create			= "true"
+    bucket 			= "thirdsource-codebucket"
+    acl    			= "private"
+    versioning 		= true
+    force_destroy 	= true
     logging_bucket	= "${module.s3_logging.name}"
 }    
 
 
+##############################
+module "vpc_flow_log_role" {
+    source 		= "../../../Terraform/vpc/flow_log_role"
+    # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//vpc/flow_log_role"
 
-# module "vpc" {
-#     source 		= "./vpc/"
-#     globals 	= "${module.globals.globals}"
-#     tags		= "${map("Module", "common")}"
-#     name 		= "thirdsource-common"
-# }
+    globals 	= "${local.globals}"
+
+    create = "true"
+}
+
+module "vpc" {
+    source 			= "./vpc/"
+    globals 		= "${module.globals.globals}"
+    tags			= "${map("Module", "common")}"
+    name 			= "thirdsource-common"
+}
 
 # module "bastion" {
 #     source 		= "./bastion/"

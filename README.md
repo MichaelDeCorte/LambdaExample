@@ -10,16 +10,16 @@ TODO
     - s3-bucket-ssl-requests-only / done
     - s3-bucket-policy-grantee-check / done
     - encrypted-volumes / done?
+    - s3-bucket-logging-enabled / done
+    - s3 buckets should be encypted / done
+    - s3 buckets should be limited to ssl / done
     - cloud-trail-encryption-enabled / won't do.  encrypted by default.  rule requires kms key.
     - cloudformation-stack-notification-check / n/a
     - ec2-instance-detailed-monitoring-enabled 
     - ec2-instance-managed-by-systems-manager
-    - 
+
     - ssh should be retricted to vpn.  impacts all security groups
     - s3 buckets should be replicated across regions
-    - s3 buckets should be encypted / done
-    - s3 buckets should be limited to ssl
-    - s3-bucket-logging-enabled
     - mfa-enabled-for-iam-console-access for mdecorte and adminstrator
     - s3-bucket-policy-grantee-check
     - vpc-flow-logs-enabled
@@ -27,6 +27,7 @@ TODO
     - ec2-instance-detailed-monitoring-enabled
     - 
     
+- aws guardduty / https://aws.amazon.com/guardduty/
 - multiple angular workspaces, not hard coded.  how?  Currently "dev" is hardcoded in shared/environment/environment.service.ts
 - micro frontends https://micro-frontends.org/
 - app mesh

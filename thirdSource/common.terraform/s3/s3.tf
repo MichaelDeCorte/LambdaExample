@@ -26,7 +26,6 @@ module "terraform_s3" {
     bucket = "${var.name}"
     prevent_destroy = true
     versioning = true
-
 }    
 
 ##############################
