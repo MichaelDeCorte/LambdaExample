@@ -62,7 +62,6 @@ module "terraform" {
     logging_bucket	= "${module.s3_logging.name}"
 }
 
-
 ##########
 module "cloudtrail_bucket" {
     # source 		= "../../../Terraform/s3/s3"
@@ -101,9 +100,25 @@ module "cloudtrail_trail" {
 }
 
 ##########
+module "guardduty" {
+    # source 			= "../../../Terraform/guardduty/detector"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//guardduty/detector"
+
+    globals 		= "${module.globals.globals}"
+}
+
+##########
+module "password_policy" {
+    # source 			= "../../../Terraform/iam/password_policy"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//iam/password_policy"
+
+    globals 		= "${module.globals.globals}"
+}
+
+##########
 module "aws_config" {
-    source 			= "../../../Terraform/awsConfig"
-    # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//awsConfig"
+    # source 			= "../../../Terraform/awsConfig"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//awsConfig"
 
     depends			= "${module.s3_logging.depends}"
 

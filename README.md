@@ -5,32 +5,9 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 
 ==============================
 TODO
-- aws config
-    - s3-bucket-replication-enabled
-    - s3-bucket-ssl-requests-only / done
-    - s3-bucket-policy-grantee-check / done
-    - encrypted-volumes / done?
-    - s3-bucket-logging-enabled / done
-    - s3 buckets should be encypted / done
-    - s3 buckets should be limited to ssl / done
-    - cloud-trail-encryption-enabled / won't do.  encrypted by default.  rule requires kms key.
-    - cloudformation-stack-notification-check / n/a
-    - ec2-instance-detailed-monitoring-enabled 
-    - ec2-instance-managed-by-systems-manager
-
-    - ssh should be retricted to vpn.  impacts all security groups
-    - s3 buckets should be replicated across regions
-    - mfa-enabled-for-iam-console-access for mdecorte and adminstrator
-    - s3-bucket-policy-grantee-check
-    - vpc-flow-logs-enabled
-    - cloud-trail-encryption-enabled
-    - ec2-instance-detailed-monitoring-enabled
-    - 
-    
-- aws guardduty / https://aws.amazon.com/guardduty/
 - multiple angular workspaces, not hard coded.  how?  Currently "dev" is hardcoded in shared/environment/environment.service.ts
 - micro frontends https://micro-frontends.org/
-- app mesh
+- app mesh / https://aws.amazon.com/app-mesh/
 - session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
 - packer?
 - refactor to classes
@@ -83,6 +60,27 @@ TODO
 
 ==============================
 DONE
+- aws config
+    - s3-bucket-replication-enabled
+    - s3-bucket-ssl-requests-only / done
+    - s3-bucket-policy-grantee-check / done
+    - encrypted-volumes / done?
+    - s3-bucket-logging-enabled / done
+    - s3 buckets should be encypted / done
+    - s3 buckets should be limited to ssl / done
+    - vpc-flow-logs-enabled / done
+    - guardduty-enabled-centralized / done
+    - iam-password-policy / MRD / not working
+    - cloud-trail-log-file-validation-enabled / done
+
+
+    - would be good if it was possible to disable an AWS config rule
+    - vpc-default-security-group-closed/ won't do
+    - cloud-trail-encryption-enabled / won't do.  encrypted by default.  rule requires kms key.
+    - cloud-trail-encryption-enabled / won't do.  rule requires kms key
+    - multi-region-cloudtrail-enabled / won't do until muliple regions supported
+    
+- aws guardduty / https://aws.amazon.com/guardduty/
 - TF lambda module / multiple services, simplify usage
 - disallow s3 website access
 - multiple workspaces
