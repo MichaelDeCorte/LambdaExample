@@ -1,4 +1,6 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import * as using from 'jasmine-data-provider';
+const testData = require(__filename.replace(/.[^.]+$/, '.json'));
 
 import {
     HttpClientTestingModule,
@@ -16,41 +18,24 @@ describe('EnvironmentService', () => {
         });
     });
 
-    it('should be initialized',
-       inject([EnvironmentService], 
-              (environmentService: EnvironmentService) => {
-                  expect(environmentService).toBeTruthy();
-              }
-             )
-      );
+    using(testData, (data)  => {
+            it('should get environment',
+               fakeAsync(
+                   inject([EnvironmentService, HttpTestingController], 
+                          (environmentService: EnvironmentService, http: HttpTestingController) => {
+                              const url = '/assets/environment.dev.json';
 
-    it('should get environment',
-       fakeAsync(
-           inject([EnvironmentService, HttpTestingController], 
-                  (environmentService: EnvironmentService, http: HttpTestingController) => {
-                      const url = '/assets/environment.dev.json';
-                      const responseObject = {
-                          "apiEndPoints": {"party":{"endpoint":"/party"}},
-                          "apiInvokeUrl": "https://dh9qp202xf.execute-api.us-east-1.amazonaws.com/dev-stage",
-                          "cognitoUserPoolId": "us-east-1_JQpUwdflR",
-                          "cognitoClientId": "7it5nphstn03r67faklvdjsd33",
-                          "cognitoUrl": "https://thirdsource.auth.us-east-1.amazoncognito.com",
-                          "loginUrl": "https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=7it5nphstn03r67faklvdjsd33&redirect_uri=http%3A%2F%2Flocalhost%3A4200%2Fsecurity%2Fauthenticate",
-                          "region": "us-east-1"
-                      };
+                              environmentService.initialize();
+                              const requestWrapper = http.expectOne({url: url});
+                              requestWrapper.flush(data.input);
+                              tick();
+                              let config = environmentService.getConfig();
 
-                      environmentService.initialize();
-
-                      const requestWrapper = http.expectOne({url: url});
-                      requestWrapper.flush(responseObject);
-                      tick();
-
-                      let config = environmentService.getConfig();
-
-                      expect(config).toBeTruthy();
-                      expect(config).toEqual(responseObject);
-                  }
-                 )
-       )
-       );
+                              expect(config).toBeTruthy();
+                              expect(config.apiInvokeUrl).toEqual(data.result.apiInvokeUrl);
+                          }
+                         )
+               )
+          )
+    });
 });
