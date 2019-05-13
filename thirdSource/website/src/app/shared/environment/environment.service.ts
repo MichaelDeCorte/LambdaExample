@@ -8,10 +8,10 @@ import { environment } from '../../../environments/environment';
 
 export class EnvironmentService {
 
-    private config;
+    config: any;
 
     constructor(private http: HttpClient) {
-        console.log('EnvironmentService.constructor');
+        // console.log('EnvironmentService.constructor');
     }
 
     ngOnDestroy() {
@@ -19,21 +19,33 @@ export class EnvironmentService {
     
     async initialize() {
         
-        this.config = await this.http.get('/assets/environment.dev.json').toPromise();
+        // console.log("EnvironmentService.initialize");
 
-        for (const key in this.config.apiEndPoints) {
-            if (Object.prototype.hasOwnProperty.call(this.config.apiEndPoints, key)) {
-                this.config.apiEndPoints[key].endpoint =
-                    this.config.apiInvokeUrl +
-                    this.config.apiEndPoints[key].endpoint;
+        this.config = this.updateConfig(await this.getConfigFile());
+
+        // console.log('environment config: ' + JSON.stringify(this.config, null, 4));
+        // console.log('environment angular: ' + JSON.stringify(environment, null, 4));
+    }
+
+    async getConfigFile(){
+        // console.log("EnvironmentService.getConfigFile");
+        return await this.http.get('/assets/environment.dev.json').toPromise();
+    }
+
+    updateConfig(c: any) {
+        for (const key in c.apiEndPoints) {
+            if (Object.prototype.hasOwnProperty.call(c.apiEndPoints, key)) {
+                c.apiEndPoints[key].endpoint =
+                    c.apiInvokeUrl +
+                    c.apiEndPoints[key].endpoint;
             }
         }
 
-        console.log('environment config: ' + JSON.stringify(this.config, null, 4));
-        console.log('environment angular: ' + JSON.stringify(environment, null, 4));
+        return c;
     }
-
+   
     getConfig() {
+        // console.log("EnvironmentService.getConfig");
         return this.config;
     }
 

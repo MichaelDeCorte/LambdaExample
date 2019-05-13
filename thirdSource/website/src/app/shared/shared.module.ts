@@ -3,6 +3,7 @@ import { NgModule, ModuleWithProviders, Optional, SkipSelf, APP_INITIALIZER } fr
 import { CommonModule } from '@angular/common';
 
 import { EnvironmentService } from './environment/environment.service';
+import { EnvironmentMockService } from './environment/environmentMock.service';
 
 function initEnvironment(environmentService: EnvironmentService) {
     return () => environmentService.initialize();
@@ -41,3 +42,4 @@ export class SharedModule {
 }
 
 export { EnvironmentService } from './environment/environment.service';
+export { EnvironmentMockService } from './environment/environmentMock.service';

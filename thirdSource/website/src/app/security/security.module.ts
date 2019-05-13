@@ -5,8 +5,6 @@ import { AuthService, AuthorizationToken } from './auth/auth.service';
 import { CognitoService } from './cognito/cognito.service';
 import { AuthGuardService } from './auth-guard/auth-guard.service';
 
-console.log('security.module');
-
 @NgModule({
     imports: [
         CommonModule,
@@ -32,7 +30,7 @@ export class SecurityModule {
     }
 
     ngOnDestroy() {
-        console.log('SecurityModule.ngOnDestroy');
+        // console.log('SecurityModule.ngOnDestroy');
     }
 }
 

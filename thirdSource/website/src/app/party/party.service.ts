@@ -24,8 +24,8 @@ export class PartyService {
 
         this.config  = this.environmentService.getConfig();
         this.apiUrl = this.config.apiEndPoints.party.endpoint;
+        console.log('PartyService.constructor: url: ' + this.apiUrl);
     }
-
 
     getPartyList(): Observable<Party[]> {
 

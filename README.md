@@ -5,58 +5,63 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 
 ==============================
 TODO
-- multiple angular workspaces, not hard coded.  how?  Currently "dev" is hardcoded in shared/environment/environment.service.ts
+- environment.dev.json loginUrl is wrong
+- environment.service.ts is hardcoded to dev
+- testing
+    - angular testing / Karma
+    - selenium?
+    - cucumber?    
+    - load testing
+    - memory testing
+    - source code security scanning (unclear if there are good open source packages to do this)
+
 - micro frontends https://micro-frontends.org/
-- app mesh / https://aws.amazon.com/app-mesh/
-- session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
-- packer?
+- service discovery / https://read.acloud.guru/service-discovery-as-a-service-the-missing-serverless-lynchpin-541d001466f4
 - refactor to classes
-- aws ElastiCache
-- debugger in chrome
-        https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27
-- git branches
-- cloudwatch alarms http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
-- x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
-    
-- selenium?
-- cucumber?    
-- vpc / https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html
-- lambda vpc
-- api gateway vpc link
-- version node libraries
-- version service
-- load testing
-- memory testing
-- source code security scanning (unclear if there are good open source packages to do this)
-- local lambda?
-    https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
-- service discovery
-    https://read.acloud.guru/service-discovery-as-a-service-the-missing-serverless-lynchpin-541d001466f4
+- db / https://www.npmjs.com/package/dynamodb   waiting for promise support
+
+- aws
+    - cloud9
+    - aws app mesh / https://aws.amazon.com/app-mesh/
+    - session manager: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html
+    - cloudwatch alarms http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html
+    - aws ElastiCache
+    - lambda vpc / https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html#lambda-vpc
+    - api gateway vpc link
+    - x-ray https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html
+    - api key for mobile / https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-setup-api-key-with-restapi.html
+
 - Orchestration
     - AWS Step Functions
     - AWS Simple Workflow
     - https://read.acloud.guru/some-lessons-learned-about-lambda-orchestration-1a8b72a33fd2
-- jenkins codepipeline
-- AWS code build, local testing, https://aws.amazon.com/about-aws/whats-new/2018/05/aws-codebuild-now-supports-local-testing-and-debugging
-- api stages, and lambda versioning
-    Stages are linked at method level to the lambda functions and
-    structure.  So all of the stages will have the same api with at
-    most different versions of the api.  This makes it difficult to
-    add new functions, or introduce breaking changes. Stages are best
-    reserved for green / yellow deployments.
-    
-    For different env, create a new api.
 
-- replace make??
-- api gateway, stages shoudl use stage variables
-    https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6
-    https://docs.amazonaws.cn/en_us/apigateway/latest/developerguide/aws-api-gateway-stage-variables-reference.html
-- api key
+- Dev Env
+    - packer?
+    - replace make??
+    - debugger in chrome / https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27
+    - git branches
+    - version node libraries
+    - local lambda? / https://docs.aws.amazon.com/lambda/latest/dg/sam-cli-requirements.html
+    - multiple angular workspaces, not hard coded.  how?  Currently "dev" is hardcoded in shared/environment/environment.service.ts
 
-    
-  
-- db 
-    https://www.npmjs.com/package/dynamodb   waiting for promise support
+- Pipelines
+	- jenkins codepipeline
+	- AWS code build, local testing, https://aws.amazon.com/about-aws/whats-new/2018/05/aws-codebuild-now-supports-local-testing-and-debugging
+
+- api gateway
+    - version service
+    - api stages, and lambda versioning
+        Stages are linked at method level to the lambda functions and
+        structure.  So all of the stages will have the same api with at
+        most different versions of the api.  This makes it difficult to
+        add new functions, or introduce breaking changes. Stages are best
+        reserved for green / yellow deployments.
+        For different env, create a new api.
+    - api gateway, stages should use stage variables
+        https://medium.com/@muralimohan.mothupally/configuring-aws-lambda-for-multiple-environments-using-api-gateway-stages-for-an-asp-net-1d5d8e2e88b6
+        https://docs.amazonaws.cn/en_us/apigateway/latest/developerguide/aws-api-gateway-stage-variables-reference.html
+
 
 ==============================
 DONE
