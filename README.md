@@ -5,6 +5,9 @@ https://thirdsource.auth.us-east-1.amazoncognito.com/login?response_type=code&cl
 
 ==============================
 TODO
+- party.service.ts / getPartyList is hardcoded
+- angular aspect for authentication
+- https://aws.amazon.com/blogs/aws/amazon-s3-path-deprecation-plan-the-rest-of-the-story/
 - environment.dev.json loginUrl is wrong
 - environment.service.ts is hardcoded to dev
 - testing

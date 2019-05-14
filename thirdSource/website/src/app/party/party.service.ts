@@ -24,7 +24,6 @@ export class PartyService {
 
         this.config  = this.environmentService.getConfig();
         this.apiUrl = this.config.apiEndPoints.party.endpoint;
-        console.log('PartyService.constructor: url: ' + this.apiUrl);
     }
 
     getPartyList(): Observable<Party[]> {
@@ -46,7 +45,7 @@ export class PartyService {
             return EMPTY;
         }
         else {
-             return this.http.post<Party[]>(this.apiUrl, body, httpOptions);
+            return this.http.post<Party[]>(this.apiUrl, body, httpOptions);
         }
     }
 
@@ -62,7 +61,7 @@ export class PartyService {
         };
 
         if ((httpOptions.headers === null) || (httpOptions.headers === undefined)) {
-            console.log('not authenticated');
+            console.log('==============================not authenticated');
             return EMPTY;
         } else {
             return this.http.post<Party>(this.apiUrl, body, httpOptions);

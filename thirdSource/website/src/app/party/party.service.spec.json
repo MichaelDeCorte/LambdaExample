@@ -1,0 +1,16 @@
+[
+  {
+    "comment": "getParty Test 1",
+    "input": 123,
+    "apiBody": {
+      "command": "getParty",
+      "partyID": 123
+    },
+    "result": {
+      "firstName": "First",
+      "lastName": "Last",
+      "partyID": 123
+    }
+  }
+]
+

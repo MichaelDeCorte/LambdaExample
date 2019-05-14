@@ -63,7 +63,7 @@ describe('PartyService', () => {
                () => {
                    const url = 'https://mock-invoke-url/party';
 
-                   partyService.getParty(data.input).subscribe(
+                   partyService.getPartyList().subscribe( 
                        (party) => {
                            expect(party).toEqual(data.result);
                        }

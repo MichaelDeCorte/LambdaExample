@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders, Optional, SkipSelf } from '@angular/core
 import { CommonModule } from '@angular/common';
 
 import { AuthService, AuthorizationToken } from './auth/auth.service';
+import { AuthMockService } from './auth/authMock.service';
 import { CognitoService } from './cognito/cognito.service';
 import { AuthGuardService } from './auth-guard/auth-guard.service';
 
@@ -13,6 +14,7 @@ import { AuthGuardService } from './auth-guard/auth-guard.service';
     ],
     providers: [
         AuthService,
+        AuthMockService,
         CognitoService,
         AuthGuardService
     ],
@@ -35,4 +37,5 @@ export class SecurityModule {
 }
 
 export { AuthService } from './auth/auth.service';
+export { AuthMockService } from './auth/authMock.service';
 export { AuthGuardService } from './auth-guard/auth-guard.service';
