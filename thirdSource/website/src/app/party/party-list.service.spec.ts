@@ -14,7 +14,7 @@ import { Party } from './party';
 
 import { EnvironmentService, EnvironmentMockService } from '../shared/shared.module';
  
-describe('PartyService', () => {
+describe('PartyService / List', () => {
 
     let environmentService: EnvironmentService;
     let partyService: PartyService;
@@ -42,23 +42,8 @@ describe('PartyService', () => {
        }
       );
 
-    // let partyList: Party[] = [];
-    // it('PartyService not authenticated.  should return null',
-    //    fakeAsync(
-    //        () => {
-    //            partyService.getParty(345).subscribe(
-    //                (party) => {
-    //                    console.log('============================== party = ' + party);
-    //                    partyList.push(party);
-    //                }
-    //            );
-    //            expect(partyList.length).toEqual(0);
-    //        }
-    //    )
-    //   ) ;
-
     using(testData, (data) => {
-        it('get a Party',
+        it('get a PartyList',
            fakeAsync(
                () => {
                    const url = 'https://mock-invoke-url/party';
