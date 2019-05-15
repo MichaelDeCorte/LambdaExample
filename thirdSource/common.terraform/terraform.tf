@@ -148,8 +148,8 @@ module "codebucket" {
 
 ##############################
 module "vpc_flow_log_role" {
-    source 		= "../../../Terraform/vpc/flow_log_role"
-    # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//vpc/flow_log_role"
+    # source 		= "../../../Terraform/vpc/flow_log_role"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//vpc/flow_log_role"
 
     globals 	= "${local.globals}"
 
