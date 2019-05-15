@@ -1,0 +1,58 @@
+# git ls-files --others --exclude-from=.git/info/exclude
+# Lines that start with '#' are comments.
+
+############################################################
+# Emacs files    
+*~
+\#*\#
+tmp/
+
+
+############################################################
+# TerraForm files
+# Compiled files
+*.tfstate
+*.tfstate.backup
+.terraform*
+terraform.tfstate*
+
+#############################################################
+# project files
+*.zip
+*.tgz
+*.test.out
+*.test.error
+.*.CloudFormation
+.integration.*
+.unit.*
+.install.*
+.environment.*
+.package    
+.package.file
+newSamTemplate.yaml
+
+
+#############################################################
+# node.js files
+node_modules/
+package-lock.json
+
+#############################################################
+# angular files
+dist/    
+
+#############################################################
+# testing files
+coverage/
+*.output        
+
+#############################################################
+# SonarQube
+.scannerwork/
+
+#############################################################
+# Apple OSX stuff
+.DS_Store
+
+
+    
