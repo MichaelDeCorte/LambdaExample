@@ -36,8 +36,8 @@ terraform {
 
 ##########
 module "s3_logging" {
-    source 		= "../../../Terraform/s3/logging"
-    # source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/logging"
+    # source 		= "../../../Terraform/s3/logging"
+    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//s3/logging"
 
     globals 	= "${module.globals.globals}"
     tags		= "${map("Module", "common")}"
