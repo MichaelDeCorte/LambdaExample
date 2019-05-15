@@ -2,7 +2,7 @@
 
 LOG_LEVEL ?= false
 
-NPM=/Users/mdecorte/Documents/Development/Lambda/thirdSource/node_modules/.bin
+NPM=$(PACKAGEROOT)/node_modules/.bin
 
 # force cli to load ~/.aws/config
 # https://github.com/aws/aws-sdk-js/issues/1921
