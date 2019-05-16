@@ -32,7 +32,7 @@ module "vpc" {
     vpc_cidr 				= "${local.vpc_cidr}"
     default_subnet_cidr		= "${local.public_a_cidr}"
     nat						= "false"
-    igw						= "false"
+    igw						= "true"
 
     ingress_network_acls = [    
         {
@@ -84,6 +84,15 @@ module "vpc" {
             from_port      	= 22
             to_port        	= 22
             cidr_block 		= "0.0.0.0/0"
+        },
+        {
+            # http
+            protocol       	= "tcp"
+            rule_no    		= 80
+            action    		= "allow"
+            from_port      	= 80
+            to_port        	= 80
+            cidr_block     	= "0.0.0.0/0"
         },
         {
             # https

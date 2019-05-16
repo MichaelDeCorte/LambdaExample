@@ -115,18 +115,18 @@ module "password_policy" {
     globals 		= "${module.globals.globals}"
 }
 
-##########
-module "aws_config" {
-    # source 			= "../../../Terraform/awsConfig"
-    source 		= "git@github.com:MichaelDeCorte/TerraForm.git//awsConfig"
+# ##########
+# module "aws_config" {
+#     # source 			= "../../../Terraform/awsConfig"
+#     source 		= "git@github.com:MichaelDeCorte/TerraForm.git//awsConfig"
 
-    depends			= "${module.s3_logging.depends}"
+#     depends			= "${module.s3_logging.depends}"
 
-    globals 		= "${module.globals.globals}"
+#     globals 		= "${module.globals.globals}"
 
-    name 			= "${local.aws_config}"
-    logging_bucket	= "${module.s3_logging.name}"
-}
+#     name 			= "${local.aws_config}"
+#     logging_bucket	= "${module.s3_logging.name}"
+# }
 
 ##########
 # s3 to store code
