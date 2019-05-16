@@ -35,7 +35,6 @@ newSamTemplate.yaml
 #############################################################
 # node.js files
 node_modules/
-package-lock.json
 
 #############################################################
 # angular files
