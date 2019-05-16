@@ -26,6 +26,8 @@ all: unit node package environment install integration
 #
 .PHONY: init
 .PHONY: .veryclean.init
+.PHONY: npm.init
+.PHONY: angular.init
 
 init:
 ifdef SUBPACKAGES

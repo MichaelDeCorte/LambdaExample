@@ -23,6 +23,10 @@ HASHFILE=.package.file
 ############################################################
 
 init: npm.init
+init: angular.init
+
+angular.init:
+	mkdir -p dist
 
 npm.init:
 	npm install 
