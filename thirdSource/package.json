@@ -86,6 +86,8 @@
         "error",
         "always"
       ],
+      "no-tabs": "off",
+      "no-mixed-spaces-and-tabs": "off",
       "newline-per-chained-call": "off",
       "no-console": "off",
       "no-multi-spaces": "off",
