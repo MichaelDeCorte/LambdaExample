@@ -50,9 +50,9 @@ init: npm.init
 
 npm.init:
 	npm install
-	npm install promise
-	npm install string-hash
-	npm install joi
+	# npm install promise
+	# npm install string-hash
+	# npm install joi
 
 unit:
 
