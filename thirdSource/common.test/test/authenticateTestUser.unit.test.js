@@ -2,18 +2,16 @@ const logger = require('common').logger;
 const authenticateTestUser = require('common.test').authenticateTestUser;
 
 function testFunc(done) {
-    try  {
-	return authenticateTestUser()
-            .then((result) => {
-		logger.debug('result: ' + JSON.stringify(result, null, 4));
-		expect(result.getAccessToken().getJwtToken().length).toBeGreaterThan(0);
-		done();
-            })
-    } catch(error) {
-	console.trace('catch');
-        logger.debug('error: ' + JSON.stringify(error, null, 4));
-        done.fail(error);
-    };
+    return authenticateTestUser()
+        .then((result) => {
+            logger.debug('result: ' + JSON.stringify(result, null, 4));
+            expect(result.getAccessToken().getJwtToken().length).toBeGreaterThan(0);
+            done();
+        }).catch((error) => {
+            console.trace('catch');
+            logger.debug('error: ' + JSON.stringify(error, null, 4));
+            done.fail(error);
+        });
 }
 
 test('authenticateTestUser', testFunc);
