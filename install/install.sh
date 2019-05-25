@@ -38,8 +38,8 @@ fi
 
 echo ========== install node
 NODE_VERSION=v8.10.0
-# if ! which node || ! (node --version | grep "$NODE_VERSION" )
-# then
+if ! which node || ! (node --version | grep "$NODE_VERSION" )
+then
     NODE=node-"$NODE_VERSION"-darwin-x64
     echo ========== install node
     curl -L https://nodejs.org/download/release/"$NODE_VERSION"/"$NODE".tar.gz > "$NODE".tar.gz
@@ -49,7 +49,7 @@ NODE_VERSION=v8.10.0
 #    sudo ln -fs  "$HOME"/bin/"$NODE"/bin/node /usr/local/bin/node
 #    sudo ln -fs  "$HOME"/bin/"$NODE"/bin/npm /usr/local/bin/npm
 #    sudo ln -fs  "$HOME"/bin/"$NODE"/bin/npx /usr/local/bin/npx
-# fi
+fi
 
 echo ========== install brew
 if ! which brew
