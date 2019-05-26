@@ -7,18 +7,18 @@ import {
     HttpTestingController
 } from '@angular/common/http/testing';
 
+import { EnvironmentService, EnvironmentMockService } from '../shared/shared.module';
 import { AuthService, AuthMockService } from '../security/security.module';
 
 import { PartyService } from './party.service';
 import { Party } from './party';
 
-import { EnvironmentService, EnvironmentMockService } from '../shared/shared.module';
- 
 describe('PartyService / singular', () => {
 
     let environmentService: EnvironmentService;
-    let partyService: PartyService;
     let http: HttpTestingController;
+
+    let partyService: PartyService;
 
     beforeEach(async() => {
         TestBed.configureTestingModule({
@@ -44,8 +44,7 @@ describe('PartyService / singular', () => {
 
     using(testData, (data) => {
         it('get a Party',
-           fakeAsync(
-               () => {
+           fakeAsync(() => {
                    const url = 'https://mock-invoke-url/party';
 
                    partyService.getParty(data.input).subscribe(
@@ -57,8 +56,7 @@ describe('PartyService / singular', () => {
                    expect(request.request.body).toEqual(data.apiBody);
                    request.flush(data.result);
 	               tick();
-               }
-           )
+               })
           )
     });
 });

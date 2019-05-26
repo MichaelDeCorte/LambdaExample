@@ -1,0 +1,16 @@
+[
+  {
+    "comment": "getParty Test 1",
+    "code": "123",
+    "result": {
+      "authenticateUrl": "https://mock-cognito-url/login?response_type=code&client_id=mock-client-id&redirect_uri=http%3A%2F%2Flocalhost%3A9876%2Fsecurity%2Fauthenticate",
+      "token": {
+        "id_token": "id_token_value",
+        "access_token": "access_token_value",
+        "refresh_token": "refresh_token_value"
+      },
+      "logoutUrl": "https://mock-cognito-url/logout?response_type=code&client_id=mock-client-id&logout_uri=http%3A%2F%2Flocalhost%3A9876%2Fhome"
+    }
+  }
+]
+

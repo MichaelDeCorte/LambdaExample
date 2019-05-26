@@ -1,7 +1,7 @@
 const each = require('jest-each');
+const methodRouter = require('../src/methodRouter').methodRouter;
 const logger = require('common').logger;
 const path = require('path');
-const methodRouter = require('../src/methodRouter').methodRouter;
 
 function testFunc(input, output, done) {
     expect.assertions(1);

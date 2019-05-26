@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService, AuthorizationToken } from './auth/auth.service';
 import { AuthMockService } from './auth/authMock.service';
 import { CognitoService } from './cognito/cognito.service';
+import { CognitoMockService } from './cognito/cognitoMock.service';
 import { AuthGuardService } from './auth-guard/auth-guard.service';
 
 @NgModule({
@@ -16,6 +17,7 @@ import { AuthGuardService } from './auth-guard/auth-guard.service';
         AuthService,
         AuthMockService,
         CognitoService,
+        CognitoMockService,
         AuthGuardService
     ],
     declarations: [
@@ -36,6 +38,6 @@ export class SecurityModule {
     }
 }
 
-export { AuthService } from './auth/auth.service';
+export { AuthService, AuthorizationToken } from './auth/auth.service';
 export { AuthMockService } from './auth/authMock.service';
 export { AuthGuardService } from './auth-guard/auth-guard.service';

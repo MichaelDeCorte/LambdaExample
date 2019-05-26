@@ -36,13 +36,11 @@ export class CognitoService {
             'response_type=code' +
             '&client_id=' + clientId +
             '&redirect_uri=' + loginRedirectUriEncoded;
-
     }
 
     getToken(code: string): Observable<AuthorizationToken> {
         try {
             let url = this.config.cognitoUrl + '/oauth2/token';
-
 
             let body = new HttpParams()
                 .set('grant_type', 'authorization_code')
