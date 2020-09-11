@@ -137,7 +137,7 @@
     "joi": "^14.3.1",
     "jsonlint": "^1.6.3",
     "log-driver": "^1.2.7",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "npm": "^6.9.0",
     "promise": "^8.0.3",
     "supertest": "^3.4.2"
